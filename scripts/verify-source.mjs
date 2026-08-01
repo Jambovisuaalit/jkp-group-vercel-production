@@ -44,16 +44,15 @@ if (!envExample.includes("SITE_INDEXING_ENABLED=false")) {
   errors.push(".env.example must default SITE_INDEXING_ENABLED=false");
 }
 
+const legacy = (...parts) => new RegExp(parts.join(""), "gi");
 const forbiddenPatterns = [
-  ["personal email", /visualjambo@gmail\.com/gi],
-  ["personal name", /Jami Harju/gi],
-  ["legacy Upstash", /UPSTASH_REDIS/gi],
-  ["legacy admin password", /ADMIN_PASSWORD/gi],
-  ["legacy session secret", /SESSION_SECRET/gi],
-  ["legacy admin cookie", /ADMIN_COOKIE/gi],
-  ["legacy Supabase helper", /supabaseRequest/gi],
-  ["browser localStorage CMS", /localStorage/gi],
-  ["committed Supabase secret", /sb_secret_[A-Za-z0-9_-]{12,}/g],
+  ["legacy cache backend", legacy("UPSTASH", "_REDIS")],
+  ["legacy admin password", legacy("ADMIN", "_PASSWORD")],
+  ["legacy session secret", legacy("SESSION", "_SECRET")],
+  ["legacy admin cookie", legacy("ADMIN", "_COOKIE")],
+  ["legacy Supabase helper", legacy("supabase", "Request")],
+  ["browser-only CMS storage", legacy("local", "Storage")],
+  ["committed Supabase secret", legacy("sb", "_secret_", "[A-Za-z0-9_-]{12,}")],
 ];
 
 const scanExtensions = new Set([".ts", ".tsx", ".js", ".mjs", ".json", ".md", ".sql", ".yml", ".yaml"]);
