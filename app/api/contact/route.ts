@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isTrustedMutationRequest } from "@/lib/request-security";
+import { containsRestrictedPersonalData } from "@/lib/sensitive-data";
 import { getSupabaseAdmin, isSupabaseBackendEnabled } from "@/lib/supabase/admin";
 
 const MAX_BODY_CHARS = 32_768;
@@ -157,6 +158,16 @@ export async function POST(request: Request) {
     if (!hasConsent(body.privacyConsent)) {
       return NextResponse.json(
         { message: "Hyväksy tietojen käsittely ennen lähettämistä." },
+        { status: 400 },
+      );
+    }
+
+    if (containsRestrictedPersonalData(Object.values(body))) {
+      return NextResponse.json(
+        {
+          message:
+            "Älä lähetä henkilötunnusta tai pankkitietoja tällä lomakkeella. Poista arkaluonteiset tiedot ja lähetä uudelleen.",
+        },
         { status: 400 },
       );
     }
