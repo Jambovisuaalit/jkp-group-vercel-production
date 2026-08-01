@@ -60,5 +60,6 @@ export function isSupabaseAuthConfigured(): boolean {
 export function isSupabaseBackendEnabled(): boolean {
   const mode = process.env.DATA_BACKEND?.trim().toLowerCase();
   if (mode === "static") return false;
+  if (mode === "supabase") return true;
   return isSupabaseConfigured();
 }
