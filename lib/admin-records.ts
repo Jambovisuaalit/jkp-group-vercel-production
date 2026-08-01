@@ -39,6 +39,11 @@ export function publicationColumns(state: PublicationState) {
   };
 }
 
+function numericValue(value: unknown, fallback: number): number {
+  const number = Number(value ?? fallback);
+  return Number.isFinite(number) ? number : fallback;
+}
+
 export function normalizeRental(row: Record<string, unknown>): AdminRental {
   const type: RentalType =
     row.type === "commercial" || row.type === "residential" ? row.type : "holiday";
@@ -64,7 +69,7 @@ export function normalizeRental(row: Record<string, unknown>): AdminRental {
     highlights: stringArray(row.highlights),
     contactName: String(row.contactName || "JKP Group Oy"),
     publicationState: publicationState(row),
-    sortOrder: Number(row.sortOrder || 100),
+    sortOrder: numericValue(row.sortOrder, 100),
     createdAt: String(row.created_at || ""),
     updatedAt: String(row.updated_at || ""),
   };
@@ -84,7 +89,7 @@ export function normalizeReference(row: Record<string, unknown>): AdminReference
     gallery: stringArray(row.gallery),
     permissionConfirmed: Boolean(row.permission_confirmed),
     publicationState: publicationState(row),
-    sortOrder: Number(row.sortOrder || 100),
+    sortOrder: numericValue(row.sortOrder, 100),
     createdAt: String(row.created_at || ""),
     updatedAt: String(row.updated_at || ""),
   };
