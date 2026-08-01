@@ -3,6 +3,7 @@ import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import {
   isSupabaseAuthConfigured,
   isSupabaseBackendEnabled,
+  isSupabaseConfigured,
 } from "@/lib/supabase/admin";
 
 export const metadata: Metadata = {
@@ -14,6 +15,10 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function AdminPage() {
-  const enabled = isSupabaseBackendEnabled() && isSupabaseAuthConfigured();
+  const enabled =
+    isSupabaseBackendEnabled() &&
+    isSupabaseConfigured() &&
+    isSupabaseAuthConfigured();
+
   return <AdminDashboard enabled={enabled} />;
 }
