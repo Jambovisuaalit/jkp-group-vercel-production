@@ -1,6 +1,7 @@
 import "server-only";
 
 import { defaultContent, type SiteContent } from "@/content/defaults";
+import { normalizeSiteContent } from "@/lib/site-content-validation";
 import {
   getSupabaseAdmin,
   isSupabaseBackendEnabled,
@@ -8,20 +9,6 @@ import {
 } from "@/lib/supabase/admin";
 
 const CONTENT_KEY = "main";
-
-function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteContent {
-  return {
-    ...base,
-    ...incoming,
-    company: { ...base.company, ...incoming.company },
-    hero: { ...base.hero, ...incoming.hero },
-    about: { ...base.about, ...incoming.about },
-    rental: { ...base.rental, ...incoming.rental },
-    contact: { ...base.contact, ...incoming.contact },
-    businessAreas: incoming.businessAreas?.length ? incoming.businessAreas : base.businessAreas,
-    services: incoming.services?.length ? incoming.services : base.services,
-  };
-}
 
 export async function getSiteContent(): Promise<SiteContent> {
   if (!isSupabaseBackendEnabled()) return defaultContent;
@@ -40,11 +27,7 @@ export async function getSiteContent(): Promise<SiteContent> {
     return defaultContent;
   }
 
-  const incoming = data?.content && typeof data.content === "object"
-    ? (data.content as Partial<SiteContent>)
-    : {};
-
-  return mergeContent(defaultContent, incoming);
+  return normalizeSiteContent(data?.content);
 }
 
 export async function saveSiteContent(content: SiteContent): Promise<void> {
@@ -55,9 +38,10 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
   const supabase = getSupabaseAdmin();
   if (!supabase) throw new Error("Supabasea ei ole konfiguroitu.");
 
+  const normalized = normalizeSiteContent(content);
   const { error } = await supabase
     .from("jkp_site_content")
-    .upsert({ key: CONTENT_KEY, content }, { onConflict: "key" });
+    .upsert({ key: CONTENT_KEY, content: normalized }, { onConflict: "key" });
 
   if (error) throw new Error("Sisällön tallennus Supabaseen epäonnistui.");
 }
