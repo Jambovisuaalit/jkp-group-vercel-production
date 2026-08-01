@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const errors = [];
+const selfPath = "scripts/verify-source.mjs";
 
 const requiredFiles = [
   "app/page.tsx",
@@ -69,8 +70,10 @@ async function walk(directory) {
     }
     if (!scanExtensions.has(path.extname(entry.name)) && entry.name !== ".env.example") continue;
 
-    const source = await readFile(absolute, "utf8");
     const relative = path.relative(root, absolute);
+    if (relative === selfPath) continue;
+
+    const source = await readFile(absolute, "utf8");
     for (const [label, pattern] of forbiddenPatterns) {
       pattern.lastIndex = 0;
       if (pattern.test(source)) errors.push(`${relative}: forbidden ${label}`);
