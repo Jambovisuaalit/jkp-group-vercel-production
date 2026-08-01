@@ -1,15 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-
-const panelStyle = {
-  width: "min(100% - 32px, 520px)",
-  margin: "8vh auto",
-  padding: "40px",
-  border: "1px solid #d7d2c8",
-  background: "#fff",
-  boxShadow: "0 22px 60px rgba(26, 35, 32, 0.10)",
-} as const;
+import styles from "../auth.module.css";
 
 export default function ResetPasswordPage() {
   const [accessToken, setAccessToken] = useState("");
@@ -25,10 +17,12 @@ export default function ResetPasswordPage() {
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
     const access = params.get("access_token") || "";
     const refresh = params.get("refresh_token") || "";
-    const errorDescription = params.get("error_description");
+    const errorDescription = params.get("error_description") || "";
+
+    window.history.replaceState({}, "", `${window.location.pathname}${window.location.search}`);
 
     if (errorDescription) {
-      setMessage(decodeURIComponent(errorDescription));
+      setMessage(errorDescription);
     } else if (!access || !refresh) {
       setMessage("Palautuslinkki on virheellinen tai vanhentunut.");
     } else {
@@ -58,7 +52,8 @@ export default function ResetPasswordPage() {
       setMessage(result.message || "Salasanan palautus käsiteltiin.");
       if (response.ok) {
         setSuccess(true);
-        window.history.replaceState({}, "", "/admin/reset-password");
+        setAccessToken("");
+        setRefreshToken("");
       }
     } catch {
       setMessage("Salasanan palauttaminen epäonnistui.");
@@ -68,17 +63,17 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", padding: "24px", background: "#f2f0ea", color: "#1a2320" }}>
-      <section style={panelStyle}>
-        <p style={{ margin: 0, fontSize: 12, letterSpacing: ".16em", fontWeight: 700 }}>JKP HALLINTA</p>
-        <h1 style={{ margin: "14px 0 12px", fontSize: "clamp(30px, 5vw, 44px)", lineHeight: 1.05 }}>Aseta uusi salasana</h1>
-        <p style={{ margin: "0 0 28px", lineHeight: 1.6 }}>
+    <main className={styles.page}>
+      <section className={styles.panel}>
+        <p className={styles.eyebrow}>JKP Hallinta</p>
+        <h1 className={styles.title}>Aseta uusi salasana</h1>
+        <p className={styles.lead}>
           Käytä vähintään 12 merkin salasanaa, jota ei käytetä muissa palveluissa.
         </p>
 
         {ready && !success ? (
-          <form onSubmit={submit} style={{ display: "grid", gap: 16 }}>
-            <label style={{ display: "grid", gap: 7, fontWeight: 700 }}>
+          <form className={styles.form} onSubmit={submit}>
+            <label className={styles.field}>
               Uusi salasana
               <input
                 type="password"
@@ -87,10 +82,9 @@ export default function ResetPasswordPage() {
                 minLength={12}
                 required
                 autoComplete="new-password"
-                style={{ minHeight: 48, padding: "0 14px", border: "1px solid #aaa69d", font: "inherit" }}
               />
             </label>
-            <label style={{ display: "grid", gap: 7, fontWeight: 700 }}>
+            <label className={styles.field}>
               Uusi salasana uudelleen
               <input
                 type="password"
@@ -99,21 +93,20 @@ export default function ResetPasswordPage() {
                 minLength={12}
                 required
                 autoComplete="new-password"
-                style={{ minHeight: 48, padding: "0 14px", border: "1px solid #aaa69d", font: "inherit" }}
               />
             </label>
-            <button
-              type="submit"
-              disabled={loading}
-              style={{ minHeight: 50, border: 0, background: "#173d35", color: "white", padding: "0 18px", fontWeight: 700, cursor: "pointer" }}
-            >
+            <button className={styles.button} type="submit" disabled={loading}>
               {loading ? "Tallennetaan…" : "Vaihda salasana"}
             </button>
           </form>
         ) : null}
 
-        {message ? <p role="status" style={{ marginTop: 20, padding: 14, background: success ? "#e8eee9" : "#f4e8e4", lineHeight: 1.5 }}>{message}</p> : null}
-        <a href="/admin" style={{ display: "inline-block", marginTop: 24, color: "#173d35", fontWeight: 700 }}>
+        {message ? (
+          <p className={`${styles.notice} ${success ? styles.success : ""}`} role="status">
+            {message}
+          </p>
+        ) : null}
+        <a className={styles.backLink} href="/admin">
           {success ? "Siirry hallintaan →" : "← Takaisin kirjautumiseen"}
         </a>
       </section>
