@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminUser, signOutAdmin } from "@/lib/auth";
+import { isTrustedMutationRequest } from "@/lib/request-security";
 
 export async function GET() {
   const user = await getAdminUser();
@@ -16,7 +17,10 @@ export async function GET() {
   });
 }
 
-export async function DELETE() {
+export async function DELETE(request: Request) {
+  if (!isTrustedMutationRequest(request)) {
+    return NextResponse.json({ message: "Pyyntö hylättiin." }, { status: 403 });
+  }
   await signOutAdmin();
   return NextResponse.json({ ok: true });
 }

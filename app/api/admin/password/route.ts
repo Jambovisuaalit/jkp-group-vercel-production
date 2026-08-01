@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { changeAdminPassword } from "@/lib/auth";
+import { isTrustedMutationRequest } from "@/lib/request-security";
 
 export async function PUT(request: Request) {
+  if (!isTrustedMutationRequest(request)) {
+    return NextResponse.json({ message: "Pyyntö hylättiin." }, { status: 403 });
+  }
+
   const body = (await request.json().catch(() => ({}))) as {
     currentPassword?: string;
     newPassword?: string;

@@ -1,54 +1,16 @@
-# JKP Group Oy — Vercel production source
+# JKP Group Oy — production source
 
-Puhdas Next.js-tuotantorepository JKP Group Oy:n verkkosivustolle.
+JKP Group Oy:n Next.js-tuotantorepository. Tämä repository sisältää vain nykyisen Nordic Institutional -sovelluksen, Supabase-first CMS:n ja Vercel-julkaisun tarvitsemat tiedostot.
 
-## Teknologia
+## Stack
 
-- Next.js App Router
-- React + TypeScript
-- Vercel
+- Node.js 22.x
+- Next.js 16 / App Router
+- React 19 + TypeScript
 - Supabase Database, Auth ja private Storage
+- Sharp-kuvaputki → WebP
 - Resend lomakeilmoituksiin
-
-## Vercel
-
-Importoi tämä repository Verceliin suoraan GitHubista.
-
-Suositellut asetukset:
-
-- Production Branch: `main`
-- Framework Preset: `Next.js`
-- Root Directory: repositoryn juuri
-- Build Command: Default
-- Output Directory: Default
-- Install Command: Default
-
-`vercel.json` lukitsee frameworkin Next.js:ksi eikä käytä vanhaa staattista `public`-outputia.
-
-## Ympäristömuuttujat
-
-Kopioi nimet `.env.example`-tiedostosta Vercelin Preview- ja Production-ympäristöihin. Älä tallenna oikeita secret-avaimia GitHubiin.
-
-Pakolliset Supabase-tuotannossa:
-
-- `DATA_BACKEND=supabase`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SECRET_KEY`
-- `SUPABASE_STORAGE_BUCKET=jkp-media`
-- `NEXT_PUBLIC_SITE_URL`
-
-Hallintakäyttäjää ei provisionoida ennen lopullisen omistajan valintaa:
-
-- `ADMIN_EMAIL=`
-- `ADMIN_DISPLAY_NAME=`
-
-Lomakkeiden automaattiseen sähköpostiin:
-
-- `RESEND_API_KEY`
-- `CONTACT_FROM_EMAIL`
-- `CONTACT_TO_EMAIL`
+- Vercel
 
 ## Paikallinen käyttö
 
@@ -57,51 +19,180 @@ npm install
 npm run dev
 ```
 
-Tuotantotarkistus:
+Täysi laatutarkistus:
 
 ```bash
-npm run lint
-npm run build
+npm run check
 ```
 
-Build voidaan ajaa ilman tuotantosecrettejä käyttämällä:
+Se ajaa järjestyksessä:
+
+1. ESLint / Next.js Core Web Vitals
+2. TypeScript `tsc --noEmit`
+3. Next.js production build
+
+CI-build voidaan ajaa ilman tuotantosecrettejä:
 
 ```bash
-DATA_BACKEND=static npm run build
+DATA_BACKEND=static SITE_INDEXING_ENABLED=false npm run check
 ```
 
-## Hallinta
+## Vercel
 
-Hallinta löytyy reitistä `/admin`.
+Importoi repository GitHubista asetuksilla:
 
-Tuotantotoiminnot:
+- Production Branch: `main`
+- Framework Preset: `Next.js`
+- Root Directory: repository root
+- Build Command: Default
+- Output Directory: Default
+- Install Command: Default
 
-- vuokrakohteiden CRUD
-- julkaisu / luonnos / piilotus
-- saatavuus
-- WebP-kuvalataus private Storageen
+`vercel.json` ei sisällä legacy-output-ylikirjoituksia.
+
+## Ympäristömuuttujat
+
+Katso `.env.example`. Oikeita salaisuuksia ei tallenneta GitHubiin.
+
+Supabase-tuotanto:
+
+```text
+DATA_BACKEND=supabase
+NEXT_PUBLIC_SUPABASE_URL=...
+SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+SUPABASE_SECRET_KEY=...
+SUPABASE_STORAGE_BUCKET=jkp-media
+NEXT_PUBLIC_SITE_URL=https://jkpgroup.fi
+```
+
+Previewssa indeksointi pidetään pois päältä:
+
+```text
+SITE_INDEXING_ENABLED=false
+```
+
+Vasta hyväksytyssä `jkpgroup.fi`-tuotannossa:
+
+```text
+SITE_INDEXING_ENABLED=true
+```
+
+Hallintakäyttäjä jätetään määrittämättä kehitys- ja preview-vaiheessa:
+
+```text
+ADMIN_EMAIL=
+ADMIN_DISPLAY_NAME=
+```
+
+Lomakeilmoitukset:
+
+```text
+RESEND_API_KEY=...
+CONTACT_FROM_EMAIL=...
+CONTACT_TO_EMAIL=jari.koskela@jkpgroup.fi
+```
+
+## Arkkitehtuuri
+
+### Julkinen sivusto
+
+- `/`
+- `/talotekniikka`
+- `/vuokraus`
+- `/vuokraus/[slug]`
+- `/referenssit`
+- `/robots.txt`
+- `/sitemap.xml`
+
+Julkinen sisältö luetaan palvelinpuolella. Selain ei saa Supabase service-role -avainta eikä suoraa Storage-oikeutta.
+
+### CMS
+
+Hallinta: `/admin`
+
+- Supabase Auth
+- HTTP-only, Secure, SameSite=Strict session-cookie
+- käyttöoikeuden ainoa lähde: aktiivinen `jkp_admin_users`-rivi
+- vuokrakohteiden CRUD + julkaisu/saatavuus/piilotus
 - referenssien CRUD + julkaisulupa
-- sivuston perustekstit ja hero-kuva
+- perustekstit ja hero-kuva
 - lomakeviestien inbox ja käsittelytila
-- Supabase Auth -kirjautuminen
 - salasanan vaihto ja palautus
 
-Lopullinen pääkäyttäjä luodaan vasta luovutuksen yhteydessä komennolla:
+Pääkäyttäjä provisionoidaan vasta luovutuksessa:
 
 ```bash
 npm run bootstrap:admin
 ```
 
-Komento tarvitsee server-side Supabase-secretin sekä `ADMIN_EMAIL`- ja `ADMIN_DISPLAY_NAME`-arvot ympäristöstä. Salasanaa ei tallenneta lähdekoodiin.
+Salasanaa ei tallenneta lähdekoodiin.
 
-## Turvallisuus
+### Media
 
-- `SUPABASE_SECRET_KEY` on vain palvelinympäristössä.
-- `.env*`-salaisuuksia ei commitoida.
-- `jkp-media` on private bucket.
-- selaimelle ei anneta suoraa service-role-oikeutta.
-- julkisilla lomakkeilla ei kerätä henkilötunnusta, pankkitietoja tai luottotietoasiakirjoja.
+- bucket: `jkp-media`
+- private
+- Storage hyväksyy vain WebP:n
+- upload API hyväksyy JPEG/PNG/WebP-lähteen
+- enintään 12 Mt lähdetiedosto
+- enintään 40 megapikselin dekoodaus
+- automaattinen orientointi
+- enintään 2000 × 2000 px
+- tallennettu WebP jää alle 6 Mt bucket-rajan
+- julkinen media kulkee vain `/api/media/...`-proxyn kautta
 
-## Julkaisu
+### Lomakkeet
 
-Ensin Vercel Preview. `jkpgroup.fi` kytketään vasta asiakashyväksynnän, lopullisten sisältöjen ja tuotanto-QA:n jälkeen.
+Lomaketyypit ovat eksplisiittisiä:
+
+- `contact`
+- `commercial`
+- `residential`
+
+Palvelin validoi pakolliset kentät, consentin, payload-koon ja lomaketyypin. Selvästi tunnistettavat henkilötunnus- ja FI-IBAN-muodot hylätään ennen tallennusta. Supabase-tallennus tehdään ennen Resend-ilmoitusta, jotta sähköpostipalvelun häiriö ei kadota yhteydenottoa.
+
+## Tietoturva
+
+- fail-closed Supabase-tuotantotila
+- RLS kaikissa JKP-tauluissa
+- private Storage
+- same-origin-tarkistus kaikissa selainmutaatioreiteissä
+- server-side CMS-payloadien rajaus ja normalisointi
+- DB-tason publication- ja julkaisulupaeheys
+- CSP, frame denial, nosniff, permissions policy ja cross-origin-headerit
+- preview on oletuksena `noindex`
+- recovery-tokenit poistetaan selaimen URL:sta heti lukemisen jälkeen
+
+## Migraatiot
+
+Migraatiot sijaitsevat `supabase/migrations/`-hakemistossa. Uusi eheysmigraatio varmistaa lisäksi:
+
+- `published` ja `hidden` eivät voi olla samanaikaisesti totta
+- referenssiä ei voi julkaista ilman `permission_confirmed=true`
+- `always_active` kuuluu vain holiday/kiinteistötyyppiin
+- JSON-kenttien rakenteet pysyvät oikean tyyppisinä
+
+## Release gate
+
+`main`-haaraan ei yhdistetä eikä domainia kytketä ennen kuin kaikki seuraavat täyttyvät:
+
+- [ ] riippuvuuksien asennus onnistuu
+- [ ] `npm run lint` onnistuu
+- [ ] `npm run typecheck` onnistuu
+- [ ] `npm run build` onnistuu
+- [ ] Vercel Preview on `READY`
+- [ ] Supabase-ympäristömuuttujat on todennettu oikeassa Vercel-projektissa
+- [ ] adminin selain-E2E on läpäisty
+- [ ] WebP-upload ja media-proxy on läpäisty selaimessa
+- [ ] kaikki kolme lomaketta tallentuvat Supabaseen
+- [ ] Resend-toimitus on testattu
+- [ ] QA-data on poistettu
+- [ ] referenssien kuvagallerian admin-UI on viimeistelty tai scope rajattu kirjallisesti
+- [ ] tietosuojaseloste ja lopulliset asiakassisällöt on hyväksytty
+- [ ] `SITE_INDEXING_ENABLED=true` asetetaan vasta tuotantoon
+
+`jkpgroup.fi` kytketään vasta hyväksytyn previewn jälkeen.
+
+## Release-hygienia
+
+Repositoryssa ei vielä ole `package-lock.json`-tiedostoa. Suorat riippuvuudet on siksi pinnattu tarkkoihin vakaisiin versioihin, mutta lopullinen release edellyttää lockfilen generoimista onnistuneella `npm install` -ajolla ja sen commitointia ennen mergeä.

@@ -2,6 +2,8 @@ import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
+const ALLOWED_ROOTS = new Set(["site", "rentals", "references"]);
+
 export async function GET(
   _request: Request,
   context: { params: Promise<{ path: string[] }> },
@@ -11,7 +13,12 @@ export async function GET(
     (segment) => segment && segment !== "." && segment !== ".." && !segment.includes("\\"),
   );
 
-  if (!safeSegments.length || safeSegments.length !== segments.length) {
+  if (
+    !safeSegments.length ||
+    safeSegments.length !== segments.length ||
+    !ALLOWED_ROOTS.has(safeSegments[0]) ||
+    !safeSegments.at(-1)?.toLowerCase().endsWith(".webp")
+  ) {
     return new Response("Not found", { status: 404 });
   }
 
@@ -31,7 +38,7 @@ export async function GET(
   return new Response(await data.arrayBuffer(), {
     status: 200,
     headers: {
-      "Content-Type": data.type || "image/webp",
+      "Content-Type": "image/webp",
       "Cache-Control": "public, max-age=31536000, immutable",
       "X-Content-Type-Options": "nosniff",
     },

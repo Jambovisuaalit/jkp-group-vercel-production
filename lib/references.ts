@@ -15,6 +15,11 @@ export type ProjectReference = {
 
 const staticReferences: ProjectReference[] = [];
 
+function normalizeSortOrder(value: unknown): number {
+  const number = Number(value ?? 100);
+  return Number.isFinite(number) ? number : 100;
+}
+
 export async function getPublishedReferences(): Promise<ProjectReference[]> {
   if (!isSupabaseBackendEnabled()) {
     return [...staticReferences].sort((a, b) => a.sortOrder - b.sortOrder);
@@ -44,6 +49,6 @@ export async function getPublishedReferences(): Promise<ProjectReference[]> {
     summary: String(row.summary || ""),
     description: String(row.description || ""),
     imageUrl: String(row.imageUrl || ""),
-    sortOrder: Number(row.sortOrder || 100),
+    sortOrder: normalizeSortOrder(row.sortOrder),
   }));
 }

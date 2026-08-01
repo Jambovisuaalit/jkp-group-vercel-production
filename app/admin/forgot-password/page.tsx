@@ -1,18 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-
-const panelStyle = {
-  width: "min(100% - 32px, 520px)",
-  margin: "8vh auto",
-  padding: "40px",
-  border: "1px solid #d7d2c8",
-  background: "#fff",
-  boxShadow: "0 22px 60px rgba(26, 35, 32, 0.10)",
-} as const;
+import styles from "../auth.module.css";
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("jari.koskela@jkpgroup.fi");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -37,15 +29,15 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", padding: "24px", background: "#f2f0ea", color: "#1a2320" }}>
-      <section style={panelStyle}>
-        <p style={{ margin: 0, fontSize: 12, letterSpacing: ".16em", fontWeight: 700 }}>JKP HALLINTA</p>
-        <h1 style={{ margin: "14px 0 12px", fontSize: "clamp(30px, 5vw, 44px)", lineHeight: 1.05 }}>Palauta salasana</h1>
-        <p style={{ margin: "0 0 28px", lineHeight: 1.6 }}>
-          Saat sähköpostiin kertakäyttöisen palautuslinkin. Linkki avaa suojatun salasanan vaihtosivun.
+    <main className={styles.page}>
+      <section className={styles.panel}>
+        <p className={styles.eyebrow}>JKP Hallinta</p>
+        <h1 className={styles.title}>Palauta salasana</h1>
+        <p className={styles.lead}>
+          Saat sähköpostiin kertakäyttöisen palautuslinkin, jos osoitteella on aktiivinen hallintatili.
         </p>
-        <form onSubmit={submit} style={{ display: "grid", gap: 16 }}>
-          <label style={{ display: "grid", gap: 7, fontWeight: 700 }}>
+        <form className={styles.form} onSubmit={submit}>
+          <label className={styles.field}>
             Sähköposti
             <input
               type="email"
@@ -53,19 +45,14 @@ export default function ForgotPasswordPage() {
               onChange={(event) => setEmail(event.target.value)}
               required
               autoComplete="email"
-              style={{ minHeight: 48, padding: "0 14px", border: "1px solid #aaa69d", font: "inherit" }}
             />
           </label>
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ minHeight: 50, border: 0, background: "#173d35", color: "white", padding: "0 18px", fontWeight: 700, cursor: "pointer" }}
-          >
+          <button className={styles.button} type="submit" disabled={loading}>
             {loading ? "Lähetetään…" : "Lähetä palautuslinkki"}
           </button>
         </form>
-        {message ? <p role="status" style={{ marginTop: 20, padding: 14, background: "#e8eee9", lineHeight: 1.5 }}>{message}</p> : null}
-        <a href="/admin" style={{ display: "inline-block", marginTop: 24, color: "#173d35", fontWeight: 700 }}>← Takaisin kirjautumiseen</a>
+        {message ? <p className={styles.notice} role="status">{message}</p> : null}
+        <a className={styles.backLink} href="/admin">← Takaisin kirjautumiseen</a>
       </section>
     </main>
   );

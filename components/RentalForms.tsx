@@ -3,20 +3,21 @@
 import { FormEvent, ReactNode, useRef, useState } from "react";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
+type RentalSubmissionKind = "commercial" | "residential";
 
 type ContactResponse = {
   message?: string;
-  delivery?: "resend" | "mailto";
+  delivery?: "resend" | "stored" | "mailto";
   mailtoUrl?: string;
 };
 
 type RentalFormProps = {
-  subject: string;
+  kind: RentalSubmissionKind;
   submitLabel: string;
   children: ReactNode;
 };
 
-function RentalForm({ subject, submitLabel, children }: RentalFormProps) {
+function RentalForm({ kind, submitLabel, children }: RentalFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [message, setMessage] = useState("");
   const startedAt = useRef(Date.now());
@@ -33,7 +34,7 @@ function RentalForm({ subject, submitLabel, children }: RentalFormProps) {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, subject, startedAt: startedAt.current }),
+        body: JSON.stringify({ ...data, kind, startedAt: startedAt.current }),
       });
       const payload = (await response.json()) as ContactResponse;
       if (!response.ok) throw new Error(payload.message || "Lomakkeen lähetys epäonnistui.");
@@ -76,7 +77,7 @@ function RentalForm({ subject, submitLabel, children }: RentalFormProps) {
 
 export function BusinessPremisesForm() {
   return (
-    <RentalForm subject="B2B-toimitilan tarjouspyyntö" submitLabel="Lähetä tilakysely">
+    <RentalForm kind="commercial" submitLabel="Lähetä tilakysely">
       <div className="form-row">
         <label>Yritys<input name="company" autoComplete="organization" required maxLength={160} /></label>
         <label>Y-tunnus<input name="businessId" maxLength={20} /></label>
@@ -101,7 +102,7 @@ export function BusinessPremisesForm() {
 
 export function ApartmentApplicationForm() {
   return (
-    <RentalForm subject="Asuntovuokrauksen hakemus" submitLabel="Lähetä vuokrahakemus">
+    <RentalForm kind="residential" submitLabel="Lähetä vuokrahakemus">
       <div className="form-row">
         <label>Hakijan nimi<input name="name" autoComplete="name" required maxLength={100} /></label>
         <label>Puhelin<input name="phone" type="tel" autoComplete="tel" required maxLength={40} /></label>

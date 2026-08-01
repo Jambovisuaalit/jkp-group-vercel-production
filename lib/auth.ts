@@ -29,7 +29,7 @@ function cookieOptions(maxAge: number) {
   return {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
+    sameSite: "strict" as const,
     path: "/",
     maxAge,
   };
@@ -48,9 +48,6 @@ async function clearSession() {
 }
 
 async function isAllowedAdmin(user: User): Promise<boolean> {
-  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  if (configuredEmail && user.email?.toLowerCase() === configuredEmail) return true;
-
   const admin = getSupabaseAdmin();
   if (!admin) return false;
 

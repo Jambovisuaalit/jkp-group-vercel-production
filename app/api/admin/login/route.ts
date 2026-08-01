@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { signInAdmin } from "@/lib/auth";
+import { isTrustedMutationRequest } from "@/lib/request-security";
 
 export async function POST(request: Request) {
+  if (!isTrustedMutationRequest(request)) {
+    return NextResponse.json({ message: "Pyyntö hylättiin." }, { status: 403 });
+  }
+
   const body = (await request.json().catch(() => ({}))) as {
     email?: string;
     password?: string;

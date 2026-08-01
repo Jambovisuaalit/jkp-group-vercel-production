@@ -4,7 +4,7 @@ import { FormEvent, useRef, useState } from "react";
 
 type ContactResponse = {
   message?: string;
-  delivery?: "resend" | "mailto";
+  delivery?: "resend" | "stored" | "mailto";
   mailtoUrl?: string;
 };
 
@@ -25,7 +25,12 @@ export function ContactForm({ subject = "Yhteydenotto verkkosivulta" }: { subjec
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, subject, startedAt: startedAt.current }),
+        body: JSON.stringify({
+          ...data,
+          kind: "contact",
+          topic: subject,
+          startedAt: startedAt.current,
+        }),
       });
       const payload = (await response.json()) as ContactResponse;
       if (!response.ok) throw new Error(payload.message || "Viestin lähetys epäonnistui.");
