@@ -16,6 +16,19 @@ function boundedArray(value: unknown, maxItems: number, maxLength: number): stri
     .slice(0, maxItems);
 }
 
+function managedMediaUrl(value: unknown, folder: "rentals" | "references"): string {
+  const url = boundedString(value, 800);
+  return url.startsWith(`/api/media/${folder}/`) && url.toLowerCase().endsWith(".webp")
+    ? url
+    : "";
+}
+
+function managedMediaArray(value: unknown, folder: "rentals" | "references"): string[] {
+  return boundedArray(value, 20, 800).filter(
+    (url) => url.startsWith(`/api/media/${folder}/`) && url.toLowerCase().endsWith(".webp"),
+  );
+}
+
 function boundedSortOrder(value: unknown): number {
   const number = Number(value);
   if (!Number.isFinite(number)) return 100;
@@ -60,8 +73,8 @@ export function buildRentalPayload(body: Partial<AdminRental>) {
       price: boundedString(body.price, 100),
       area: boundedString(body.area, 80),
       rooms: boundedString(body.rooms, 100),
-      mainImage: boundedString(body.mainImage, 800),
-      gallery: boundedArray(body.gallery, 20, 800),
+      mainImage: managedMediaUrl(body.mainImage, "rentals"),
+      gallery: managedMediaArray(body.gallery, "rentals"),
       details: boundedArray(body.details, 30, 300),
       highlights: boundedArray(body.highlights, 20, 240),
       contactName: boundedString(body.contactName, 160, "JKP Group Oy") || "JKP Group Oy",
@@ -98,8 +111,8 @@ export function buildReferencePayload(body: Partial<AdminReference>) {
       role: boundedString(body.role, 200),
       summary: boundedString(body.summary, 600),
       description: boundedString(body.description, 6000),
-      imageUrl: boundedString(body.imageUrl, 800),
-      gallery: boundedArray(body.gallery, 20, 800),
+      imageUrl: managedMediaUrl(body.imageUrl, "references"),
+      gallery: managedMediaArray(body.gallery, "references"),
       permission_confirmed: Boolean(body.permissionConfirmed),
       sortOrder: boundedSortOrder(body.sortOrder),
       ...publicationColumns(publicationState),
