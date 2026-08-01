@@ -1,13 +1,23 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/auth";
 import { normalizeSubmission } from "@/lib/admin-records";
+import { getAdminUser } from "@/lib/auth";
+import { isTrustedMutationRequest } from "@/lib/request-security";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import type { SubmissionStatus } from "@/types/admin";
 
 type RouteContext = { params: Promise<{ id: string }> };
-const allowed: SubmissionStatus[] = ["new", "contacted", "processed", "archived", "spam"];
+const allowed = new Set<SubmissionStatus>([
+  "new",
+  "contacted",
+  "processed",
+  "archived",
+  "spam",
+]);
 
 export async function PUT(request: Request, context: RouteContext) {
+  if (!isTrustedMutationRequest(request)) {
+    return NextResponse.json({ message: "Pyyntö hylättiin." }, { status: 403 });
+  }
   if (!(await getAdminUser())) {
     return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
   }
@@ -19,7 +29,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
   const { id } = await context.params;
   const body = (await request.json().catch(() => ({}))) as { status?: SubmissionStatus };
-  if (!body.status || !allowed.includes(body.status)) {
+  if (!body.status || !allowed.has(body.status)) {
     return NextResponse.json({ message: "Virheellinen käsittelytila." }, { status: 400 });
   }
 
