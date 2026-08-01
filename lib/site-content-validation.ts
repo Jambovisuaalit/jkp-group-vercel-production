@@ -6,6 +6,14 @@ function text(value: unknown, fallback: string, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) || fallback : fallback;
 }
 
+function managedSiteMedia(value: unknown): string {
+  if (typeof value !== "string") return "";
+  const url = value.trim().slice(0, 800);
+  return url.startsWith("/api/media/site/") && url.toLowerCase().endsWith(".webp")
+    ? url
+    : "";
+}
+
 function record(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value)
     ? (value as Record<string, unknown>)
@@ -55,7 +63,7 @@ export function normalizeSiteContent(value: unknown): SiteContent {
       eyebrow: text(hero.eyebrow, defaultContent.hero.eyebrow, 180),
       title: text(hero.title, defaultContent.hero.title, 300),
       lead: text(hero.lead, defaultContent.hero.lead, 1000),
-      imageUrl: text(hero.imageUrl, defaultContent.hero.imageUrl, 800),
+      imageUrl: managedSiteMedia(hero.imageUrl),
     },
     about: {
       title: text(about.title, defaultContent.about.title, 300),
