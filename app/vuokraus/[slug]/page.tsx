@@ -18,6 +18,12 @@ const typeLabels = {
   residential: "Vuokra-asunto",
 } as const;
 
+function contactTarget(type: keyof typeof typeLabels): string {
+  if (type === "commercial") return "/vuokraus#toimitilakysely";
+  if (type === "residential") return "/vuokraus#vuokrahakemus";
+  return "/#yhteys";
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const property = await getRentalBySlug(slug);
@@ -37,7 +43,7 @@ export default async function RentalDetailPage({ params }: PageProps) {
   const [content, property] = await Promise.all([getSiteContent(), getRentalBySlug(slug)]);
   if (!property) notFound();
 
-  const contactTarget = property.type === "commercial" ? "/vuokraus#toimitilakysely" : "/vuokraus#vuokrahakemus";
+  const target = contactTarget(property.type);
   const gallery = [property.mainImage, ...property.gallery].filter(Boolean);
 
   return (
@@ -51,11 +57,18 @@ export default async function RentalDetailPage({ params }: PageProps) {
               <h1>{property.title}</h1>
               <p>{property.summary || property.description}</p>
               <div className="hero-actions">
-                <Link className="button" href={contactTarget}>Kysy kohteesta</Link>
+                <Link className="button" href={target}>Kysy kohteesta</Link>
                 <Link className="button" href="/vuokraus">Takaisin kohteisiin</Link>
               </div>
             </div>
-            <div className="hero-visual" style={property.mainImage ? { backgroundImage: `linear-gradient(rgba(9, 28, 23, 0.18), rgba(9, 28, 23, 0.68)), url("${property.mainImage}")`, backgroundPosition: "center", backgroundSize: "cover" } : undefined}>
+            <div
+              className="hero-visual"
+              style={property.mainImage ? {
+                backgroundImage: `linear-gradient(rgba(9, 28, 23, 0.18), rgba(9, 28, 23, 0.68)), url("${property.mainImage}")`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              } : undefined}
+            >
               <div><span>{property.city || "JKP / SPACE"}</span><strong>{property.price || "Kysy lisätiedot"}</strong></div>
             </div>
           </div>
@@ -83,9 +96,15 @@ export default async function RentalDetailPage({ params }: PageProps) {
 
         {property.details.length > 0 ? (
           <section className="section services-preview">
-            <div className="shell section-heading"><div><p className="eyebrow">Varustelu ja lisätiedot</p><h2>Kohteen keskeiset ominaisuudet.</h2></div></div>
+            <div className="shell section-heading">
+              <div><p className="eyebrow">Varustelu ja lisätiedot</p><h2>Kohteen keskeiset ominaisuudet.</h2></div>
+            </div>
             <div className="shell service-grid">
-              {property.details.map((detail, index) => <article className="service-card" key={`${detail}-${index}`}><span>0{index + 1}</span><h3>{detail}</h3></article>)}
+              {property.details.map((detail, index) => (
+                <article className="service-card" key={`${detail}-${index}`}>
+                  <span>0{index + 1}</span><h3>{detail}</h3>
+                </article>
+              ))}
             </div>
           </section>
         ) : null}
@@ -95,9 +114,14 @@ export default async function RentalDetailPage({ params }: PageProps) {
             <div className="shell section-heading"><div><p className="eyebrow">Kuvat</p><h2>Tutustu kohteeseen.</h2></div></div>
             <div className="shell property-grid">
               {gallery.map((url, index) => (
-                <div className="property-card" key={`${url}-${index}`}>
-                  <div className="property-media" style={{ minHeight: 320, backgroundImage: `url("${url}")` }} />
-                </div>
+                <figure className="property-card" key={`${url}-${index}`}>
+                  <div
+                    className="property-media"
+                    role="img"
+                    aria-label={`${property.title}, kuva ${index + 1}`}
+                    style={{ minHeight: 320, backgroundImage: `url("${url}")` }}
+                  />
+                </figure>
               ))}
             </div>
           </section>
@@ -105,8 +129,12 @@ export default async function RentalDetailPage({ params }: PageProps) {
 
         <section className="contact-section">
           <div className="shell contact-grid">
-            <div><p className="eyebrow">Seuraava vaihe</p><h2>Kysy kohteesta suoraan.</h2><p>Siirry oikeaan lomakkeeseen. Arkaluonteisia henkilötietoja ei kerätä julkisella verkkolomakkeella.</p></div>
-            <div><Link className="button" href={contactTarget}>Avaa yhteydenottolomake</Link></div>
+            <div>
+              <p className="eyebrow">Seuraava vaihe</p>
+              <h2>Kysy kohteesta suoraan.</h2>
+              <p>Siirry oikeaan lomakkeeseen. Arkaluonteisia henkilötietoja ei kerätä julkisella verkkolomakkeella.</p>
+            </div>
+            <div><Link className="button" href={target}>Avaa yhteydenottolomake</Link></div>
           </div>
         </section>
       </main>
