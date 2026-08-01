@@ -30,6 +30,16 @@ export function buildRentalPayload(body: Partial<AdminRental>) {
   const title = boundedString(body.title, 180);
   const slug = slugify(boundedString(body.slug, 100) || title);
   const publicationState = resolvePublicationState(body.publicationState);
+  const type =
+    body.type === "commercial" || body.type === "residential"
+      ? body.type
+      : "holiday";
+  const availability =
+    body.availability === "available" || body.availability === "occupied"
+      ? body.availability
+      : type === "holiday"
+        ? "always_active"
+        : "available";
 
   if (!title || !slug) {
     return { error: "Kohteen nimi on pakollinen." as const, slug: "", payload: null };
@@ -41,14 +51,8 @@ export function buildRentalPayload(body: Partial<AdminRental>) {
     payload: {
       slug,
       title,
-      type:
-        body.type === "commercial" || body.type === "residential"
-          ? body.type
-          : "holiday",
-      status:
-        body.availability === "available" || body.availability === "occupied"
-          ? body.availability
-          : "always_active",
+      type,
+      status: availability,
       city: boundedString(body.city, 120),
       address: boundedString(body.address, 240),
       summary: boundedString(body.summary, 600),
