@@ -31,6 +31,11 @@ function normalizeStringArray(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 }
 
+function normalizeSortOrder(value: unknown): number {
+  const number = Number(value ?? 100);
+  return Number.isFinite(number) ? number : 100;
+}
+
 function normalizeProperty(row: Record<string, unknown>): RentalProperty {
   return {
     id: String(row.id || ""),
@@ -51,7 +56,7 @@ function normalizeProperty(row: Record<string, unknown>): RentalProperty {
     highlights: normalizeStringArray(row.highlights),
     contactName: String(row.contactName || "JKP Group Oy"),
     published: Boolean(row.published),
-    sortOrder: Number(row.sortOrder || 100),
+    sortOrder: normalizeSortOrder(row.sortOrder),
   };
 }
 
