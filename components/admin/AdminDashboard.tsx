@@ -492,7 +492,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
           ) : (
             <form className={styles.loginForm} onSubmit={login}>
               <Field label="Sähköposti">
-                <input name="email" type="email" autoComplete="username" defaultValue="jari.koskela@jkpgroup.fi" required />
+                <input name="email" type="email" autoComplete="username" required />
               </Field>
               <Field label="Salasana">
                 <input name="password" type="password" autoComplete="current-password" required />
@@ -502,6 +502,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
               </button>
             </form>
           )}
+          <a className={styles.backLink} href="/admin/forgot-password">Unohtuiko salasana?</a>
           <a className={styles.backLink} href="/">← Takaisin verkkosivustolle</a>
         </section>
         <aside className={styles.loginVisual} aria-hidden="true">
@@ -567,7 +568,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
           {view === "overview" ? (
             <section>
               <div className={styles.pageHeading}>
-                <div><p className={styles.kicker}>YHTEENVETO</p><h1>Hyvää päivää, Jari.</h1><p>Hallinnoi JKP Groupin verkkosivuston sisältöjä yhdestä paikasta.</p></div>
+                <div><p className={styles.kicker}>YHTEENVETO</p><h1>Hallinnan yhteenveto</h1><p>Hallinnoi JKP Groupin verkkosivuston sisältöjä yhdestä paikasta.</p></div>
                 <button className={styles.primaryButton} onClick={() => { setRentalDraft(emptyRental()); navigate("rentals"); }}><Icon name="plus" />Lisää vuokrakohde</button>
               </div>
               <div className={styles.statsGrid}>
@@ -667,7 +668,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             <section>
               <div className={styles.pageHeading}><div><p className={styles.kicker}>OMA TILI</p><h1>Käyttäjätili</h1><p>Hallinnoi kirjautumistietojasi turvallisesti.</p></div></div>
               <div className={styles.accountGrid}>
-                <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>Jari Koskela</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Rooli</dt><dd>Pääkäyttäjä</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
+                <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>JKP Hallinnan pääkäyttäjä</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Rooli</dt><dd>Pääkäyttäjä</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
                 <form className={styles.panel} onSubmit={changePassword}><p className={styles.kicker}>TIETOTURVA</p><h2>Vaihda salasana</h2><div className={styles.formStack}><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><Field label="Uusi salasana" hint="Vähintään 12 merkkiä"><input name="newPassword" type="password" autoComplete="new-password" minLength={12} required /></Field><Field label="Uusi salasana uudelleen"><input name="confirmation" type="password" autoComplete="new-password" minLength={12} required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Vaihda salasana</button></div></form>
               </div>
             </section>
