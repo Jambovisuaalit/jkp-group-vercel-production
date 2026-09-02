@@ -4,7 +4,7 @@ import "./client-theme.css";
 import "./home-mobile-fix.css";
 
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-const siteUrl = configuredSiteUrl || "https://jkpgroup.fi";
+const siteUrl = configuredSiteUrl || "https://jkp-group-asiakas.vercel.app";
 const isProductionDomain = configuredSiteUrl === "https://jkpgroup.fi";
 
 export const metadata: Metadata = {
