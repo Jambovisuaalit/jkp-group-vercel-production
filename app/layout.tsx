@@ -3,12 +3,17 @@ import "./globals.css";
 import "./client-theme.css";
 import "./home-mobile-fix.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jkpgroup.fi";
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const siteUrl = configuredSiteUrl || "https://jkpgroup.fi";
+const isProductionDomain = configuredSiteUrl === "https://jkpgroup.fi";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "JKP Group Oy | Rakennuttaminen, talotekniikka ja vuokraus", template: "%s | JKP Group Oy" },
   description: "JKP Group Oy tarjoaa rakennuttamisen, taloteknisen valvonnan ja projektinjohdon asiantuntijapalveluja sekä vuokraa omia liike- ja toimitiloja, asuntoja ja loma-asuntoja.",
+  robots: isProductionDomain
+    ? { index: true, follow: true }
+    : { index: false, follow: false, nocache: true },
   alternates: { canonical: "/" },
   openGraph: {
     locale: "fi_FI",
