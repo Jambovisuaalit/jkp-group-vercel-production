@@ -8,47 +8,42 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const content = await getSiteContent();
-  const heroStyle = content.hero.imageUrl
-    ? {
-        backgroundImage: `linear-gradient(145deg, rgba(6, 16, 26, 0.24), rgba(6, 16, 26, 0.9)), url("${content.hero.imageUrl}")`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }
-    : undefined;
 
   return (
     <>
       <Header email={content.company.email} />
       <main>
-        <section className="hero">
+        <section className="hero blueprint-hero">
           <div className="shell hero-grid">
             <div className="hero-copy">
               <p className="eyebrow">{content.hero.eyebrow}</p>
               <h1>{content.hero.title}</h1>
               <p className="hero-lead">{content.hero.lead}</p>
               <div className="hero-actions">
-                <a className="button" href="#yhteys">Kerro tarpeesta</a>
+                <a className="button" href="#yhteys">Kerro hankkeesta</a>
                 <Link className="text-link" href="/talotekniikka">
                   Tutustu palveluihin <span aria-hidden="true">→</span>
                 </Link>
               </div>
               <div className="proof-row" aria-label="JKP Groupin luottamusluvut">
                 <div><strong>1993</strong><span>Perustettu</span></div>
-                <div><strong>84,2 %</strong><span>Omavaraisuus 2024</span></div>
-                <div><strong>40,2 %</strong><span>Liikevoitto 2024</span></div>
+                <div><strong>30+ v</strong><span>Kokemusta</span></div>
+                <div><strong>Keski-Suomi</strong><span>Toiminta-alue</span></div>
               </div>
             </div>
 
-            <div className="hero-visual" aria-label="JKP Groupin palvelukokonaisuus" style={heroStyle}>
-              <div className="institutional-code">JKP / 1993 / KESKI-SUOMI</div>
-              <div className="visual-ring">
-                <span>Hanke</span>
-                <strong>Hallinnassa</strong>
+            <div className="hero-visual blueprint-panel" aria-label="Rakennushankkeen suunnittelu ja toteutus">
+              <div className="blueprint-topline"><span>JKP GROUP OY</span><span>RAKENNUTTAMINEN / TALOTEKNIIKKA</span></div>
+              <div className="blueprint-sheet" aria-hidden="true">
+                <span className="bp-line bp-line-a" />
+                <span className="bp-line bp-line-b" />
+                <span className="bp-line bp-line-c" />
+                <span className="bp-box bp-box-a" />
+                <span className="bp-box bp-box-b" />
+                <span className="bp-circle" />
+                <strong>JKP</strong>
               </div>
-              <div className="visual-footer">
-                <span>Talotekniikka</span>
-                <span>Vuokraus</span>
-              </div>
+              <div className="visual-footer"><span>Esiselvitys</span><span>Toteutus</span><span>Vastaanotto</span></div>
             </div>
           </div>
         </section>
@@ -56,10 +51,10 @@ export default async function HomePage() {
         <section className="section business-section">
           <div className="shell section-heading">
             <div>
-              <p className="eyebrow">Kaksi selkeää palvelupolkua</p>
-              <h2>Valitse asia, jonka haluat ratkaista.</h2>
+              <p className="eyebrow">Kaksi palvelukokonaisuutta</p>
+              <h2>Rakennushanke tai vuokratarve — yksi selkeä reitti eteenpäin.</h2>
             </div>
-            <p>Tekninen hanke ja toimitilan tarve vaativat eri lähtötiedot. Siksi ne on erotettu omiksi, nopeasti ymmärrettäviksi kokonaisuuksiksi.</p>
+            <p>Rakennuttamisen ja talotekniikan asiantuntijapalvelut sekä omien kohteiden vuokraustoiminta on erotettu omiksi kokonaisuuksikseen.</p>
           </div>
           <div className="shell business-grid">
             {content.businessAreas.map((area, index) => (
@@ -75,12 +70,12 @@ export default async function HomePage() {
         <section className="section about-section">
           <div className="shell about-grid">
             <div className="about-panel">
-              <span>33</span>
-              <strong>vuotta yritystoimintaa</strong>
-              <p>Suomen Vahvimmat Platina -sertifikaatti. Vuoden 2024 omavaraisuusaste 84,2 %.</p>
+              <span>1993</span>
+              <strong>JKP Group Oy</strong>
+              <p>Rakennuttamisen, talotekniikan ja kiinteistöjen asiantuntijapalvelut.</p>
             </div>
             <div className="about-copy">
-              <p className="eyebrow">JKP Group Oy</p>
+              <p className="eyebrow">Rakennuttaminen ja valvonta</p>
               <h2>{content.about.title}</h2>
               <p>{content.about.body}</p>
               <Link className="text-link dark-link" href="/referenssit">Katso referenssit →</Link>
@@ -90,7 +85,7 @@ export default async function HomePage() {
 
         <section className="section services-preview">
           <div className="shell section-heading">
-            <div><p className="eyebrow">Talotekniikka</p><h2>Tekninen laatu ilman hallinnollista sumua.</h2></div>
+            <div><p className="eyebrow">Talotekniikka</p><h2>Vastuut hankkeen eri vaiheisiin.</h2></div>
           </div>
           <div className="shell service-grid">
             {content.services.map((service, index) => (
