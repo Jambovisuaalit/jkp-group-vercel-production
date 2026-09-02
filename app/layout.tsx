@@ -6,15 +6,15 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://jkpgroup.fi";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "JKP Group Oy | Talotekniikka, kiinteistöt ja vuokraus", template: "%s | JKP Group Oy" },
-  description: "Vuodesta 1993 toiminut JKP Group Oy tarjoaa taloteknistä rakennuttamista, valvontaa, LVI-suunnittelua sekä liike- ja toimitilojen vuokrausta Jyväskylässä ja Keski-Suomessa.",
+  title: { default: "JKP Group Oy | Rakennuttaminen, talotekniikka ja vuokraus", template: "%s | JKP Group Oy" },
+  description: "JKP Group Oy tarjoaa rakennuttamisen, taloteknisen valvonnan ja projektinjohdon asiantuntijapalveluja sekä vuokraa omia liike- ja toimitiloja, asuntoja ja loma-asuntoja.",
   alternates: { canonical: "/" },
   openGraph: {
     locale: "fi_FI",
     type: "website",
     siteName: "JKP Group Oy",
-    title: "JKP Group Oy | Talotekniikka, kiinteistöt ja vuokraus",
-    description: "Jyväskyläläinen, vuodesta 1993 toiminut talotekniikan ja kiinteistöjen asiantuntijayhtiö.",
+    title: "JKP Group Oy | Rakennuttaminen, talotekniikka ja vuokraus",
+    description: "Rakennuttamisen ja talotekniikan asiantuntijapalvelut sekä omien kohteiden vuokraustoiminta.",
   },
 };
 
