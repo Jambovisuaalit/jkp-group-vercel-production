@@ -11,39 +11,21 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header email={content.company.email} />
+      <Header email={content.company.email} variant="light" />
       <main>
-        <section className="hero blueprint-hero">
-          <div className="shell hero-grid">
-            <div className="hero-copy">
-              <p className="eyebrow">{content.hero.eyebrow}</p>
-              <h1>{content.hero.title}</h1>
-              <p className="hero-lead">{content.hero.lead}</p>
-              <div className="hero-actions">
-                <a className="button" href="#yhteys">Kerro hankkeesta</a>
-                <Link className="text-link" href="/talotekniikka">
-                  Tutustu palveluihin <span aria-hidden="true">→</span>
-                </Link>
+        <section className="hero client-home-hero">
+          <div className="shell client-home-hero-inner">
+            <div className="client-home-hero-copy">
+              <p className="client-home-kicker"><span aria-hidden="true" />VUODESTA 1995</p>
+              <h1>
+                Rakentamisen ja kiinteistöliiketoiminnan{" "}
+                <em>asiantuntijapalveluita</em> vuosien kokemuksella
+              </h1>
+              <p className="client-home-lead">Toimivaa talotekniikkaa vuodesta 1995.</p>
+              <div className="hero-actions client-home-actions">
+                <Link className="button" href="/talotekniikka">Tutustu palveluihin</Link>
+                <a className="text-link dark-link" href="#yhteys">Ota yhteyttä →</a>
               </div>
-              <div className="proof-row" aria-label="JKP Groupin luottamusluvut">
-                <div><strong>1993</strong><span>Perustettu</span></div>
-                <div><strong>30+ v</strong><span>Kokemusta</span></div>
-                <div><strong>Keski-Suomi</strong><span>Toiminta-alue</span></div>
-              </div>
-            </div>
-
-            <div className="hero-visual blueprint-panel" aria-label="Rakennushankkeen suunnittelu ja toteutus">
-              <div className="blueprint-topline"><span>JKP GROUP OY</span><span>RAKENNUTTAMINEN / TALOTEKNIIKKA</span></div>
-              <div className="blueprint-sheet" aria-hidden="true">
-                <span className="bp-line bp-line-a" />
-                <span className="bp-line bp-line-b" />
-                <span className="bp-line bp-line-c" />
-                <span className="bp-box bp-box-a" />
-                <span className="bp-box bp-box-b" />
-                <span className="bp-circle" />
-                <strong>JKP</strong>
-              </div>
-              <div className="visual-footer"><span>Esiselvitys</span><span>Toteutus</span><span>Vastaanotto</span></div>
             </div>
           </div>
         </section>
@@ -70,8 +52,8 @@ export default async function HomePage() {
         <section className="section about-section">
           <div className="shell about-grid">
             <div className="about-panel">
-              <span>1993</span>
-              <strong>JKP Group Oy</strong>
+              <span>30+</span>
+              <strong>vuotta kokemusta</strong>
               <p>Rakennuttamisen, talotekniikan ja kiinteistöjen asiantuntijapalvelut.</p>
             </div>
             <div className="about-copy">
