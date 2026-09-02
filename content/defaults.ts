@@ -44,61 +44,61 @@ export const defaultContent: SiteContent = {
     area: "Jyväskylä ja Keski-Suomi",
   },
   hero: {
-    eyebrow: "Yli 30 vuoden kokemus rakennus- ja kiinteistöalalta",
-    title: "Talotekniikan asiantuntijapalvelut ja vuokraustoiminta",
+    eyebrow: "Rakennuttamisen ja talotekniikan asiantuntija",
+    title: "Rakennuttamisen ja talotekniikan asiantuntijapalvelut",
     lead:
-      "Luotettavaa talotekniikan rakennuttamista, valvontaa ja projektien johtamista sekä laadukkaita vuokrakohteita yksityisille ja yrityksille. Yli 30 vuoden kokemus rakennus- ja kiinteistöalalta asiakkaiden, urakoitsijoiden ja suunnittelijoiden yhteistyökumppanina.",
+      "JKP Group tukee rakennushanketta esiselvityksestä toteutukseen, valvontaan ja vastaanottoon. Lisäksi vuokraamme omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja.",
     imageUrl: "",
   },
   about: {
-    title: "Asiantuntemusta rakennushankkeisiin",
+    title: "Kokonaisuus hallintaan suunnittelusta vastaanottoon",
     body:
-      "Tarjoamme riippumatonta asiantuntijapalvelua talotekniikan rakennuttamiseen, valvontaan ja projektinhallintaan. Tavoitteemme on varmistaa, että hankkeet toteutuvat laadukkaasti, aikataulussa ja kustannustehokkaasti.",
+      "Rakennuttamisessa huolehdimme kokonaisuudesta ja kokoamme hankkeen tarvitsemat asiantuntijapalvelut yhteen. Taloteknisessä valvonnassa painotamme laatua, toteutettavuutta, dokumentointia ja ratkaisujen toimivuutta kiinteistön elinkaaren aikana.",
   },
   businessAreas: [
     {
       slug: "talotekniikka",
-      title: "Talotekniikan palvelut",
+      title: "Rakennuttaminen ja talotekniikka",
       summary:
-        "Talotekniikan rakennuttaminen, valvonta, projektinjohto sekä käyttöönotot ja vastaanotot rakennushankkeen eri vaiheisiin.",
+        "Rakennuttaminen, valvonta, projektinjohto sekä käyttöönotot ja vastaanotot rakennushankkeen eri vaiheisiin.",
     },
     {
       slug: "vuokraus",
       title: "Vuokraustoiminta",
       summary:
-        "Hyvin ylläpidettyjä ja laadukkaita asuntoja, liiketiloja sekä varasto- ja toimitiloja erilaisiin tarpeisiin.",
+        "Omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja ja lomakohteita erilaisiin tarpeisiin.",
     },
   ],
   services: [
     {
       title: "Talotekniikan rakennuttaminen",
       description:
-        "Rakennushankkeiden talotekninen ohjaus suunnittelusta käyttöönottoon.",
+        "Hankkeen kokonaisohjaus esiselvityksestä suunnitteluun, toteutukseen ja vastaanottoon.",
     },
     {
       title: "Talotekniikan valvonta",
       description:
-        "LVIA-järjestelmien laadun, aikataulun ja toteutuksen valvonta.",
+        "Yleis-, ajallinen, tekninen, laadullinen ja taloudellinen valvonta sekä dokumentointi.",
     },
     {
       title: "Projektinjohto",
       description:
-        "Kokonaisvaltainen hankkeiden koordinointi ja eri osapuolten yhteistyön varmistaminen.",
+        "Hankkeen osapuolten, kustannusten, aikataulun ja päätöksenteon koordinointi koko toteutuksen ajan.",
     },
     {
       title: "Käyttöönotot ja vastaanotot",
       description:
-        "Taloteknisten järjestelmien toimivuuden varmistaminen ennen luovutusta.",
+        "Vastaanotto-, luovutus- ja takuuajan tehtävät sekä taloteknisten järjestelmien toimivuuden varmistaminen.",
     },
   ],
   rental: {
-    title: "Vuokraustoiminta",
+    title: "Liike- ja toimitiloja, asuntoja sekä loma-asuntoja",
     lead:
-      "Tarjoamme hyvin ylläpidettyjä ja laadukkaita vuokrakohteita erilaisiin tarpeisiin. Valikoimaan kuuluvat asunnot, liiketilat sekä varasto- ja toimitilat.",
+      "Vuokraamme omia kohteitamme yrityksille ja yksityisille. Valikoimaan kuuluvat liike- ja toimitilat, asunnot sekä loma-asunnot ja lomakohteet.",
   },
   contact: {
     title: "Keskustellaan hankkeestasi tai vuokratarpeestasi.",
     body:
-      "Ota yhteyttä JKP Groupiin, kun tarvitset talotekniikan asiantuntijapalvelua tai etsit vuokrakohdetta.",
+      "Ota yhteyttä JKP Groupiin, kun tarvitset rakennuttamisen tai talotekniikan asiantuntijapalvelua tai etsit vuokrakohdetta.",
   },
 };
