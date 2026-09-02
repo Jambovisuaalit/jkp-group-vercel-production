@@ -94,7 +94,7 @@ export default async function HomePage() {
         </section>
       </main>
       <Footer content={content} />
-      <a className="mobile-contact" href="#yhteys">Ota yhteyttä <span aria-hidden="true">→</span></a>
+      <a className="mobile-contact home-mobile-contact" href="#yhteys">Ota yhteyttä <span aria-hidden="true">→</span></a>
     </>
   );
 }
