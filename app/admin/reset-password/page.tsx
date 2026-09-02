@@ -27,15 +27,17 @@ export default function ResetPasswordPage() {
     const refresh = params.get("refresh_token") || "";
     const errorDescription = params.get("error_description");
 
-    if (errorDescription) {
-      setMessage(decodeURIComponent(errorDescription));
-    } else if (!access || !refresh) {
-      setMessage("Palautuslinkki on virheellinen tai vanhentunut.");
-    } else {
-      setAccessToken(access);
-      setRefreshToken(refresh);
-      setReady(true);
-    }
+    queueMicrotask(() => {
+      if (errorDescription) {
+        setMessage(decodeURIComponent(errorDescription));
+      } else if (!access || !refresh) {
+        setMessage("Palautuslinkki on virheellinen tai vanhentunut.");
+      } else {
+        setAccessToken(access);
+        setRefreshToken(refresh);
+        setReady(true);
+      }
+    });
   }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
