@@ -8,46 +8,23 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const content = await getSiteContent();
-  const heroStyle = content.hero.imageUrl
-    ? {
-        backgroundImage: `linear-gradient(145deg, rgba(6, 16, 26, 0.24), rgba(6, 16, 26, 0.9)), url("${content.hero.imageUrl}")`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }
-    : undefined;
 
   return (
     <>
-      <Header email={content.company.email} />
+      <Header email={content.company.email} variant="light" />
       <main>
-        <section className="hero">
-          <div className="shell hero-grid">
-            <div className="hero-copy">
-              <p className="eyebrow">{content.hero.eyebrow}</p>
-              <h1>{content.hero.title}</h1>
-              <p className="hero-lead">{content.hero.lead}</p>
-              <div className="hero-actions">
-                <a className="button" href="#yhteys">Kerro tarpeesta</a>
-                <Link className="text-link" href="/talotekniikka">
-                  Tutustu palveluihin <span aria-hidden="true">→</span>
-                </Link>
-              </div>
-              <div className="proof-row" aria-label="JKP Groupin luottamusluvut">
-                <div><strong>1993</strong><span>Perustettu</span></div>
-                <div><strong>84,2 %</strong><span>Omavaraisuus 2024</span></div>
-                <div><strong>40,2 %</strong><span>Liikevoitto 2024</span></div>
-              </div>
-            </div>
-
-            <div className="hero-visual" aria-label="JKP Groupin palvelukokonaisuus" style={heroStyle}>
-              <div className="institutional-code">JKP / 1993 / KESKI-SUOMI</div>
-              <div className="visual-ring">
-                <span>Hanke</span>
-                <strong>Hallinnassa</strong>
-              </div>
-              <div className="visual-footer">
-                <span>Talotekniikka</span>
-                <span>Vuokraus</span>
+        <section className="hero client-home-hero">
+          <div className="shell client-home-hero-inner">
+            <div className="client-home-hero-copy">
+              <p className="client-home-kicker"><span aria-hidden="true" />VUODESTA 1995</p>
+              <h1>
+                Rakentamisen ja kiinteistöliiketoiminnan{" "}
+                <em>asiantuntijapalveluita</em> vuosien kokemuksella
+              </h1>
+              <p className="client-home-lead">Toimivaa talotekniikkaa vuodesta 1995.</p>
+              <div className="hero-actions client-home-actions">
+                <Link className="button" href="/talotekniikka">Tutustu palveluihin</Link>
+                <a className="text-link dark-link" href="#yhteys">Ota yhteyttä →</a>
               </div>
             </div>
           </div>
@@ -56,10 +33,10 @@ export default async function HomePage() {
         <section className="section business-section">
           <div className="shell section-heading">
             <div>
-              <p className="eyebrow">Kaksi selkeää palvelupolkua</p>
-              <h2>Valitse asia, jonka haluat ratkaista.</h2>
+              <p className="eyebrow">Kaksi palvelukokonaisuutta</p>
+              <h2>Rakennushanke tai vuokratarve — yksi selkeä reitti eteenpäin.</h2>
             </div>
-            <p>Tekninen hanke ja toimitilan tarve vaativat eri lähtötiedot. Siksi ne on erotettu omiksi, nopeasti ymmärrettäviksi kokonaisuuksiksi.</p>
+            <p>Rakennuttamisen ja talotekniikan asiantuntijapalvelut sekä omien kohteiden vuokraustoiminta on erotettu omiksi kokonaisuuksikseen.</p>
           </div>
           <div className="shell business-grid">
             {content.businessAreas.map((area, index) => (
@@ -75,12 +52,12 @@ export default async function HomePage() {
         <section className="section about-section">
           <div className="shell about-grid">
             <div className="about-panel">
-              <span>33</span>
-              <strong>vuotta yritystoimintaa</strong>
-              <p>Suomen Vahvimmat Platina -sertifikaatti. Vuoden 2024 omavaraisuusaste 84,2 %.</p>
+              <span>30+</span>
+              <strong>vuotta kokemusta</strong>
+              <p>Rakennuttamisen, talotekniikan ja kiinteistöjen asiantuntijapalvelut.</p>
             </div>
             <div className="about-copy">
-              <p className="eyebrow">JKP Group Oy</p>
+              <p className="eyebrow">Rakennuttaminen ja valvonta</p>
               <h2>{content.about.title}</h2>
               <p>{content.about.body}</p>
               <Link className="text-link dark-link" href="/referenssit">Katso referenssit →</Link>
@@ -90,7 +67,7 @@ export default async function HomePage() {
 
         <section className="section services-preview">
           <div className="shell section-heading">
-            <div><p className="eyebrow">Talotekniikka</p><h2>Tekninen laatu ilman hallinnollista sumua.</h2></div>
+            <div><p className="eyebrow">Talotekniikka</p><h2>Vastuut hankkeen eri vaiheisiin.</h2></div>
           </div>
           <div className="shell service-grid">
             {content.services.map((service, index) => (
@@ -117,7 +94,7 @@ export default async function HomePage() {
         </section>
       </main>
       <Footer content={content} />
-      <a className="mobile-contact" href="#yhteys">Ota yhteyttä <span aria-hidden="true">→</span></a>
+      <a className="mobile-contact home-mobile-contact" href="#yhteys">Ota yhteyttä <span aria-hidden="true">→</span></a>
     </>
   );
 }

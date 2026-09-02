@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   FormEvent,
   useCallback,
@@ -502,7 +503,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
               </button>
             </form>
           )}
-          <a className={styles.backLink} href="/">← Takaisin verkkosivustolle</a>
+          <Link className={styles.backLink} href="/">← Takaisin verkkosivustolle</Link>
         </section>
         <aside className={styles.loginVisual} aria-hidden="true">
           <span>JKP / ADMIN</span>

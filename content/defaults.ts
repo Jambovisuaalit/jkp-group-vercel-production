@@ -44,61 +44,61 @@ export const defaultContent: SiteContent = {
     area: "Jyväskylä ja Keski-Suomi",
   },
   hero: {
-    eyebrow: "Talotekniikka, kiinteistöt ja vuokraus vuodesta 1993",
-    title: "Hankkeet hallintaan. Tilat tehokkaaseen käyttöön.",
+    eyebrow: "Rakennuttamisen ja talotekniikan asiantuntija",
+    title: "Rakennuttamisen ja talotekniikan asiantuntijapalvelut",
     lead:
-      "JKP Group Oy on jyväskyläläinen, omistajavetoinen asiantuntija- ja kiinteistöyhtiö. Talotekninen rakennuttaminen, valvonta ja LVI-suunnittelu yhdistyvät käytännönläheiseen kiinteistö- ja vuokrausosaamiseen.",
+      "JKP Group tukee rakennushanketta esiselvityksestä toteutukseen, valvontaan ja vastaanottoon. Lisäksi vuokraamme omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja.",
     imageUrl: "",
   },
   about: {
-    title: "Pitkäjänteistä talotekniikan ja kiinteistöjen osaamista vuodesta 1993.",
+    title: "Kokonaisuus hallintaan suunnittelusta vastaanottoon",
     body:
-      "JKP Group Oy:n toimintamalli on suora ja vastuullinen. Toimitusjohtaja Jari Koskela toimii asiakkaan yhteyshenkilönä ja vie kokonaisuuksia eteenpäin ilman tarpeettomia välikäsiä. Vuoden 2024 taloustiedot osoittavat vahvaa vakavaraisuutta ja kannattavuutta: omavaraisuusaste oli 84,2 % ja liikevoittoprosentti 40,2 %.",
+      "Rakennuttamisessa huolehdimme kokonaisuudesta ja kokoamme hankkeen tarvitsemat asiantuntijapalvelut yhteen. Taloteknisessä valvonnassa painotamme laatua, toteutettavuutta, dokumentointia ja ratkaisujen toimivuutta kiinteistön elinkaaren aikana.",
   },
   businessAreas: [
     {
       slug: "talotekniikka",
-      title: "Talotekniikan rakennuttaminen ja valvonta",
+      title: "Rakennuttaminen ja talotekniikka",
       summary:
-        "Rakennuttaminen, työmaavalvonta, LVI-suunnittelu ja kustannusten hallinta yhdeltä kokeneelta vastuuhenkilöltä.",
+        "Rakennuttaminen, valvonta, projektinjohto sekä käyttöönotot ja vastaanotot rakennushankkeen eri vaiheisiin.",
     },
     {
       slug: "vuokraus",
-      title: "Liike- ja toimitilojen vuokraus",
+      title: "Vuokraustoiminta",
       summary:
-        "Selkeät kohdetiedot, suora yhteys omistajaan ja joustava eteneminen tilatarpeen mukaan.",
+        "Omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja ja lomakohteita erilaisiin tarpeisiin.",
     },
   ],
   services: [
     {
-      title: "Talotekninen rakennuttaminen",
+      title: "Talotekniikan rakennuttaminen",
       description:
-        "Tavoitteiden, suunnittelun, hankintojen ja toteutuksen yhteensovitus niin, että kokonaisuus pysyy hallinnassa.",
+        "Hankkeen kokonaisohjaus esiselvityksestä suunnitteluun, toteutukseen ja vastaanottoon.",
     },
     {
-      title: "Työmaavalvonta",
+      title: "Talotekniikan valvonta",
       description:
-        "Laadun, aikataulun, sopimusten ja teknisen toteutuksen riippumaton seuranta rakennushankkeen aikana.",
+        "Yleis-, ajallinen, tekninen, laadullinen ja taloudellinen valvonta sekä dokumentointi.",
     },
     {
-      title: "LVI-suunnittelu",
+      title: "Projektinjohto",
       description:
-        "Käytännölliset ja toteutuskelpoiset LVI-ratkaisut uudis- ja korjausrakentamisen tarpeisiin.",
+        "Hankkeen osapuolten, kustannusten, aikataulun ja päätöksenteon koordinointi koko toteutuksen ajan.",
     },
     {
-      title: "Kustannushallinta",
+      title: "Käyttöönotot ja vastaanotot",
       description:
-        "Ratkaisujen ja muutosten taloudellisten vaikutusten arviointi ennen kuin kustannukset ehtivät realisoitua.",
+        "Vastaanotto-, luovutus- ja takuuajan tehtävät sekä taloteknisten järjestelmien toimivuuden varmistaminen.",
     },
   ],
   rental: {
-    title: "Tilat yrityksen todelliseen tarpeeseen.",
+    title: "Liike- ja toimitiloja, asuntoja sekä loma-asuntoja",
     lead:
-      "Vuokrattavat kohteet lisätään sivustolle sitä mukaa, kun vahvistetut kohdetiedot ja kuvat ovat käytettävissä.",
+      "Vuokraamme omia kohteitamme yrityksille ja yksityisille. Valikoimaan kuuluvat liike- ja toimitilat, asunnot sekä loma-asunnot ja lomakohteet.",
   },
   contact: {
-    title: "Kerro hankkeesta tai tilatarpeesta.",
+    title: "Keskustellaan hankkeestasi tai vuokratarpeestasi.",
     body:
-      "Ota suoraan yhteyttä Jari Koskelaan. Lähetä lyhyt kuvaus tilanteesta, niin saat vastauksen ilman monimutkaista myyntiprosessia.",
+      "Ota yhteyttä JKP Groupiin, kun tarvitset rakennuttamisen tai talotekniikan asiantuntijapalvelua tai etsit vuokrakohdetta.",
   },
 };

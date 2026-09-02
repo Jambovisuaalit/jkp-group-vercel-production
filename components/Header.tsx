@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-export function Header({ email }: { email: string }) {
+export function Header({ email, variant = "dark" }: { email: string; variant?: "dark" | "light" }) {
   return (
-    <header className="site-header">
+    <header className={`site-header ${variant === "light" ? "site-header-light" : ""}`}>
       <div className="shell nav-shell">
         <Link className="brand" href="/" aria-label="JKP Group Oy etusivu">
           <span className="brand-mark" aria-hidden="true">JKP</span>
