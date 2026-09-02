@@ -13,6 +13,102 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible { outline-color: rgba(121, 199, 242, 0.48); }
 
+/* Client-approved homepage system */
+.site-header-light {
+  position: relative;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(18, 55, 80, 0.1);
+  backdrop-filter: none;
+}
+.site-header-light .nav-shell { min-height: 108px; }
+.site-header-light .brand { color: #123750; }
+.site-header-light .brand-mark {
+  color: #74b5d9;
+  border-color: #294e67;
+  background: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+}
+.site-header-light .brand-copy strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  letter-spacing: 0.01em;
+}
+.site-header-light .brand-copy small {
+  color: #49667a;
+  font-size: 10px;
+  letter-spacing: 0.17em;
+}
+.site-header-light .desktop-nav { color: #294e67; }
+.site-header-light .desktop-nav a:hover { color: #123750; }
+.site-header-light .header-contact {
+  background: transparent;
+  color: #123750;
+  border-color: #79c7f2;
+}
+
+.client-home-hero {
+  color: #123750;
+  background:
+    linear-gradient(rgba(38, 91, 126, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(38, 91, 126, 0.07) 1px, transparent 1px),
+    linear-gradient(135deg, #f3fbff 0%, #e5f4fb 52%, #dbeef7 100%);
+  background-size: 42px 42px, 42px 42px, auto;
+  padding: clamp(72px, 9vw, 126px) 0 clamp(76px, 10vw, 132px);
+  overflow: hidden;
+}
+.client-home-hero::before { display: none; }
+.client-home-hero-inner { position: relative; }
+.client-home-hero-copy { max-width: 1180px; }
+.client-home-kicker {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin: 0 0 42px;
+  color: #294e67;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.client-home-kicker span {
+  width: 54px;
+  height: 1px;
+  background: #294e67;
+}
+.client-home-hero h1 {
+  max-width: 1260px;
+  margin: 0;
+  color: #123750;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(54px, 6.1vw, 90px);
+  font-weight: 700;
+  line-height: 0.99;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.client-home-hero h1 em {
+  color: #78b7da;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+.client-home-lead {
+  max-width: 720px;
+  margin: 48px 0 0;
+  color: #4c6a7c;
+  font-size: clamp(20px, 2vw, 27px);
+  line-height: 1.45;
+}
+.client-home-actions { margin-top: 36px; }
+.client-home-actions .button {
+  background: #123750;
+  border-color: #123750;
+  color: #ffffff;
+}
+.client-home-actions .button:hover { background: #294e67; }
+.client-home-actions .dark-link { color: #123750; }
+
 .hero,
 .subhero {
   background:
@@ -24,66 +120,6 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.48); }
 .subhero-code { border-color: rgba(121, 199, 242, 0.34); }
 .business-card:hover { border-color: rgba(121, 199, 242, 0.68); }
 .about-panel { border-color: rgba(121, 199, 242, 0.28); }
-
-/* Customer-approved Rouhento-derived visual direction: architectural document, not SaaS dashboard. */
-.blueprint-hero {
-  background:
-    linear-gradient(rgba(121, 199, 242, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(121, 199, 242, 0.04) 1px, transparent 1px),
-    linear-gradient(145deg, #06101a 0%, #0b1f31 58%, #071521 100%);
-  background-size: 48px 48px, 48px 48px, auto;
-}
-.blueprint-panel {
-  min-height: 440px;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  background: #f7fbfe;
-  color: var(--ink);
-  border: 1px solid rgba(121, 199, 242, 0.7);
-  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.3);
-}
-.blueprint-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  color: #31566f;
-  font-size: 9px;
-  font-weight: 850;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.blueprint-sheet {
-  position: relative;
-  min-height: 280px;
-  margin: 24px 0;
-  overflow: hidden;
-  background:
-    linear-gradient(rgba(11, 31, 49, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 31, 49, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-  border: 1px solid rgba(11, 31, 49, 0.16);
-}
-.blueprint-sheet strong {
-  position: absolute;
-  left: 26px;
-  bottom: 22px;
-  color: #0b1f31;
-  font-size: clamp(68px, 7vw, 108px);
-  line-height: 0.8;
-  letter-spacing: -0.08em;
-}
-.bp-line,
-.bp-box,
-.bp-circle { position: absolute; border-color: rgba(11, 31, 49, 0.52); }
-.bp-line { height: 1px; background: rgba(11, 31, 49, 0.42); transform-origin: left; }
-.bp-line-a { top: 22%; left: 12%; width: 72%; transform: rotate(7deg); }
-.bp-line-b { top: 47%; left: 18%; width: 58%; transform: rotate(-11deg); }
-.bp-line-c { top: 69%; left: 38%; width: 46%; transform: rotate(14deg); }
-.bp-box { border: 1px solid rgba(11, 31, 49, 0.45); }
-.bp-box-a { width: 38%; height: 34%; top: 18%; right: 12%; }
-.bp-box-b { width: 28%; height: 26%; top: 48%; right: 25%; }
-.bp-circle { width: 92px; height: 92px; border: 1px solid rgba(121, 199, 242, 0.9); border-radius: 50%; top: 30%; left: 18%; }
-.blueprint-panel .visual-footer { color: #31566f; border-top-color: rgba(11, 31, 49, 0.15); }
 
 .technical-hero { padding-top: 88px; padding-bottom: 82px; }
 .technical-hero-grid {
@@ -192,14 +228,36 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.48); }
 }
 
 @media (max-width: 920px) {
+  .site-header-light .nav-shell { min-height: 92px; }
   .technical-hero-grid { grid-template-columns: 1fr; }
   .technical-service-index { min-height: 390px; }
   .delivery-phase-grid,
   .rental-category-grid { grid-template-columns: 1fr; }
   .historical-reference-grid { grid-template-columns: 1fr 1fr; }
+  .client-home-hero h1 { font-size: clamp(50px, 8.8vw, 72px); }
 }
 
 @media (max-width: 640px) {
+  .site-header-light .nav-shell { min-height: 78px; padding-block: 13px; }
+  .site-header-light .brand-mark { width: 48px; height: 48px; }
+  .site-header-light .brand-copy strong { font-size: 19px; }
+  .site-header-light .brand-copy small { font-size: 8px; letter-spacing: 0.12em; }
+  .site-header-light .desktop-nav { border-top-color: rgba(18, 55, 80, 0.12); }
+
+  .client-home-hero {
+    padding: 54px 0 68px;
+    background-size: 34px 34px, 34px 34px, auto;
+  }
+  .client-home-kicker { gap: 14px; margin-bottom: 28px; font-size: 10px; }
+  .client-home-kicker span { width: 34px; }
+  .client-home-hero h1 {
+    font-size: clamp(42px, 12vw, 56px);
+    line-height: 1.01;
+    letter-spacing: -0.04em;
+  }
+  .client-home-lead { margin-top: 30px; font-size: 18px; }
+  .client-home-actions { margin-top: 28px; }
+
   .technical-hero { padding-top: 58px; padding-bottom: 58px; }
   .technical-hero-copy h1 { font-size: clamp(42px, 12.5vw, 56px); }
   .technical-hero-copy .hero-actions { margin-top: 30px; }
@@ -208,10 +266,6 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.48); }
   .technical-service-index > strong { font-size: 92px; margin-block: 26px; }
   .technical-service-index li { grid-template-columns: 32px 1fr; padding: 12px 0; }
   .technical-service-index li b { font-size: 13px; }
-  .blueprint-panel { min-height: 360px; padding: 20px; }
-  .blueprint-topline { flex-direction: column; gap: 6px; }
-  .blueprint-sheet { min-height: 230px; }
-  .blueprint-sheet strong { font-size: 72px; }
   .delivery-phase-grid,
   .historical-reference-grid { grid-template-columns: 1fr; }
   .delivery-phase { padding: 24px; }
