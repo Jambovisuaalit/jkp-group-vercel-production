@@ -7,14 +7,14 @@ import { getSiteContent } from "@/lib/content";
 import { getPublishedRentals } from "@/lib/rentals";
 
 export const metadata: Metadata = {
-  title: "Liike-, toimitila- ja asuntovuokraus Jyväskylä",
-  description: "JKP Groupin vuokrattavat liike- ja toimitilat sekä asuntovuokrauksen hakemus Jyväskylän alueella.",
+  title: "Liike- ja toimitilat, asunnot ja loma-asunnot",
+  description: "JKP Group vuokraa omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja ja lomakohteita.",
   alternates: { canonical: "/vuokraus" },
 };
 export const dynamic = "force-dynamic";
 
 const typeLabels = {
-  holiday: "Loma-asunto tai kiinteistö",
+  holiday: "Loma-asunto tai lomakohde",
   commercial: "Liike- tai toimitila",
   residential: "Vuokra-asunto",
 } as const;
@@ -29,22 +29,22 @@ export default async function VuokrausPage() {
         <section className="subhero rental-hero">
           <div className="shell subhero-grid">
             <div>
-              <p className="eyebrow">Vuokraus</p>
+              <p className="eyebrow">Vuokraus / omat kohteet</p>
               <h1>{content.rental.title}</h1>
               <p>{content.rental.lead}</p>
-              <div className="hero-actions">
-                <a className="button" href="#toimitilakysely">Kysy toimitilaa</a>
-                <a className="button" href="#vuokrahakemus">Täytä vuokrahakemus</a>
+              <div className="hero-actions technical-hero-actions">
+                <a className="button" href="#toimitilakysely">Kysy liike- tai toimitilaa</a>
+                <a className="text-link" href="#vuokrahakemus">Asuntohakemus →</a>
               </div>
             </div>
-            <div className="hero-visual"><div><span>JKP / SPACE</span><strong>Tilaa toimia.</strong></div></div>
+            <div className="hero-visual rental-blueprint"><div><span>JKP / SPACE</span><strong>Omat kohteet.</strong><p>Liike- ja toimitilat · asunnot · loma-asunnot</p></div></div>
           </div>
         </section>
 
         <section className="section">
           <div className="shell section-heading">
-            <div><p className="eyebrow">Vuokrattavat kohteet</p><h2>Ajantasaiset kohteet yhdestä näkymästä.</h2></div>
-            <p>Loma-asunnot ja kiinteistöt pysyvät näkyvissä jatkuvasti. Liike-, toimitila- ja asuntokohteet näkyvät vain vapaina.</p>
+            <div><p className="eyebrow">Vuokrattavat kohteet</p><h2>Kohteet yritysten, asumisen ja vapaa-ajan tarpeisiin.</h2></div>
+            <p>Liike- ja toimitiloissa painotus on Jyväskylän seudulla. Loma-asuntojen tarkat sijainnit julkaistaan kohdekohtaisesti vain vahvistettujen tietojen perusteella.</p>
           </div>
 
           {properties.length > 0 ? (
@@ -65,25 +65,24 @@ export default async function VuokrausPage() {
               ))}
             </div>
           ) : (
-            <div className="shell">
-              <article className="property-card">
-                <div className="property-media" />
-                <div className="property-content"><small>Kohdetiedot päivittyvät</small><h3>Kysy tämänhetkisestä tarjonnasta</h3><p>Vahvistettuja vapaita kohteita ei ole juuri nyt julkaistu. Lähetä tilakysely tai ota suoraan yhteyttä.</p></div>
-              </article>
+            <div className="shell rental-category-grid">
+              <article className="rental-category"><span>01</span><h3>Liike- ja toimitilat</h3><p>Omat liike- ja toimitilat yritysten tarpeisiin, erityisesti Jyväskylän seudulla.</p></article>
+              <article className="rental-category"><span>02</span><h3>Asunnot</h3><p>Omat vuokra-asunnot. Vapaat kohteet julkaistaan, kun niiden tiedot on vahvistettu.</p></article>
+              <article className="rental-category"><span>03</span><h3>Loma-asunnot</h3><p>Loma-asuntoja ja lomakohteita. Tarkat kohdetiedot julkaistaan erikseen vahvistettuna.</p></article>
             </div>
           )}
         </section>
 
         <section className="contact-section" id="toimitilakysely">
           <div className="shell contact-grid">
-            <div><p className="eyebrow">Yrityksille</p><h2>B2B-toimitilojen tarjouspyyntö</h2><p>Kerro yrityksestä, tilatarpeesta, pinta-alasta, sijainnista ja tavoiteaikataulusta.</p></div>
+            <div><p className="eyebrow">Yrityksille</p><h2>Kerro tilatarpeesta.</h2><p>Yritys, käyttötarkoitus, tarvittava pinta-ala, sijainti ja tavoiteaikataulu riittävät ensimmäiseen arvioon.</p></div>
             <BusinessPremisesForm />
           </div>
         </section>
 
         <section className="section" id="vuokrahakemus">
           <div className="shell contact-grid">
-            <div><p className="eyebrow">Asuntovuokraus</p><h2>Vuokralaisen hakemuslomake</h2><p>Täytä hakemus sen jälkeen, kun olet ollut yhteydessä JKP Groupiin ilmoitetusta kohteesta.</p></div>
+            <div><p className="eyebrow">Asuntovuokraus</p><h2>Vuokralaisen hakemuslomake</h2><p>Täytä hakemus, kun olet ollut yhteydessä JKP Groupiin julkaistusta tai tarjotusta kohteesta.</p></div>
             <ApartmentApplicationForm />
           </div>
         </section>
