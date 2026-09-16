@@ -102,6 +102,14 @@ Komento tarvitsee server-side Supabase-secretin sekä `ADMIN_EMAIL`- ja `ADMIN_D
 - selaimelle ei anneta suoraa service-role-oikeutta.
 - julkisilla lomakkeilla ei kerätä henkilötunnusta, pankkitietoja tai luottotietoasiakirjoja.
 
+## Asiakasversion release gate
+
+- asiakkaan toimittama vuokrauskohteen pääkuva näkyy `/vuokraus`-sivulla
+- referenssilista perustuu asiakkaan toimittamaan historialliseen aineistoon
+- yrityksen rekisteröintipäivä / `foundingDate` vastaa vahvistettua historiaa
+- desktop- ja mobile-layout tarkistetaan ennen domain-julkaisua
+- `jkpgroup.fi` kytketään vasta asiakashyväksynnän, lopullisten sisältöjen ja tuotanto-QA:n jälkeen
+
 ## Julkaisu
 
 Ensin Vercel Preview. `jkpgroup.fi` kytketään vasta asiakashyväksynnän, lopullisten sisältöjen ja tuotanto-QA:n jälkeen.
