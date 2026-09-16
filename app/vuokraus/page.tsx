@@ -47,6 +47,14 @@ export default async function VuokrausPage() {
             <p>Liike- ja toimitiloissa painotus on Jyväskylän seudulla. Loma-asuntojen tarkat sijainnit julkaistaan kohdekohtaisesti vain vahvistettujen tietojen perusteella.</p>
           </div>
 
+          <div className="shell" style={{ marginBottom: 32 }}>
+            <img
+              src="/images/jkp-vuokraus-kohde.webp"
+              alt="JKP Groupin vuokrattava kohde"
+              style={{ display: "block", width: "100%", height: "auto", maxHeight: 560, objectFit: "cover", borderRadius: 2 }}
+            />
+          </div>
+
           {properties.length > 0 ? (
             <div className="shell property-grid">
               {properties.map((property) => (
