@@ -21,9 +21,32 @@ export default async function VuokrausPage() {
     <>
       <Header email={content.company.email} />
       <main>
-        <section className="subhero rental-hero"><div className="shell subhero-grid"><div><p className="eyebrow">Vuokraus / omat kohteet</p><h1>{content.rental.title}</h1><p>{content.rental.lead}</p><div className="hero-actions technical-hero-actions"><a className="button" href="#toimitilakysely">Kysy liike- tai toimitilaa</a><a className="text-link" href="#vuokrahakemus">Asuntohakemus →</a></div></div><div className="hero-visual rental-blueprint"><div><span>JKP / SPACE</span><strong>Omat kohteet.</strong><p>Liike- ja toimitilat · asunnot · loma-asunnot</p></div></div></div></section>
+        <section className="subhero rental-hero">
+          <div className="shell subhero-grid">
+            <div>
+              <p className="eyebrow">Vuokraus / omat kohteet</p>
+              <h1>{content.rental.title}</h1>
+              <p>{content.rental.lead}</p>
+              <div className="hero-actions technical-hero-actions">
+                <a className="button" href="#toimitilakysely">Kysy liike- tai toimitilaa</a>
+                <a className="text-link" href="#vuokrahakemus">Asuntohakemus →</a>
+              </div>
+            </div>
+            <div className="hero-visual rental-blueprint rental-client-image">
+              <img src="/images/jkp-vuokraus-kohde.webp" alt="JKP Groupin vuokrattava kohde" />
+              <div className="rental-image-caption">
+                <span>JKP / SPACE</span>
+                <strong>Omat kohteet.</strong>
+                <p>Liike- ja toimitilat · asunnot · loma-asunnot</p>
+              </div>
+            </div>
+          </div>
+        </section>
         <section className="section">
-          <div className="shell section-heading"><div><p className="eyebrow">Vuokrattavat kohteet</p><h2>Kohteet yritysten, asumisen ja vapaa-ajan tarpeisiin.</h2></div><p>Liike- ja toimitiloissa painotus on Jyväskylän seudulla. Loma-asuntojen tarkat sijainnit julkaistaan kohdekohtaisesti vain vahvistettujen tietojen perusteella.</p></div>
+          <div className="shell section-heading">
+            <div><p className="eyebrow">Vuokrattavat kohteet</p><h2>Kohteet yritysten, asumisen ja vapaa-ajan tarpeisiin.</h2></div>
+            <p>Liike- ja toimitiloissa painotus on Jyväskylän seudulla. Loma-asuntojen tarkat sijainnit julkaistaan kohdekohtaisesti vain vahvistettujen tietojen perusteella.</p>
+          </div>
           <div className="shell" style={{ marginBottom: 32 }}>
             <img src="/images/jkp-vuokraus-kohde.webp" alt="JKP Groupin vuokrattava kohde" fetchPriority="high" style={{ display: "block", width: "100%", height: "auto", maxHeight: 560, objectFit: "cover", borderRadius: 2 }} />
           </div>
