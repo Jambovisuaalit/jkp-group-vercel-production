@@ -1,26 +1,33 @@
 import Link from "next/link";
 
-export function Header({ email, variant = "dark" }: { email: string; variant?: "dark" | "light" }) {
+export function Header({ email, variant = "dark", locale = "fi" }: { email: string; variant?: "dark" | "light"; locale?: "fi" | "en" }) {
+  const en = locale === "en";
+  const prefix = en ? "/en" : "";
   return (
     <header className={`site-header ${variant === "light" ? "site-header-light" : ""}`}>
       <div className="shell nav-shell">
-        <Link className="brand" href="/" aria-label="JKP Group Oy etusivu">
+        <Link className="brand" href={prefix || "/"} aria-label="JKP Group Oy home">
           <span className="brand-mark" aria-hidden="true">JKP</span>
           <span className="brand-copy">
             <strong>JKP Group Oy</strong>
-            <small>Talotekniikka · Kiinteistöt</small>
+            <small>{en ? "Building Services · Properties" : "Talotekniikka · Kiinteistöt"}</small>
           </span>
         </Link>
-
-        <nav className="desktop-nav" aria-label="Päänavigaatio">
-          <Link href="/talotekniikka">Talotekniikka</Link>
-          <Link href="/vuokraus">Vuokraus</Link>
-          <Link href="/referenssit">Referenssit</Link>
+        <nav className="desktop-nav" aria-label={en ? "Main navigation" : "Päänavigaatio"}>
+          <Link href={`${prefix}/talotekniikka`}>{en ? "Building Services" : "Talotekniikka"}</Link>
+          <Link href={`${prefix}/vuokraus`}>{en ? "Properties" : "Vuokraus"}</Link>
+          <Link href={`${prefix}/referenssit`}>{en ? "References" : "Referenssit"}</Link>
         </nav>
-
-        <a className="button button-small header-contact" href={`mailto:${email}`}>
-          Ota yhteyttä <span aria-hidden="true">↗</span>
-        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div className="language-switcher" aria-label="Language">
+            <Link href="/" aria-current={!en ? "page" : undefined}>FI</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/en" aria-current={en ? "page" : undefined}>EN</Link>
+          </div>
+          <a className="button button-small header-contact" href={`mailto:${email}`}>
+            {en ? "Contact" : "Ota yhteyttä"} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </div>
     </header>
   );
