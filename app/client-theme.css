@@ -1,3 +1,4 @@
+/* Approved public visual tokens and light-system overrides. */
 :root {
   --copper: #79c7f2;
   --copper-light: #a9d8ef;
@@ -14,202 +15,81 @@ textarea:focus-visible,
 select:focus-visible { outline-color: rgba(121, 199, 242, 0.55); }
 
 /* Client-approved light / white public visual system */
-.site-header-light {
-  position: relative;
-  background: #ffffff;
-  border-bottom: 1px solid rgba(18, 55, 80, 0.12);
-  backdrop-filter: none;
-}
+.site-header-light { position: relative; background: #ffffff; border-bottom: 1px solid rgba(18, 55, 80, 0.12); backdrop-filter: none; }
 .site-header-light .nav-shell { min-height: 108px; }
 .site-header-light .brand { color: #123750; }
-.site-header-light .brand-mark {
-  color: #74b5d9;
-  border-color: #294e67;
-  background: #ffffff;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 21px;
-}
-.site-header-light .brand-copy strong {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 24px;
-  letter-spacing: 0.01em;
-}
-.site-header-light .brand-copy small {
-  color: #49667a;
-  font-size: 10px;
-  letter-spacing: 0.17em;
-}
+.site-header-light .brand-mark { color: #74b5d9; border-color: #294e67; background: #ffffff; font-family: Georgia, "Times New Roman", serif; font-size: 21px; }
+.site-header-light .brand-copy strong { font-family: Georgia, "Times New Roman", serif; font-size: 24px; letter-spacing: 0.01em; }
+.site-header-light .brand-copy small { color: #49667a; font-size: 10px; letter-spacing: 0.17em; }
 .site-header-light .desktop-nav { color: #294e67; }
 .site-header-light .desktop-nav a:hover { color: #123750; }
-.site-header-light .header-contact {
-  background: #ffffff;
-  color: #123750;
-  border-color: #79c7f2;
-}
+.site-header-light .header-contact { background: #ffffff; color: #123750; border-color: #79c7f2; }
 
-.client-home-hero,
-.hero.client-home-hero {
-  color: #123750;
-  background: #ffffff;
-  padding: clamp(72px, 9vw, 126px) 0 clamp(76px, 10vw, 132px);
-  overflow: hidden;
-}
+.client-home-hero, .hero.client-home-hero { color: #123750; background: #ffffff; padding: clamp(72px, 9vw, 126px) 0 clamp(76px, 10vw, 132px); overflow: hidden; }
 .client-home-hero::before { display: none; }
 .client-home-hero-inner { position: relative; }
 .client-home-hero-copy { max-width: 1180px; }
-.client-home-kicker {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  margin: 0 0 42px;
-  color: #294e67;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
+.client-home-kicker { display: flex; align-items: center; gap: 22px; margin: 0 0 42px; color: #294e67; font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; }
 .client-home-kicker span { width: 54px; height: 1px; background: #294e67; }
-.client-home-hero h1 {
-  max-width: 1260px;
-  margin: 0;
-  color: #123750;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(54px, 6.1vw, 90px);
-  font-weight: 700;
-  line-height: 0.99;
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
-.client-home-hero h1 em {
-  color: #78b7da;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 700;
-  font-style: italic;
-}
-.client-home-lead {
-  max-width: 720px;
-  margin: 48px 0 0;
-  color: #4c6a7c;
-  font-size: clamp(20px, 2vw, 27px);
-  line-height: 1.45;
-}
+.client-home-hero h1 { max-width: 1260px; margin: 0; color: #123750; font-family: Georgia, "Times New Roman", serif; font-size: clamp(54px, 6.1vw, 90px); font-weight: 700; line-height: 0.99; letter-spacing: -0.045em; text-wrap: balance; }
+.client-home-hero h1 em { color: #78b7da; font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-style: italic; }
+.client-home-lead { max-width: 720px; margin: 48px 0 0; color: #4c6a7c; font-size: clamp(20px, 2vw, 27px); line-height: 1.45; }
 .client-home-actions { margin-top: 36px; }
 .client-home-actions .button { background: #123750; border-color: #123750; color: #ffffff; }
 .client-home-actions .button:hover { background: #294e67; }
 .client-home-actions .dark-link { color: #123750; }
 
-/* Public subpages use the same white system; dark sections are intentionally removed. */
-.hero:not(.client-home-hero),
-.subhero,
-.process-section,
-.contact-section {
-  color: #123750;
-  background: #ffffff;
-}
-.hero:not(.client-home-hero)::before,
-.subhero::before { display: none; }
-.hero-grid,
-.subhero-grid { position: relative; }
-.hero-lead,
-.subhero p,
-.section-heading > p,
-.about-copy > p { color: #526b7a; }
+.hero:not(.client-home-hero), .subhero, .process-section, .contact-section { color: #123750; background: #ffffff; }
+.hero:not(.client-home-hero)::before, .subhero::before { display: none; }
+.hero-grid, .subhero-grid { position: relative; }
+.hero-lead, .subhero p, .section-heading > p, .about-copy > p { color: #526b7a; }
 .eyebrow { color: #4c83a3; }
 .text-link { color: #123750; }
 .text-link:hover { color: #4f9ac3; }
 .hero-actions .button + .button { color: #123750; border-color: #79c7f2; background: #ffffff; }
 .hero-actions .button + .button:hover { background: #eef8fd; }
-.hero-visual,
-.subhero-code {
-  background: #f6fafc;
-  border-color: rgba(121, 199, 242, 0.55);
-  box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10);
-}
+.hero-visual, .subhero-code { background: #f6fafc; border-color: rgba(121, 199, 242, 0.55); box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10); }
 .visual-ring { border-color: #79c7f2; box-shadow: inset 0 0 0 34px rgba(121, 199, 242, 0.08), 0 0 60px rgba(121, 199, 242, 0.12); }
-.visual-ring span,
-.visual-footer,
-.subhero-code p { color: #5f7481; }
-.institutional-code,
-.subhero-code > span,
-.hero-visual > div > span { color: #4c83a3; }
+.visual-ring span, .visual-footer, .subhero-code p { color: #5f7481; }
+.institutional-code, .subhero-code > span, .hero-visual > div > span { color: #4c83a3; }
 .rental-hero .hero-visual strong { color: #123750; }
 
-.business-card,
-.service-card,
-.property-card,
-.reference-placeholder,
-.admin-card,
-.admin-login {
-  background: #ffffff;
-  border-color: rgba(18, 55, 80, 0.13);
-}
+.business-card, .service-card, .property-card, .reference-placeholder, .admin-card, .admin-login { background: #ffffff; border-color: rgba(18, 55, 80, 0.13); }
 .business-card:hover { border-color: rgba(121, 199, 242, 0.75); box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10); }
 .business-card::before { background: #79c7f2; }
-.card-arrow,
-.service-card > span,
-.property-content small { color: #4f9ac3; }
-
-.about-section,
-.supervision-section { background: #f3f7fa; }
-.about-panel {
-  background: #123750;
-  color: #ffffff;
-  border-color: rgba(121, 199, 242, 0.45);
-  box-shadow: 0 24px 60px rgba(18, 55, 80, 0.14);
-}
+.card-arrow, .service-card > span, .property-content small { color: #4f9ac3; }
+.about-section, .supervision-section { background: #f3f7fa; }
+.about-panel { background: #123750; color: #ffffff; border-color: rgba(121, 199, 242, 0.45); box-shadow: 0 24px 60px rgba(18, 55, 80, 0.14); }
 .about-panel span { color: #79c7f2; }
 .about-panel p { color: #d4e1e8; }
-
-.service-card:hover,
-a.property-card:hover { box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10); }
+.service-card:hover, a.property-card:hover { box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10); }
 .process-grid { background: rgba(18, 55, 80, 0.14); }
 .process-grid li { background: #ffffff; color: #123750; }
 .process-grid p { color: #5f7481; }
 .process-grid li > span { color: #4f9ac3; }
-
 .contact-section { border-top: 1px solid rgba(18, 55, 80, 0.10); }
 .contact-section .contact-grid > div > p:not(.eyebrow) { color: #526b7a; }
 .contact-email { color: #3f8db8; }
 .contact-form { border-top-color: #79c7f2; box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10); }
-
-.delivery-phase,
-.rental-category,
-.historical-reference {
-  background: #ffffff;
-  border-color: rgba(18, 55, 80, 0.13);
-}
-.delivery-phase ul,
-.historical-reference p { color: #526b7a; }
-.delivery-phase > span,
-.rental-category > span,
-.historical-reference > span { color: #4f9ac3; }
-.rental-blueprint {
-  background: #f6fafc;
-  border: 1px solid rgba(121, 199, 242, 0.45);
-}
-.technical-service-index {
-  background: #123750;
-  border: 1px solid rgba(18, 55, 80, 0.15);
-}
+.delivery-phase, .rental-category, .historical-reference { background: #ffffff; border-color: rgba(18, 55, 80, 0.13); }
+.delivery-phase ul, .historical-reference p { color: #526b7a; }
+.delivery-phase > span, .rental-category > span, .historical-reference > span { color: #4f9ac3; }
+.rental-blueprint { background: #f6fafc; border: 1px solid rgba(121, 199, 242, 0.45); }
+.technical-service-index { background: #123750; border: 1px solid rgba(18, 55, 80, 0.15); }
 .technical-service-index li b { color: #edf6fb; }
-.technical-service-index li span,
-.technical-service-index > strong { color: #79c7f2; }
-
+.technical-service-index li span, .technical-service-index > strong { color: #79c7f2; }
 .site-footer { background: #123750; color: #cbd9e1; border-top-color: rgba(121, 199, 242, 0.45); }
-.footer-grid strong,
-.footer-brand { color: #ffffff; }
+.footer-grid strong, .footer-brand { color: #ffffff; }
 .footer-grid a:hover { color: #a9d8ef; }
 
 @media (max-width: 920px) {
   .site-header-light .nav-shell { min-height: 92px; }
   .technical-hero-grid { grid-template-columns: 1fr; }
   .technical-service-index { min-height: 390px; }
-  .delivery-phase-grid,
-  .rental-category-grid { grid-template-columns: 1fr; }
+  .delivery-phase-grid, .rental-category-grid { grid-template-columns: 1fr; }
   .historical-reference-grid { grid-template-columns: 1fr 1fr; }
   .client-home-hero h1 { font-size: clamp(50px, 8.8vw, 72px); }
 }
-
 @media (max-width: 640px) {
   .site-header-light .nav-shell { min-height: 78px; padding-block: 13px; }
   .site-header-light .brand-mark { width: 48px; height: 48px; }
@@ -228,7 +108,6 @@ a.property-card:hover { box-shadow: 0 24px 60px rgba(18, 55, 80, 0.10); }
   .technical-service-index > strong { font-size: 92px; margin-block: 26px; }
   .technical-service-index li { grid-template-columns: 32px 1fr; padding: 12px 0; }
   .technical-service-index li b { font-size: 13px; }
-  .delivery-phase-grid,
-  .historical-reference-grid { grid-template-columns: 1fr; }
+  .delivery-phase-grid, .historical-reference-grid { grid-template-columns: 1fr; }
   .delivery-phase { padding: 24px; }
 }
