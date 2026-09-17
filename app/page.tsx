@@ -16,12 +16,12 @@ export default async function HomePage() {
         <section className="hero client-home-hero">
           <div className="shell client-home-hero-inner">
             <div className="client-home-hero-copy">
-              <p className="client-home-kicker"><span aria-hidden="true" />VUODESTA 1995</p>
+              <p className="client-home-kicker"><span aria-hidden="true" />VUODESTA 1993</p>
               <h1>
                 Rakentamisen ja kiinteistöliiketoiminnan{" "}
                 <em>asiantuntijapalveluita</em> vuosien kokemuksella
               </h1>
-              <p className="client-home-lead">Toimivaa talotekniikkaa vuodesta 1995.</p>
+              <p className="client-home-lead">Toimivaa talotekniikkaa vuodesta 1993.</p>
               <div className="hero-actions client-home-actions">
                 <Link className="button" href="/talotekniikka">Tutustu palveluihin</Link>
                 <a className="text-link dark-link" href="#yhteys">Ota yhteyttä →</a>
