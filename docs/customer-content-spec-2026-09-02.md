@@ -4,8 +4,9 @@ Lähde: asiakkaan kanssa läpikäydyt ja käsin kommentoidut Rakennuttajapalvelu
 
 ## Etusivu
 - Pääviesti: rakennuttamisen ja talotekniikan asiantuntijapalvelut sekä vuokraustoiminta.
-- Visuaalinen suunta: säilytetään Rouhento-aineiston rakennus-/suunnittelupiirustusluonne; vähemmän abstraktia dashboard-ilmettä.
+- Visuaalinen suunta: säilytetään Rouhento-aineiston rakennus-/suunnittelupiirustusluonne; valkoinen, rauhallinen ja tekninen julkinen käyttöliittymä, jossa vaaleansininen toimii korostevärinä.
 - Pääpalvelupolut: Talotekniikka ja Vuokraus.
+- Yrityshistoriaa koskeva julkinen vuosiluku: 1993, ellei asiakkaalta erikseen vahvisteta muuta käyttötapaa.
 
 ## Talotekniikka / rakennuttaminen
 - Rakennuttaminen kuvataan kokonaisvastuuna hankkeen tarpeesta vastaanottoon.
@@ -30,6 +31,6 @@ Lähde: asiakkaan kanssa läpikäydyt ja käsin kommentoidut Rakennuttajapalvelu
 - Referenssit esitetään historiallisina toimeksiantoina asiakkaan toimittaman aineiston perusteella. Tarkkaa roolia, laajuutta tai julkaisulupaa ei laajenneta lähteen ulkopuolelle.
 
 ## Visuaalinen hero
-- Tummansininen pääväri + asiakkaan toivoma vaaleansininen korosteväri.
+- Valkoinen julkinen pääpinta + tumma sininen typografia + asiakkaan toivoma vaaleansininen korosteväri.
 - Rakennuspiirustus-/suunnitteludokumenttiestetiikka, selkeä JKP Group -nimi ja tekninen rakenne.
 - Ei geneeristä SaaS/dashboard-vaikutelmaa.
