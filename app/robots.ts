@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const isProductionDomain = configuredSiteUrl === "https://jkpgroup.fi";
+  const isProduction = process.env.VERCEL_ENV === "production";
 
-  if (!isProductionDomain) {
+  if (!isProduction) {
     return { rules: [{ userAgent: "*", disallow: "/" }] };
   }
 
