@@ -5,9 +5,9 @@ export function HomeSections({ content, locale = "fi" }: { content: SiteContent;
   const en = locale === "en";
   const prefix = en ? "/en" : "";
   const tiles = [
-    { slug: "talotekniikka", title: en ? "Building services project management" : "Talotekniikan rakennuttamispalvelut", description: en ? "Expert support for building services across the project lifecycle." : "Rakennuttajan velvollisuutena on huolehtia kokonaisuudesta. Tuemme myös kiinteistönpidon elinkaaritaloutta." },
-    { slug: "lvia-valvonta", title: en ? "Supervision services" : "Valvontapalvelut", description: en ? "Professional supervision supports project quality and delivery." : "Huolellinen ja ammattitaitoinen valvonta on edellytys rakennushankkeen onnistumiselle." },
-    { slug: "vuokraus", title: en ? "Property rental" : "Vuokrauspalvelut", description: en ? "JKP Group rents its own premises, apartments and holiday properties." : "Tarjoamme ammattitaitoista ja luotettavaa vuokrauspalvelua omissa liike- ja toimitiloissamme sekä asunnoissa ja lomakohteissa." },
+    { slug: "talotekniikka", title: en ? "Building services project management" : "Talotekniikan rakennuttamispalvelut" },
+    { slug: "lvia-valvonta", title: en ? "Supervision services" : "Valvontapalvelut" },
+    { slug: "vuokraus", title: en ? "Property rental" : "Vuokrauspalvelut" },
   ];
   const gallery = content.media.referenceImages.filter(Boolean);
   return (
@@ -23,7 +23,7 @@ export function HomeSections({ content, locale = "fi" }: { content: SiteContent;
                 ) : (
                   <span className="home-image-placeholder" aria-hidden="true"><span>JKP</span></span>
                 )}
-                <span className="home-service-text"><strong>{tile.title}</strong><span>{tile.description}</span><span className="home-service-cta">{en ? "Explore service" : "Tutustu palveluun"} →</span></span>
+                <span className="home-service-text"><strong>{tile.title}</strong><span className="home-service-cta">{en ? "Explore service" : "Tutustu palveluun"} →</span></span>
               </Link>
             ))}
           </div>
