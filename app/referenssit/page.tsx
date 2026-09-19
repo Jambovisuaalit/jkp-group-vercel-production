@@ -1,3 +1,4 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
@@ -5,11 +6,10 @@ import { Header } from "@/components/Header";
 import { ReferenceTimeline } from "@/components/ReferenceTimeline";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "Referenssit",
   description: "JKP Group Oy:n LVIA-valvonnan ja talotekniikan projektireferenssit asiakkaan syyskuussa 2026 toimittaman referenssilistan mukaan.",
-  alternates: { canonical: "/referenssit" },
-};
+}, "/referenssit", "fi");
 export const dynamic = "force-dynamic";
 
 export default async function ReferenssitPage() {

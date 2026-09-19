@@ -1,8 +1,16 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
+
+export const metadata: Metadata = withLocalizedSeo({
+  title: { absolute: "JKP Group Oy | Rakennuttaminen, talotekniikka ja vuokraus" },
+  description: "JKP Group Oy tarjoaa rakennuttamisen, taloteknisen valvonnan ja projektinjohdon asiantuntijapalveluja sekä vuokraa omia liike- ja toimitiloja, asuntoja ja loma-asuntoja.",
+  openGraph: { title: "JKP Group Oy | Rakennuttaminen, talotekniikka ja vuokraus" },
+}, "", "fi");
 
 export const dynamic = "force-dynamic";
 

@@ -1,9 +1,10 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
-export const metadata: Metadata = { title: "Building Services & Technical Supervision", description: "Project management, building services supervision, commissioning and handover support from Jyväskylä and Central Finland." };
+export const metadata: Metadata = withLocalizedSeo({ title: "Building Services & Technical Supervision", description: "Project management, building services supervision, commissioning and handover support from Jyväskylä and Central Finland." }, "/talotekniikka", "en");
 export const dynamic = "force-dynamic";
 const phases = [{ number: "01", title: "Early planning", items: ["Concept design", "Option studies", "Delivery models", "Cost estimates", "Budgeting", "Contract matters"] }, { number: "02", title: "Implementation", items: ["Detailed design", "Tendering", "HVAC and building services supervision", "Cost monitoring and reporting", "Authority coordination", "Technical supervision"] }, { number: "03", title: "Handover", items: ["Handover and delivery tasks", "Final financial settlement", "Warranty-period tasks"] }];
 export default async function EnglishTechnical() { const content = await getSiteContent(); return <><Header email={content.company.email} locale="en" /><main>

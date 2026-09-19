@@ -1,10 +1,12 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata = { title: "Building Services, Property & Project Expertise", description: "JKP Group Oy provides building services, project management, technical supervision and property rental." };
+export const metadata: Metadata = withLocalizedSeo({ title: "Building Services, Property & Project Expertise", description: "JKP Group Oy provides building services, project management, technical supervision and property rental." }, "", "en");
 export const dynamic = "force-dynamic";
 
 export default async function EnglishHome() {

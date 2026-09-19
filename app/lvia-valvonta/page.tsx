@@ -1,3 +1,4 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
@@ -5,11 +6,10 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "LVIA-valvonta ja talotekninen asiantuntijavalvonta",
   description: "LVIA-suunnitelmien tarkastus, työmaavalvonta, kustannus- ja laadunseuranta sekä testauksen, käyttöönoton ja vastaanoton valvonta.",
-  alternates: { canonical: "/lvia-valvonta" },
-};
+}, "/lvia-valvonta", "fi");
 export const dynamic = "force-dynamic";
 
 const phases = [

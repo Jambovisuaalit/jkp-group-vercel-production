@@ -1,3 +1,4 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
@@ -5,11 +6,10 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "HVAC & Building Services Supervision",
   description: "HVAC plan review, construction supervision, quality and cost follow-up, testing, commissioning and handover support for construction projects.",
-  alternates: { canonical: "/en/lvia-valvonta" },
-};
+}, "/lvia-valvonta", "en");
 export const dynamic = "force-dynamic";
 
 const phases = [

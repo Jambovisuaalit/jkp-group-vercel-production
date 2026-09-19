@@ -1,15 +1,15 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "Rakennuttaminen ja talotekninen valvonta Jyväskylä",
   description:
     "Rakennuttaminen, talotekninen valvonta, projektinjohto sekä käyttöönotto- ja vastaanottotehtävät Jyväskylässä ja Keski-Suomessa.",
-  alternates: { canonical: "/talotekniikka" },
-};
+}, "/talotekniikka", "fi");
 export const dynamic = "force-dynamic";
 
 const phases = [

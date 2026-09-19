@@ -1,9 +1,10 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
-export const metadata: Metadata = { title: "Property Rental", description: "Commercial premises, apartments and holiday properties from JKP Group's own portfolio." };
+export const metadata: Metadata = withLocalizedSeo({ title: "Property Rental", description: "Commercial premises, apartments and holiday properties from JKP Group's own portfolio." }, "/vuokraus", "en");
 export const dynamic = "force-dynamic";
 export default async function EnglishRental() { const content=await getSiteContent(); return <><Header email={content.company.email} locale="en" /><main>
 <section className="subhero"><div className="shell narrow"><p className="eyebrow">Property rental</p><h1>Commercial premises, apartments and holiday properties.</h1><p>JKP Group rents its own properties to companies and private customers. Availability and details are discussed directly.</p></div></section>

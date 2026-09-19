@@ -25,6 +25,10 @@ jobs:
         run: node scripts/smoke-visual.mjs
         env:
           JKP_BASE_URL: https://www.jkpgroup.fi
+      - name: Verify all FI/EN canonical, og:locale and hreflang pairs
+        run: node scripts/smoke-seo.mjs
+        env:
+          JKP_BASE_URL: https://www.jkpgroup.fi
       - name: Save 390 and 1440 screenshots
         if: always()
         uses: actions/upload-artifact@v4

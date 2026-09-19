@@ -1,3 +1,4 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
@@ -5,11 +6,10 @@ import { Header } from "@/components/Header";
 import { ReferenceTimeline } from "@/components/ReferenceTimeline";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "References",
   description: "JKP Group Oy's HVAC supervision, project management and commissioning references, as supplied by the customer in September 2026.",
-  alternates: { canonical: "/en/referenssit" },
-};
+}, "/referenssit", "en");
 export const dynamic = "force-dynamic";
 
 export default async function EnglishReferences() {

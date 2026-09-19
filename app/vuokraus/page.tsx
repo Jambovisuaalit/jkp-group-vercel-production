@@ -1,3 +1,4 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BusinessPremisesForm, ApartmentApplicationForm } from "@/components/RentalForms";
@@ -6,11 +7,10 @@ import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
 import { getPublishedRentals } from "@/lib/rentals";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "Liike- ja toimitilat, asunnot ja loma-asunnot",
   description: "JKP Group vuokraa omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja ja lomakohteita.",
-  alternates: { canonical: "/vuokraus" },
-};
+}, "/vuokraus", "fi");
 export const dynamic = "force-dynamic";
 
 const typeLabels = { holiday: "Loma-asunto tai lomakohde", commercial: "Liike- tai toimitila", residential: "Vuokra-asunto" } as const;

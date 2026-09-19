@@ -1,3 +1,4 @@
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
@@ -5,12 +6,11 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = withLocalizedSeo({
   title: "Yritys",
   description:
     "JKP Group Oy on vuonna 1993 perustettu rakennuttamisen, talotekniikan ja kiinteistöjen asiantuntijayhtiö Jyväskylässä ja Keski-Suomessa.",
-  alternates: { canonical: "/yritys" },
-};
+}, "/yritys", "fi");
 
 export const dynamic = "force-dynamic";
 
