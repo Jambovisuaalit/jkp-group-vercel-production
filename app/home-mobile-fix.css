@@ -1,20 +1,69 @@
-/* Mobile layout only. Public colour tokens live in client-theme.css. */
+/* Mobile adaptations for the client's screenshot-based industrial-photo UI. */
 .home-mobile-contact { display: none !important; }
-
+@media (max-width: 920px) {
+  .site-header-light .nav-shell {
+    width: min(100% - 28px, 1100px);
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  .site-header-light .brand { margin-right: auto; }
+  .site-header-light .desktop-nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 6px 0;
+    border-top: 1px solid rgba(18,55,80,.1);
+    scrollbar-width: none;
+  }
+  .site-header-light .desktop-nav::-webkit-scrollbar { display: none; }
+}
 @media (max-width: 640px) {
-  .site-header-light .nav-shell { min-height: 70px; padding-block: 10px; gap: 10px 16px; }
+  .site-header-light .nav-shell { padding-block: 12px 8px; gap: 7px 10px; }
   .site-header-light .brand { gap: 10px; }
-  .site-header-light .brand-mark { width: 42px; height: 42px; font-size: 18px; }
-  .site-header-light .brand-copy strong { font-size: 17px; }
-  .site-header-light .brand-copy small { margin-top: 5px; font-size: 7px; letter-spacing: 0.1em; }
-  .site-header-light .desktop-nav { gap: 20px; padding-top: 10px; font-size: 13px; }
-  .hero.client-home-hero { min-height: auto; padding: 44px 0 58px; background: #ffffff; overflow: clip; }
-  .client-home-kicker { gap: 12px; margin-bottom: 24px; color: #294e67; font-size: 10px; letter-spacing: 0.18em; }
-  .client-home-kicker span { width: 30px; }
-  .hero.client-home-hero h1 { max-width: 100%; color: #123750; font-size: clamp(36px, 10.4vw, 44px); line-height: 1.03; letter-spacing: -0.035em; text-wrap: pretty; overflow-wrap: normal; word-break: normal; hyphens: auto; }
-  .hero.client-home-hero h1 em { color: #78b7da; }
-  .client-home-lead { margin-top: 26px; color: #4c6a7c; font-size: 17px; line-height: 1.4; }
-  .client-home-actions { margin-top: 26px; gap: 12px; }
-  .client-home-actions .button { width: 100%; min-height: 50px; }
-  .client-home-actions .dark-link { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; color: #123750; }
+  .site-header-light .brand-mark { width: 38px; height: 40px; font-size: 15px; }
+  .site-header-light .brand-copy strong { font-size: 15px; }
+  .site-header-light .brand-copy small { margin-top: 3px; font-size: 7px; letter-spacing: .08em; }
+  .site-header-light .header-contact { display: none; }
+  .site-header-light .language-switcher { font-size: 10px; }
+  .site-header-light .desktop-nav { font-size: 12px; gap: 20px; }
+  .site-header-light .desktop-nav a { padding-block: 5px; }
+  .hero.client-home-hero {
+    min-height: 565px;
+    padding: 0;
+    background-image: linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)),url("/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg");
+    background-position: 55% center;
+    background-size: cover;
+  }
+  .client-home-hero-inner { min-height: 565px; }
+  .client-home-hero-copy { padding: 54px 0; }
+  .client-home-company { font-size: 24px; letter-spacing: .06em; }
+  .client-home-subtitle { margin: 4px 0 34px; font-size: 14px; }
+  .hero.client-home-hero h1 {
+    max-width: 100%;
+    font-size: clamp(27px, 7.7vw, 34px);
+    font-weight: 400;
+    color: #26343a;
+    line-height: 1.23;
+    letter-spacing: 0;
+    hyphens: none;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+  .client-home-lead {
+    max-width: 100%;
+    margin: 18px auto 0;
+    color: #303d43;
+    font-size: 16px;
+    line-height: 1.44;
+  }
+  .client-home-actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 27px;
+    align-items: stretch;
+  }
+  .client-home-actions .button { width: 100%; min-height: 45px; }
+  .business-section .section-heading h2 { font-size: clamp(23px,6vw,28px); }
 }
