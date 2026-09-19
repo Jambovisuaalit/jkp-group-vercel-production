@@ -2,8 +2,40 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ReferenceTimeline } from "@/components/ReferenceTimeline";
 import { getSiteContent } from "@/lib/content";
-export const metadata: Metadata = { title: "References", description: "Selected historical references for JKP Group Oy's project management, building services and supervision work." };
+
+export const metadata: Metadata = {
+  title: "References",
+  description: "JKP Group Oy's HVAC supervision, project management and commissioning references, as supplied by the customer in September 2026.",
+  alternates: { canonical: "/en/referenssit" },
+};
 export const dynamic = "force-dynamic";
-const references=["Kiipulasäätiö","Aro-Yhtymä Oy / Autokeskus Konala","Lammin Säästöpankki","Versowood Oy","Loimua Oy / Vanajan Voimalaitos","Krogenus Oy","Etola Kiinteistöt","Katepal Oy","Koy Brahenkatu 20 / Euromaster Hämeenlinna","As Oy Hämeenlinnan Rauhanlinna","Fingrid Oyj"];
-export default async function EnglishReferences(){const content=await getSiteContent();return <><Header email={content.company.email} locale="en"/><main><section className="subhero reference-hero"><div className="shell narrow"><p className="eyebrow">References</p><h1>Experience in project management, supervision and building services.</h1><p>The list below contains selected historical references from customer-provided source material. Specific roles and scopes are stated only when separately verified.</p></div></section><section className="section"><div className="shell historical-reference-grid">{references.map((name,i)=><article className="historical-reference" key={name}><span>{String(i+1).padStart(2,"0")}</span><h2>{name}</h2><p>Historical reference based on customer-provided source material.</p></article>)}</div></section><section className="contact-section"><div className="shell contact-grid"><div><p className="eyebrow">Discuss experience</p><h2>Looking for experience from a similar project?</h2><p>Tell us the project type and required responsibility. JKP Group can clarify relevant experience and references case by case.</p></div><ContactForm subject="Reference and experience enquiry" locale="en"/></div></section></main><Footer content={content} locale="en"/></>}
+
+export default async function EnglishReferences() {
+  const content = await getSiteContent();
+  return (
+    <>
+      <Header email={content.company.email} locale="en" />
+      <main>
+        <section className="subhero reference-hero">
+          <div className="shell narrow">
+            <p className="eyebrow">References / building services</p>
+            <h1>Selected HVAC supervision and commissioning projects.</h1>
+            <p>Customer-supplied reference list covering 2017–2026. Project names, periods and responsibilities are shown as provided in the original reference material.</p>
+          </div>
+        </section>
+        <section className="section">
+          <ReferenceTimeline locale="en" />
+        </section>
+        <section className="contact-section">
+          <div className="shell contact-grid">
+            <div><p className="eyebrow">Contact</p><h2>Discuss a comparable project.</h2><p>Describe the property, project phase and required scope to discuss relevant project experience.</p></div>
+            <ContactForm subject="Reference and experience enquiry" locale="en" />
+          </div>
+        </section>
+      </main>
+      <Footer content={content} locale="en" />
+    </>
+  );
+}
