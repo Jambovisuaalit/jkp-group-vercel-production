@@ -14,8 +14,9 @@ export function Header({ email, variant = "light", locale = "fi" }: { email: str
           </span>
         </Link>
         <nav className="desktop-nav" aria-label={en ? "Main navigation" : "Päänavigaatio"}>
+          <Link href={prefix || "/"}>{en ? "Home" : "Etusivu"}</Link>
           <Link href={`${prefix}/yritys`}>{en ? "Company" : "Yritys"}</Link>
-          <Link href={`${prefix}/talotekniikka`}>{en ? "Building Services" : "Talotekniikka"}</Link>
+          <Link href={`${prefix}/talotekniikka`}>{en ? "Services" : "Palvelut"}</Link>
           <Link href={`${prefix}/vuokraus`}>{en ? "Properties" : "Vuokraus"}</Link>
           <Link href={`${prefix}/referenssit`}>{en ? "References" : "Referenssit"}</Link>
         </nav>
@@ -25,8 +26,8 @@ export function Header({ email, variant = "light", locale = "fi" }: { email: str
             <span aria-hidden="true">/</span>
             <Link href="/en" aria-current={en ? "page" : undefined}>EN</Link>
           </div>
-          <a className="button button-small header-contact" href={`mailto:${email}`}>
-            {en ? "Contact" : "Ota yhteyttä"} <span aria-hidden="true">↗</span>
+          <a className="button button-small header-contact" href={en ? "/en#contact" : "/#yhteys"}>
+            {en ? "Contact" : "Ota yhteyttä"}
           </a>
         </div>
       </div>
