@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { HomeSections } from "@/components/HomeSections";
 import { getSiteContent } from "@/lib/content";
 
 export const metadata: Metadata = withLocalizedSeo({
@@ -21,13 +22,13 @@ export default async function HomePage() {
     <>
       <Header email={content.company.email} variant="light" />
       <main>
-        <section className="hero client-home-hero">
+        <section className="hero client-home-hero" style={{ backgroundImage: `linear-gradient(rgba(255,255,255,.79),rgba(255,255,255,.79)),url("${content.hero.imageUrl || "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg"}")` }}>
           <div className="shell client-home-hero-inner">
             <div className="client-home-hero-copy">
               <p className="client-home-company">JKP GROUP OY</p>
               <p className="client-home-subtitle">Talotekniikka – kiinteistöt</p>
-              <h1>Toimivaa talotekniikkaa vuodesta 1993.</h1>
-              <p className="client-home-lead">Suunnittelua, valvontaa ja rakennuttamista vaativiin kiinteistö- ja rakennushankkeisiin uudis- ja peruskorjauskohteissa.</p>
+              <h1>{content.hero.title}</h1>
+              <p className="client-home-lead">{content.hero.lead}</p>
               <div className="hero-actions client-home-actions">
                 <Link className="button" href="/talotekniikka">Tutustu palveluihin</Link>
                 <a className="button button-outline" href="#yhteys">Ota yhteyttä</a>
@@ -36,55 +37,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="section business-section">
-          <div className="shell section-heading">
-            <div>
-              <p className="eyebrow">Kaksi palvelukokonaisuutta</p>
-              <h2>Rakennushanke tai vuokratarve — yksi selkeä reitti eteenpäin.</h2>
-            </div>
-            <p>Rakennuttamisen ja talotekniikan asiantuntijapalvelut sekä omien kohteiden vuokraustoiminta on erotettu omiksi kokonaisuuksikseen.</p>
-          </div>
-          <div className="shell business-grid">
-            {content.businessAreas.map((area, index) => (
-              <Link className="business-card" href={`/${area.slug}`} key={area.slug}>
-                <span className="eyebrow">0{index + 1}</span>
-                <div><h3>{area.title}</h3><p>{area.summary}</p></div>
-                <span className="card-arrow" aria-hidden="true">↗</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="section about-section">
-          <div className="shell about-grid">
-            <div className="about-panel">
-              <span>30+</span>
-              <strong>vuotta kokemusta</strong>
-              <p>Rakennuttamisen, talotekniikan ja kiinteistöjen asiantuntijapalvelut.</p>
-            </div>
-            <div className="about-copy">
-              <p className="eyebrow">Rakennuttaminen ja valvonta</p>
-              <h2>{content.about.title}</h2>
-              <p>{content.about.body}</p>
-              <Link className="text-link dark-link" href="/referenssit">Katso referenssit →</Link>
-            </div>
-          </div>
-        </section>
-
-        <section className="section services-preview">
-          <div className="shell section-heading">
-            <div><p className="eyebrow">Talotekniikka</p><h2>Vastuut hankkeen eri vaiheisiin.</h2></div>
-          </div>
-          <div className="shell service-grid">
-            {content.services.map((service, index) => (
-              <article className="service-card" key={service.title}>
-                <span>0{index + 1}</span>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <HomeSections content={content} />
 
         <section className="contact-section" id="yhteys">
           <div className="shell contact-grid">
@@ -92,6 +45,7 @@ export default async function HomePage() {
               <p className="eyebrow">Suora yhteys</p>
               <h2>{content.contact.title}</h2>
               <p>{content.contact.body}</p>
+              {content.media.contactImageUrl ? <img className="home-contact-image" src={content.media.contactImageUrl} alt="JKP Groupin yhteyshenkilö" loading="lazy" /> : null}
               <a className="contact-email" href={`mailto:${content.company.email}`}>{content.company.email}</a>
               {content.company.phone ? <a className="contact-email" href={`tel:${content.company.phone.replace(/\s/g, "")}`}>{content.company.phone}</a> : null}
             </div>

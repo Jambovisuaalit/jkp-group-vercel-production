@@ -36,6 +36,7 @@ export type SiteContent = {
   };
   media: {
     technicalImageUrl: string;
+    rentalImageUrl: string;
     serviceImages: string[];
     referenceImages: string[];
     contactImageUrl: string;
@@ -50,10 +51,10 @@ export const defaultContent: SiteContent = {
     area: "Jyväskylä ja Keski-Suomi",
   },
   hero: {
-    eyebrow: "Rakennuttamisen ja talotekniikan asiantuntija",
-    title: "Rakennuttamisen ja talotekniikan asiantuntijapalvelut",
+    eyebrow: "JKP GROUP OY",
+    title: "Toimivaa talotekniikkaa vuodesta 1993.",
     lead:
-      "JKP Group tukee rakennushanketta esiselvityksestä toteutukseen, valvontaan ja vastaanottoon. Lisäksi vuokraamme omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja.",
+      "Suunnittelua, valvontaa ja rakennuttamista vaativiin kiinteistö- ja rakennushankkeisiin uudis- ja peruskorjauskohteissa.",
     imageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
   },
   about: {
@@ -104,6 +105,7 @@ export const defaultContent: SiteContent = {
   },
   media: {
     technicalImageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
+    rentalImageUrl: "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg",
     serviceImages: ["", "", ""],
     referenceImages: ["", "", "", "", "", "", "", "", ""],
     contactImageUrl: "",
