@@ -125,3 +125,18 @@
 .admin-reference-master-row input, .admin-reference-master-row textarea { width: 100%; min-width: 0; padding: 9px; border: 1px solid #ccdae2; font: 400 14px/1.45 Arial,Helvetica,sans-serif; }
 .admin-reference-master-row > button, .admin-reference-master-actions > button:first-child { padding: 10px; border: 1px solid #cfdae2; background: #fff; color: #123750; cursor: pointer; }
 .admin-reference-master-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; }
+
+/* Mobile dropdown must be contained within the viewport, not its nav item. */
+@media (max-width: 640px) {
+  .site-header-light .service-menu-options {
+    position: fixed;
+    top: 115px;
+    left: 12px;
+    right: 12px;
+    width: calc(100vw - 24px);
+    min-width: 0;
+    max-width: none;
+    box-sizing: border-box;
+    z-index: 300;
+  }
+}
