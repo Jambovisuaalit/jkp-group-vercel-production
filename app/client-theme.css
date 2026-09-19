@@ -14,30 +14,167 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible { outline-color: rgba(121, 199, 242, 0.55); }
 
-/* Client-approved light / white public visual system */
-.site-header-light { position: relative; background: #ffffff; border-bottom: 1px solid rgba(18, 55, 80, 0.12); backdrop-filter: none; }
-.site-header-light .nav-shell { min-height: 108px; }
-.site-header-light .brand { color: #123750; }
-.site-header-light .brand-mark { color: #74b5d9; border-color: #294e67; background: #ffffff; font-family: Georgia, "Times New Roman", serif; font-size: 21px; }
-.site-header-light .brand-copy strong { font-family: Georgia, "Times New Roman", serif; font-size: 24px; letter-spacing: 0.01em; }
-.site-header-light .brand-copy small { color: #49667a; font-size: 10px; letter-spacing: 0.17em; }
-.site-header-light .desktop-nav { color: #294e67; }
-.site-header-light .desktop-nav a:hover { color: #123750; }
-.site-header-light .header-contact { background: #ffffff; color: #123750; border-color: #79c7f2; }
+/* Screenshot master: customer-provided original white / industrial-photo UI.
+   Content and SEO are managed separately. This replaces the incorrect serif hero. */
+.site-header-light {
+  position: relative;
+  background: #fff;
+  border-bottom: 1px solid #e4e9ec;
+  backdrop-filter: none;
+}
+.site-header-light .nav-shell {
+  min-height: 88px;
+  width: min(1100px, calc(100% - 48px));
+  gap: 26px;
+}
+.site-header-light .brand {
+  color: #243e4b;
+  gap: 12px;
+}
+.site-header-light .brand-mark {
+  width: 44px;
+  height: 46px;
+  color: #547788;
+  border: 1px solid #9cabb3;
+  background: #fff;
+  font: 400 17px/1 Arial, Helvetica, sans-serif;
+  letter-spacing: -.04em;
+}
+.site-header-light .brand-copy strong {
+  font: 800 19px/1.15 Arial, Helvetica, sans-serif;
+  letter-spacing: .01em;
+}
+.site-header-light .brand-copy small {
+  margin-top: 4px;
+  color: #6d7b83;
+  font: 600 9px/1.2 Arial, Helvetica, sans-serif;
+  letter-spacing: .10em;
+}
+.site-header-light .desktop-nav {
+  gap: clamp(12px, 1.5vw, 24px);
+  color: #3b4b54;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.site-header-light .desktop-nav a:hover { color: #205b74; }
+.site-header-light .header-contact {
+  min-height: auto;
+  padding: 9px 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #3b4b54;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-transform: none;
+}
+.site-header-light .header-contact:hover { color: #205b74; transform: none; background: transparent; }
+.site-header-light .language-switcher { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #64747d; }
+.site-header-light .language-switcher a[aria-current="page"] { font-weight: 800; color: #243e4b; }
 
-.client-home-hero, .hero.client-home-hero { color: #123750; background: #ffffff; padding: clamp(72px, 9vw, 126px) 0 clamp(76px, 10vw, 132px); overflow: hidden; }
-.client-home-hero::before { display: none; }
-.client-home-hero-inner { position: relative; }
-.client-home-hero-copy { max-width: 1180px; }
-.client-home-kicker { display: flex; align-items: center; gap: 22px; margin: 0 0 42px; color: #294e67; font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; }
-.client-home-kicker span { width: 54px; height: 1px; background: #294e67; }
-.client-home-hero h1 { max-width: 1260px; margin: 0; color: #123750; font-family: Georgia, "Times New Roman", serif; font-size: clamp(54px, 6.1vw, 90px); font-weight: 700; line-height: 0.99; letter-spacing: -0.045em; text-wrap: balance; }
-.client-home-hero h1 em { color: #78b7da; font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-style: italic; }
-.client-home-lead { max-width: 720px; margin: 48px 0 0; color: #4c6a7c; font-size: clamp(20px, 2vw, 27px); line-height: 1.45; }
-.client-home-actions { margin-top: 36px; }
-.client-home-actions .button { background: #123750; border-color: #123750; color: #ffffff; }
-.client-home-actions .button:hover { background: #294e67; }
-.client-home-actions .dark-link { color: #123750; }
+.hero.client-home-hero {
+  min-height: 530px;
+  padding: 0;
+  color: #24333b;
+  background-image: linear-gradient(rgba(255,255,255,.79), rgba(255,255,255,.79)), url("/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.hero.client-home-hero::before { display: none; }
+.client-home-hero-inner {
+  position: relative;
+  display: flex;
+  min-height: 530px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.client-home-hero-copy {
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 45px 0;
+}
+.client-home-company {
+  margin: 0;
+  color: #203844;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(26px, 3.2vw, 34px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: .08em;
+}
+.client-home-subtitle {
+  margin: 3px 0 47px;
+  color: #3b4b54;
+  font-size: 16px;
+  line-height: 1.3;
+}
+.hero.client-home-hero h1 {
+  max-width: 1050px;
+  margin: 0 auto;
+  color: #26343a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(29px, 3.2vw, 39px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: .005em;
+  text-wrap: balance;
+}
+.client-home-lead {
+  max-width: 755px;
+  margin: 16px auto 0;
+  color: #303d43;
+  font-size: clamp(17px, 1.7vw, 21px);
+  line-height: 1.5;
+  text-wrap: balance;
+}
+.client-home-actions {
+  justify-content: center;
+  margin-top: 30px;
+  gap: 14px;
+}
+.client-home-actions .button {
+  min-height: 44px;
+  padding: 0 23px;
+  border: 1px solid #225f79;
+  border-radius: 0;
+  background: #225f79;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .025em;
+  text-transform: uppercase;
+}
+.client-home-actions .button:hover { background: #174d65; border-color: #174d65; }
+.client-home-actions .button.button-outline {
+  border-color: #9dabb2;
+  background: rgba(255,255,255,.57);
+  color: #3b4b54;
+  font-weight: 500;
+}
+.client-home-actions .button.button-outline:hover { background: #fff; border-color: #225f79; color: #225f79; }
+.business-section .section-heading {
+  display: block;
+  text-align: center;
+  margin-bottom: 45px;
+}
+.business-section .section-heading h2 {
+  max-width: 900px;
+  margin: 0 auto;
+  font: 400 clamp(25px, 2.35vw, 32px)/1.28 Arial, Helvetica, sans-serif;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #34434a;
+}
+.business-section .section-heading > p {
+  max-width: 760px;
+  margin: 22px auto 0;
+}
+.business-section .section-heading .eyebrow { color: #506e7e; }
 
 .hero:not(.client-home-hero), .subhero, .process-section, .contact-section { color: #123750; background: #ffffff; }
 .hero:not(.client-home-hero)::before, .subhero::before { display: none; }
@@ -83,31 +220,28 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.55); }
 .footer-grid a:hover { color: #a9d8ef; }
 
 @media (max-width: 920px) {
-  .site-header-light .nav-shell { min-height: 92px; }
+  .site-header-light .nav-shell { min-height: 80px; }
   .technical-hero-grid { grid-template-columns: 1fr; }
   .technical-service-index { min-height: 390px; }
   .delivery-phase-grid, .rental-category-grid { grid-template-columns: 1fr; }
   .historical-reference-grid { grid-template-columns: 1fr 1fr; }
-  .client-home-hero h1 { font-size: clamp(50px, 8.8vw, 72px); }
 }
 @media (max-width: 640px) {
-  .site-header-light .nav-shell { min-height: 78px; padding-block: 13px; }
-  .site-header-light .brand-mark { width: 48px; height: 48px; }
-  .site-header-light .brand-copy strong { font-size: 19px; }
-  .site-header-light .brand-copy small { font-size: 8px; letter-spacing: 0.12em; }
-  .site-header-light .desktop-nav { border-top-color: rgba(18, 55, 80, 0.12); }
-  .client-home-hero { padding: 54px 0 68px; }
-  .client-home-kicker { gap: 14px; margin-bottom: 28px; font-size: 10px; }
-  .client-home-kicker span { width: 34px; }
-  .client-home-hero h1 { font-size: clamp(42px, 12vw, 56px); line-height: 1.01; letter-spacing: -0.04em; }
-  .client-home-lead { margin-top: 30px; font-size: 18px; }
-  .client-home-actions { margin-top: 28px; }
+  .site-header-light .nav-shell { min-height: 70px; padding-block: 12px; }
+  .site-header-light .brand-mark { width: 42px; height: 42px; }
+  .site-header-light .brand-copy strong { font-size: 17px; }
+  .site-header-light .brand-copy small { font-size: 8px; }
+  .site-header-light .desktop-nav { border-top-color: rgba(18,55,80,.12); }
+  .hero.client-home-hero { min-height: 580px; background-position: 54% center; }
+  .client-home-hero-inner { min-height: 580px; }
+  .client-home-hero-copy { padding: 58px 0; }
+  .client-home-company { font-size: 25px; letter-spacing: .05em; }
+  .client-home-subtitle { margin-bottom: 33px; font-size: 14px; }
+  .hero.client-home-hero h1 { font-size: clamp(27px,7.4vw,34px); line-height: 1.25; }
+  .client-home-lead { font-size: 16px; line-height: 1.45; margin-top: 18px; }
+  .client-home-actions { margin-top: 27px; gap: 10px; }
+  .client-home-actions .button { min-height: 44px; }
   .technical-hero { padding-top: 58px; padding-bottom: 58px; }
-  .technical-hero-copy h1 { font-size: clamp(42px, 12.5vw, 56px); }
   .technical-service-index { min-height: 0; padding: 22px; }
-  .technical-service-index > strong { font-size: 92px; margin-block: 26px; }
-  .technical-service-index li { grid-template-columns: 32px 1fr; padding: 12px 0; }
-  .technical-service-index li b { font-size: 13px; }
   .delivery-phase-grid, .historical-reference-grid { grid-template-columns: 1fr; }
-  .delivery-phase { padding: 24px; }
 }
