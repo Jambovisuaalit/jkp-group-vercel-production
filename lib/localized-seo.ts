@@ -10,7 +10,7 @@ export type SiteLocale = "fi" | "en";
 
 export function withLocalizedSeo(
   pageMetadata: Metadata,
-  route: "" | "/yritys" | "/talotekniikka" | "/lvia-valvonta" | "/vuokraus" | "/referenssit",
+  route: "" | "/yritys" | "/talotekniikka" | "/lvia-valvonta" | "/vuokraus" | "/referenssit" | "/tietosuoja",
   locale: SiteLocale,
 ): Metadata {
   const fiUrl = ORIGIN + (route || "");
