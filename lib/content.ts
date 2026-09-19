@@ -18,6 +18,13 @@ function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteCo
     about: { ...base.about, ...incoming.about },
     rental: { ...base.rental, ...incoming.rental },
     contact: { ...base.contact, ...incoming.contact },
+    media: {
+      ...base.media, ...incoming.media,
+      serviceImages: Array.isArray(incoming.media?.serviceImages)
+        ? incoming.media.serviceImages : base.media.serviceImages,
+      referenceImages: Array.isArray(incoming.media?.referenceImages)
+        ? incoming.media.referenceImages : base.media.referenceImages,
+    },
     businessAreas: incoming.businessAreas?.length ? incoming.businessAreas : base.businessAreas,
     services: incoming.services?.length ? incoming.services : base.services,
   };

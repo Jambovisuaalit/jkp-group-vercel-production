@@ -34,6 +34,12 @@ export type SiteContent = {
     title: string;
     body: string;
   };
+  media: {
+    technicalImageUrl: string;
+    serviceImages: string[];
+    referenceImages: string[];
+    contactImageUrl: string;
+  };
 };
 
 export const defaultContent: SiteContent = {
@@ -48,7 +54,7 @@ export const defaultContent: SiteContent = {
     title: "Rakennuttamisen ja talotekniikan asiantuntijapalvelut",
     lead:
       "JKP Group tukee rakennushanketta esiselvityksestä toteutukseen, valvontaan ja vastaanottoon. Lisäksi vuokraamme omia liike- ja toimitiloja, asuntoja sekä loma-asuntoja.",
-    imageUrl: "",
+    imageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
   },
   about: {
     title: "Kokonaisuus hallintaan suunnittelusta vastaanottoon",
@@ -95,6 +101,12 @@ export const defaultContent: SiteContent = {
     title: "Liike- ja toimitiloja, asuntoja sekä loma-asuntoja",
     lead:
       "Vuokraamme omia kohteitamme yrityksille ja yksityisille. Valikoimaan kuuluvat liike- ja toimitilat, asunnot sekä loma-asunnot ja lomakohteet.",
+  },
+  media: {
+    technicalImageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
+    serviceImages: ["", "", ""],
+    referenceImages: ["", "", "", "", "", "", "", "", ""],
+    contactImageUrl: "",
   },
   contact: {
     title: "Keskustellaan hankkeestasi tai vuokratarpeestasi.",
