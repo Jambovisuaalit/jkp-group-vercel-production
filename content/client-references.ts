@@ -10,6 +10,7 @@ export type ClientReference = {
   role: string;
   scope: string;
   areas?: readonly string[];
+  imageUrl?: string;
 };
 
 export const clientReferences: readonly ClientReference[] = [

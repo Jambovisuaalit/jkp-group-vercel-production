@@ -623,6 +623,46 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                 <div><p className={styles.kicker}>REFERENSSIT</p><h1>Referenssit</h1><p>Julkaise vain asiakkaan hyväksymät projektit ja kuvat.</p></div>
                 <button className={styles.primaryButton} onClick={() => setReferenceDraft(emptyReference())}><Icon name="plus" />Lisää referenssi</button>
               </div>
+              {content ? <form onSubmit={saveContent} className="admin-reference-master">
+                <h2>Asiakkaan julkinen referenssiluettelo</h2>
+                <p>Tämä luettelo näkyy suoraan sivuilla /referenssit ja /en/referenssit. Vahvista projektin tiedot ja julkaisulupa ennen tallennusta.</p>
+                {content.references.map((item, index) => (
+                  <fieldset key={index} className="admin-reference-master-row">
+                    <legend>{String(index + 1).padStart(2, "0")} / {item.client || "Uusi referenssi"}</legend>
+                    {([
+                      ["period", "Ajanjakso"], ["client", "Asiakas / kohde"], ["project", "Projektin nimi"],
+                      ["role", "Tehtävä"], ["scope", "Tehtävän laajuus"],
+                    ] as const).map(([key, label]) => <label key={key}>{label}<input
+                      value={item[key] || ""}
+                      onChange={event => setContent(current => {
+                        if (!current) return current;
+                        return { ...current, references: current.references.map((entry, i) => i === index ? { ...entry, [key]: event.target.value } : entry) };
+                      })}
+                    /></label>)}
+                    <label>Vastuualueet (yksi riviä kohti)<textarea rows={3}
+                      value={item.areas?.join("\n") || ""}
+                      onChange={event => setContent(current => {
+                        if (!current) return current;
+                        return { ...current, references: current.references.map((entry, i) => i === index
+                          ? { ...entry, areas: event.target.value.split("\n").map(value => value.trim()).filter(Boolean) }
+                          : entry) };
+                      })}
+                    /></label>
+                    <label>Referenssikuvan osoite (lataa kuva ensin Etusivu → Referenssikuvat -osiossa)<input
+                      value={item.imageUrl || ""}
+                      onChange={event => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: event.target.value } : entry) } : current)}
+                    /></label>
+                    <button type="button" onClick={() => {
+                      if (!window.confirm("Poistetaanko tämä referenssi julkisesta luettelosta?")) return;
+                      setContent(current => current ? { ...current, references: current.references.filter((_,i)=>i!==index) } : current);
+                    }}>Poista luettelosta</button>
+                  </fieldset>
+                ))}
+                <div className="admin-reference-master-actions">
+                  <button type="button" onClick={() => setContent(current => current ? { ...current, references: [...current.references, { period: "", client: "", role: "", scope: "" }] } : current)}>Lisää projektirivi</button>
+                  <button className={styles.primaryButton} type="submit" disabled={loading}>Tallenna julkinen referenssiluettelo</button>
+                </div>
+              </form> : null}
               <div className={styles.cardGrid}>
                 {references.map((item) => <button className={styles.referenceCard} key={item.id} onClick={() => setReferenceDraft({ ...item })}>{item.imageUrl ? <img src={item.imageUrl} alt="" /> : <div className={styles.imagePlaceholder}>JKP</div>}<div><StatusBadge state={item.publicationState} /><h2>{item.title}</h2><p>{[item.category, item.location, item.year].filter(Boolean).join(" · ") || "Tiedot täydentämättä"}</p><small>{item.permissionConfirmed ? "Julkaisulupa vahvistettu" : "Julkaisulupa puuttuu"}</small></div></button>)}
                 {!references.length ? <div className={styles.emptyState}>Referenssejä ei ole vielä lisätty.</div> : null}

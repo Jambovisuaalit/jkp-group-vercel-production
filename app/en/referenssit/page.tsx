@@ -26,7 +26,7 @@ export default async function EnglishReferences() {
           </div>
         </section>
         <section className="section">
-          <ReferenceTimeline locale="en" />
+          <ReferenceTimeline locale="en" items={content.references} />
         </section>
         <section className="contact-section">
           <div className="shell contact-grid">

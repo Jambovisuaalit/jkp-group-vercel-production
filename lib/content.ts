@@ -18,6 +18,7 @@ function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteCo
     about: { ...base.about, ...incoming.about },
     rental: { ...base.rental, ...incoming.rental },
     contact: { ...base.contact, ...incoming.contact },
+    references: Array.isArray(incoming.references) ? incoming.references : base.references,
     media: {
       ...base.media, ...incoming.media,
       serviceImages: Array.isArray(incoming.media?.serviceImages)

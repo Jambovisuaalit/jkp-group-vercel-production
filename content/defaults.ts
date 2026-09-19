@@ -1,3 +1,5 @@
+import { clientReferences, type ClientReference } from "@/content/client-references";
+
 export type ServiceItem = {
   title: string;
   description: string;
@@ -34,6 +36,7 @@ export type SiteContent = {
     title: string;
     body: string;
   };
+  references: ClientReference[];
   media: {
     technicalImageUrl: string;
     rentalImageUrl: string;
@@ -103,6 +106,7 @@ export const defaultContent: SiteContent = {
     lead:
       "Vuokraamme omia kohteitamme yrityksille ja yksityisille. Valikoimaan kuuluvat liike- ja toimitilat, asunnot sekä loma-asunnot ja lomakohteet.",
   },
+  references: clientReferences.map((entry) => ({ ...entry, areas: entry.areas ? [...entry.areas] : undefined })),
   media: {
     technicalImageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
     rentalImageUrl: "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg",
