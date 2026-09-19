@@ -14,6 +14,7 @@ export function Header({ email, variant = "dark", locale = "fi" }: { email: stri
           </span>
         </Link>
         <nav className="desktop-nav" aria-label={en ? "Main navigation" : "Päänavigaatio"}>
+          <Link href={`${prefix}/yritys`}>{en ? "Company" : "Yritys"}</Link>
           <Link href={`${prefix}/talotekniikka`}>{en ? "Building Services" : "Talotekniikka"}</Link>
           <Link href={`${prefix}/vuokraus`}>{en ? "Properties" : "Vuokraus"}</Link>
           <Link href={`${prefix}/referenssit`}>{en ? "References" : "Referenssit"}</Link>
