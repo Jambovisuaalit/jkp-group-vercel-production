@@ -20,7 +20,7 @@ for (const route of routes) {
     const response = await fetch(url, { redirect: "follow" });
     assert.equal(response.status, 200, url + " returned non-200");
     const html = await response.text();
-    assert.match(html, new RegExp(`<html\\\\s+lang="${locale}"`), url + " wrong HTML language");
+    assert.match(html, new RegExp(`<html\\s+lang="${locale}"`), url + " wrong HTML language");
     const normalize = value => value?.replace(/\/$/, "") ?? value;
     const canonicals = [...html.matchAll(/<link\b[^>]*rel="canonical"[^>]*>/gi)].map(m => attr(m[0], "href"));
     assert.equal(canonicals.length, 1, url + " must have exactly one canonical");
