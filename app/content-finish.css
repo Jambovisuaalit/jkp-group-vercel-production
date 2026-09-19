@@ -1,0 +1,161 @@
+/* 2026-09 customer delivery: new content components only.
+   Base visual system remains the approved 693b54d9 white editorial design. */
+.client-reference-list {
+  display: grid;
+  gap: 0;
+}
+.client-reference {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.28fr) 1fr;
+  column-gap: clamp(28px, 6vw, 94px);
+  padding: clamp(30px, 5vw, 56px) 0;
+  border-top: 1px solid rgba(18, 55, 80, 0.15);
+  background: #fff;
+}
+.client-reference:last-child {
+  border-bottom: 1px solid rgba(18, 55, 80, 0.15);
+}
+.client-reference-period {
+  font-size: clamp(17px, 2vw, 24px);
+  color: #4c83a3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.client-reference-main h2 {
+  margin: 0 0 14px;
+  color: #123750;
+  font-size: clamp(24px, 2.7vw, 38px);
+  line-height: 1.14;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.client-reference-main p {
+  max-width: 760px;
+  margin: 8px 0;
+  color: #526b7a;
+  font-size: clamp(15px, 1.3vw, 18px);
+}
+.client-reference-main .client-reference-project,
+.client-reference-main .client-reference-role {
+  color: #123750;
+  font-weight: 700;
+}
+.client-reference-areas {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(18, 55, 80, 0.1);
+}
+.client-reference-areas summary {
+  cursor: pointer;
+  color: #123750;
+  font-weight: 700;
+}
+.client-reference-areas ul {
+  columns: 2;
+  column-gap: 42px;
+  margin: 17px 0 0;
+  padding-left: 22px;
+  color: #526b7a;
+}
+.client-reference-areas li {
+  padding: 3px 0;
+  break-inside: avoid;
+}
+.lvia-phase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 18px;
+}
+.lvia-phase {
+  padding: clamp(24px, 3vw, 42px);
+  background: #fff;
+  border: 1px solid rgba(18,55,80,.14);
+  min-width: 0;
+}
+.lvia-phase > span {
+  color: #4c83a3;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+.lvia-phase h3 {
+  margin: 20px 0 12px;
+  color: #123750;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.15;
+}
+.lvia-phase p,
+.lvia-phase li {
+  color: #526b7a;
+  line-height: 1.65;
+}
+.lvia-phase ul {
+  margin: 20px 0 0;
+  padding-left: 20px;
+}
+.lvia-proof-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(25px,5vw,70px);
+  align-items: start;
+}
+.lvia-proof-layout h2 {
+  margin: 0;
+  color: #123750;
+  font-size: clamp(33px, 4vw, 54px);
+  line-height: 1.08;
+}
+.lvia-proof-layout p {
+  margin: 10px 0 22px;
+  color: #526b7a;
+  font-size: 17px;
+}
+.rental-client-image {
+  position: relative;
+  display: flex;
+  align-items: stretch !important;
+  padding: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #f6fafc;
+}
+.rental-client-image img,
+.rental-client-inline-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.rental-client-image img {
+  aspect-ratio: 3 / 2;
+}
+.rental-image-caption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 18px 22px;
+  color: #fff;
+  background: linear-gradient(transparent,rgba(18,55,80,.88));
+}
+.rental-image-caption span,
+.rental-image-caption strong,
+.rental-image-caption p {
+  color: #fff !important;
+}
+.rental-image-caption strong {
+  display: block;
+  font-size: clamp(19px,2.3vw,28px) !important;
+  letter-spacing: -.02em;
+}
+.rental-image-caption p { margin: 0; font-size: 12px; }
+@media(max-width:920px) {
+  .lvia-phase-grid { grid-template-columns: 1fr 1fr; }
+  .lvia-proof-layout { grid-template-columns: 1fr; }
+}
+@media(max-width:640px) {
+  .client-reference { grid-template-columns: 1fr; gap: 14px; }
+  .client-reference-areas ul { columns: 1; }
+  .lvia-phase-grid { grid-template-columns: 1fr; }
+  .rental-image-caption { padding: 12px 15px; }
+  .rental-image-caption strong { font-size: 19px !important; }
+  .rental-image-caption p { font-size: 11px; }
+}
