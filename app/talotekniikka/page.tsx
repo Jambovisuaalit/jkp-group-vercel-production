@@ -14,8 +14,8 @@ export const dynamic = "force-dynamic";
 
 const phases = [
   { number: "01", title: "Esiselvitysvaihe", items: ["Luonnossuunnittelu", "Vaihtoehtotarkastelut", "Toteutustapamallit", "Kustannusarviot", "Budjetointi", "Sopimusasiat"] },
-  { number: "02", title: "Toteutusvaihe", items: ["Toteutussuunnittelu", "Urakkakilpailutus", "LVI- ja talotekninen valvonta", "Kustannusseuranta ja raportointi", "Viranomaisneuvottelut", "Talotekniikan asiantuntijavalvonta"] },
-  { number: "03", title: "Vastaanottovaihe", items: ["Vastaanotto- ja luovutustehtävät", "Taloudellinen loppuselvitys", "Takuuajan tehtävät"] },
+  { number: "02", title: "Toteutusvaihe", items: ["Suunnittelijoiden ja urakoitsijoiden valinta ja ohjaus", "Urakkakilpailutus", "LVI-valvonta", "Kustannusseuranta ja raportointi", "Viranomaisneuvottelut", "Talotekniikan asennusvalvonta"] },
+  { number: "03", title: "Vastaanottovaihe", items: ["Vastaan- ja käyttöönottoon liittyvät tehtävät", "Taloudellinen loppuselvitys", "Takuuajan tehtävät"] },
 ];
 
 export default async function TalotekniikkaPage() {
@@ -29,34 +29,24 @@ export default async function TalotekniikkaPage() {
             <div className="technical-hero-copy">
               <p className="eyebrow">Rakennuttaminen / talotekniikka</p>
               <h1>Hankkeen kokonaisuus hallintaan esiselvityksestä vastaanottoon.</h1>
-              <p>JKP Group kokoaa rakennuttamisen, taloteknisen valvonnan ja projektinjohdon yhdeksi selkeäksi kokonaisuudeksi. Tavoitteena on toteutuskelpoinen ratkaisu, hallittu kustannus ja dokumentoitu lopputulos.</p>
+              <p>JKP Group kokoaa talotekniikan rakennuttamisen ja valvonnan yhdeksi selkeäksi kokonaisuudeksi. Tavoitteena on toteutuskelpoinen ratkaisu, hallittu kustannus ja dokumentoitu lopputulos.</p>
               <div className="hero-actions technical-hero-actions">
                 <a className="button" href="#tarjouspyynto">Keskustele hankkeesta</a>
                 <a className="text-link" href="#vaiheet">Katso hankkeen vaiheet →</a>
               </div>
             </div>
-            <aside className="subhero-code technical-service-index" aria-label="Talotekniikan palvelut">
-              <div className="technical-index-topline"><span>JKP / TECHNICAL</span><span>01—04</span></div>
-              <strong>4</strong>
-              <ol>{content.services.map((service, index) => <li key={service.title}><span>{String(index + 1).padStart(2, "0")}</span><b>{service.title}</b></li>)}</ol>
-            </aside>
+            <div className="technical-image-slot">
+              <img src={content.media.technicalImageUrl || "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg"} alt="Talotekniikan rakennuttaminen ja valvonta, esimerkkikuva" width={1536} height={1022} />
+            </div>
           </div>
-        </section>
-
-        <section className="section technical-services" id="palvelut">
-          <div className="shell section-heading">
-            <div><p className="eyebrow">Palvelut</p><h2>Rakennuttamisen ja valvonnan vastuut hankkeen eri vaiheisiin.</h2></div>
-            <p>Palvelu voidaan rajata yksittäiseen tehtävään tai rakentaa koko hankkeen läpi jatkuvaksi asiantuntijavastuuksi.</p>
-          </div>
-          <div className="shell service-grid">{content.services.map((service, index) => <article className="service-card" key={service.title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{service.title}</h3><p>{service.description}</p><b>Sovitaan hankekohtaisesti</b></article>)}</div>
         </section>
 
         <section className="process-section" id="vaiheet">
-          <div className="shell"><p className="eyebrow">Rakennuttamisen eteneminen</p><h2>Kolme vaihetta tarpeesta vastaanottoon.</h2><div className="delivery-phase-grid">{phases.map((phase) => <article className="delivery-phase" key={phase.number}><span>{phase.number}</span><h3>{phase.title}</h3><ul>{phase.items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></div>
+          <div className="shell"><p className="eyebrow">Rakennuttamisen eteneminen</p><h2>Palvelu kattaa rakennusprojektin kaikki vaiheet tarveselvityksestä käyttöönoton ja takuuajan tehtäviin.</h2><div className="delivery-phase-grid">{phases.map((phase) => <article className="delivery-phase" key={phase.number}><span>{phase.number}</span><h3>{phase.title}</h3><ul>{phase.items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></div>
         </section>
 
         <section className="section supervision-section">
-          <div className="shell section-heading"><div><p className="eyebrow">Valvonta</p><h2>Laatu, toteutettavuus ja dokumentointi näkyviksi työmaalla.</h2></div><p>Valvonta kattaa yleisvalvonnan, ajallisen valvonnan, teknisen ja laadullisen valvonnan, taloudellisen valvonnan sekä dokumentoinnin. Taloteknisissä ratkaisuissa huomioidaan myös toteutettavuus ja ylläpidettävyys kiinteistön elinkaaren aikana.</p></div>
+          <div className="shell section-heading"><div><p className="eyebrow">Valvonta</p><h2>Tavoitteena on tuottaa asiakkaalle toimivia ja kustannustehokkaita LVI-teknisiä ratkaisuja, jotka ovat edullisia toteuttaa ja ylläpitää kiinteistön elinkaaren ajan.</h2></div><p>Valvonnan laajuus määritellään hankekohtaisesti. Suunnittelijoiden ja urakoitsijoiden valinta ja ohjaus, LVI-valvonta sekä käyttöönottoon ja vastaanottoon liittyvät tehtävät sovitaan toimeksiannossa.</p></div>
           <div className="shell" style={{ marginTop: 28 }}><a className="text-link dark-link" href="/lvia-valvonta">Tutustu LVIA-valvontaan →</a></div>
         </section>
 

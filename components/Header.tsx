@@ -16,8 +16,16 @@ export function Header({ email, variant = "light", locale = "fi" }: { email: str
         <nav className="desktop-nav" aria-label={en ? "Main navigation" : "Päänavigaatio"}>
           <Link href={prefix || "/"}>{en ? "Home" : "Etusivu"}</Link>
           <Link href={`${prefix}/yritys`}>{en ? "Company" : "Yritys"}</Link>
-          <Link href={`${prefix}/talotekniikka`}>{en ? "Services" : "Palvelut"}</Link>
-          <Link href={`${prefix}/vuokraus`}>{en ? "Properties" : "Vuokraus"}</Link>
+          <div className="service-menu">
+            <details>
+              <summary>{en ? "Services" : "Palvelut"} <span aria-hidden="true">⌄</span></summary>
+              <div className="service-menu-options">
+                <Link href={`${prefix}/talotekniikka`}>{en ? "Building services project management" : "Talotekniikan rakennuttaminen"}</Link>
+                <Link href={`${prefix}/lvia-valvonta`}>{en ? "HVAC supervision" : "LVIA-valvonta"}</Link>
+                <Link href={`${prefix}/vuokraus`}>{en ? "Property rental" : "Vuokraus"}</Link>
+              </div>
+            </details>
+          </div>
           <Link href={`${prefix}/referenssit`}>{en ? "References" : "Referenssit"}</Link>
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
