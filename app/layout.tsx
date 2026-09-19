@@ -3,7 +3,7 @@ import "./globals.css";
 import "./client-theme.css";
 import "./home-mobile-fix.css";
 
-const PRODUCTION_URL = "https://jkpgroup.fi";
+const PRODUCTION_URL = "https://www.jkpgroup.fi";
 const PREVIEW_FALLBACK_URL = "https://jkp-group-asiakas.vercel.app";
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 const isProduction = process.env.VERCEL_ENV === "production";
