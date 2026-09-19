@@ -15,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/en/lvia-valvonta",
     "/en/vuokraus",
     "/en/referenssit",
+    "/tietosuoja",
+    "/en/privacy",
   ];
 
   return paths.map((path) => ({

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { withLocalizedSeo } from "@/lib/localized-seo";
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { getSiteContent } from "@/lib/content";
-export const metadata: Metadata = { title: "Privacy notice", description: "Processing of contact and rental enquiry data on the JKP Group Oy website.", alternates: { canonical: "/en/privacy" } };
+export const metadata: Metadata = withLocalizedSeo({ title: "Privacy notice", description: "Processing of contact and rental enquiry data on the JKP Group Oy website." }, "/tietosuoja", "en");
 export default async function PrivacyEN() {
  const content = await getSiteContent();
  return <><Header email={content.company.email} locale="en" /><main>

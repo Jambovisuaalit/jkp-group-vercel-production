@@ -37,4 +37,19 @@ for (const route of routes) {
     console.log("PASS " + JSON.stringify(findings.at(-1)));
   }
 }
+
+// Legal-notice pages use asymmetric FI/EN slugs but reciprocal hreflang.
+for (const [locale, path, canonical, alternate] of [
+  ["fi", "/tietosuoja", origin + "/tietosuoja", origin + "/en/privacy"],
+  ["en", "/en/privacy", origin + "/en/privacy", origin + "/tietosuoja"],
+]) {
+  const response = await fetch(base + path);
+  assert.equal(response.status, 200, path + " must return 200");
+  const html = await response.text();
+  assert.ok(html.includes('<html lang="' + locale + '"'), path + " HTML language incorrect");
+  assert.ok(html.includes('<link rel="canonical" href="' + canonical + '"'), path + " canonical incorrect");
+  assert.ok(html.includes('hrefLang="' + (locale === "fi" ? "en" : "fi") + '" href="' + alternate + '"'), path + " reciprocal hreflang absent");
+  assert.ok(html.includes('property="og:locale" content="' + (locale === "fi" ? "fi_FI" : "en_GB") + '"'), path + " Open Graph locale incorrect");
+}
+
 console.log("JKP_SEO_SUMMARY=" + JSON.stringify({ passed: true, pages: findings.length, pairs: routes.length }));

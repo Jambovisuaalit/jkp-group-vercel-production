@@ -14,7 +14,7 @@ export function withLocalizedSeo(
   locale: SiteLocale,
 ): Metadata {
   const fiUrl = ORIGIN + (route || "");
-  const enUrl = ORIGIN + "/en" + route;
+  const enUrl = ORIGIN + (route === "/tietosuoja" ? "/en/privacy" : "/en" + route);
   const currentUrl = locale === "fi" ? fiUrl : enUrl;
   const ogLocale = locale === "fi" ? "fi_FI" : "en_GB";
   const alternateOgLocale = locale === "fi" ? "en_GB" : "fi_FI";
