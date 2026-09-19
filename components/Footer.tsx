@@ -28,7 +28,8 @@ export function Footer({ content, locale = "fi" }: { content: SiteContent; local
       </div>
       <div className="shell footer-bottom">
         <span>© {new Date().getFullYear()} JKP Group Oy</span>
-        <span>Business ID 0923519-9</span>
+        <span>Y-tunnus 0923519-9</span>
+        <Link href={en ? "/en/privacy" : "/tietosuoja"}>{en ? "Privacy notice" : "Tietosuojaseloste"}</Link>
       </div>
     </footer>
   );

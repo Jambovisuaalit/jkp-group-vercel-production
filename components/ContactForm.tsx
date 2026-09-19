@@ -27,7 +27,7 @@ export function ContactForm({ subject = "Yhteydenotto verkkosivulta", locale = "
     <div className="form-row"><label>{en ? "Company" : "Yritys"}<input name="company" autoComplete="organization" maxLength={120} /></label><label>{en ? "Phone" : "Puhelin"}<input name="phone" type="tel" autoComplete="tel" maxLength={40} /></label></div>
     <label>{en ? "Message" : "Viesti"}<textarea name="message" required minLength={10} maxLength={3000} rows={6} /></label>
     <label className="honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
-    <label className="privacy-row"><input name="privacyConsent" type="checkbox" value="Hyväksytty" required />{en ? "I agree to my information being processed to respond to this enquiry." : "Hyväksyn tietojeni käsittelyn yhteydenottoon vastaamista varten."}</label>
+    <label className="privacy-row"><input name="privacyConsent" type="checkbox" value="Hyväksytty" required /><span>{en ? "I have read the privacy notice and agree to the processing of my enquiry details." : "Olen tutustunut tietosuojatietoihin ja hyväksyn yhteydenottotietojeni käsittelyn."} <a href={en ? "/en/privacy" : "/tietosuoja"} target="_blank" rel="noopener noreferrer">{en ? "Privacy notice" : "Tietosuojaseloste"}</a></span></label>
     <button className="button button-submit" type="submit" disabled={status === "loading"}>{status === "loading" ? (en ? "Sending…" : "Lähetetään…") : (en ? "Send message" : "Lähetä viesti")}</button>
     {message ? <p className={`form-status ${status}`} role="status">{message}</p> : null}
   </form>;

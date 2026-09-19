@@ -68,7 +68,7 @@ function RentalForm({ subject, submitLabel, children }: RentalFormProps) {
       </label>
       <label className="privacy-row">
         <input name="privacyConsent" type="checkbox" value="Hyväksytty" required />
-        Hyväksyn tietojen käsittelyn yhteydenottoa ja hakemuksen käsittelyä varten.
+        <span>Olen tutustunut tietosuojatietoihin ja hyväksyn tietojeni käsittelyn hakemusta varten. <a href="/tietosuoja" target="_blank" rel="noopener noreferrer">Tietosuojaseloste</a></span>
       </label>
       <button className="button button-submit" type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Lähetetään…" : submitLabel}

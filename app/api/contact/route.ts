@@ -86,6 +86,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Lomake lähetettiin liian nopeasti." }, { status: 429 });
     }
 
+    if (!isSupabaseBackendEnabled()) {
+      return NextResponse.json({ message: "Lomakepalvelu on tilapäisesti pois käytöstä. Ota yhteyttä sähköpostitse tai puhelimitse." }, { status: 503 });
+    }
     if (isSupabaseBackendEnabled()) {
       const supabase = getSupabaseAdmin();
       if (!supabase) {
@@ -118,7 +121,15 @@ export async function POST(request: Request) {
     const emailSubject = `${subject}: ${name}`;
     const emailBody = buildEmailLines(body).join("\n");
 
-    if (apiKey && from) {
+    if (!apiKey || !from) {
+      console.error("JKP form email delivery is not configured");
+      return NextResponse.json({
+        message: "Yhteydenotto tallennettiin, mutta sähköposti-ilmoitusta ei voitu lähettää. Voit varmistaa kiireellisen yhteydenoton puhelimitse.",
+        delivery: "stored",
+      }, { status: 202 });
+    }
+
+    try {
       const emailResponse = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -130,21 +141,17 @@ export async function POST(request: Request) {
           text: emailBody,
         }),
       });
-
       if (emailResponse.ok) {
         return NextResponse.json({ message: "Tiedot vastaanotettu.", delivery: "resend" });
       }
-
-      console.error("JKP Resend notification failed", await emailResponse.text());
+      console.error("JKP Resend notification failed", emailResponse.status);
+    } catch (error) {
+      console.error("JKP notification transport failed", error);
     }
-
-    const mailtoUrl = `mailto:${to}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-
     return NextResponse.json({
-      message: "Sähköpostiohjelma avataan. Lähetä viesti sieltä loppuun.",
-      delivery: "mailto",
-      mailtoUrl,
-    });
+      message: "Yhteydenotto tallennettiin, mutta sähköposti-ilmoitusta ei voitu vahvistaa. Voit varmistaa kiireellisen yhteydenoton puhelimitse.",
+      delivery: "stored",
+    }, { status: 202 });
   } catch {
     return NextResponse.json({ message: "Virheellinen lomakepyyntö." }, { status: 400 });
   }

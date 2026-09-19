@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import "./globals.css";
 import "./client-theme.css";
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
   openGraph: { locale: "fi_FI", type: "website", siteName: "JKP Group Oy", title: "JKP Group Oy | Rakennuttaminen, talotekniikka ja vuokraus", description: "Rakennuttamisen ja talotekniikan asiantuntijapalvelut sekä omien kohteiden vuokraustoiminta." },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const language = (await headers()).get("x-jkp-locale") === "en" ? "en" : "fi";
   const organization = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -34,5 +36,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     identifier: "0923519-9",
     employee: { "@type": "Person", name: "Jari Koskela", jobTitle: "Toimitusjohtaja" },
   };
-  return <html lang="fi"><body>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /></body></html>;
+  return <html lang={language}><body>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} /></body></html>;
 }
