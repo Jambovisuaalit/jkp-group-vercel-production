@@ -50,10 +50,10 @@ try {
         result = { ...result, status: response?.status() ?? null, ...state, pageErrors };
         await page.screenshot({ path: path.join(output, (route === "/" ? "home" : route.slice(1)) + "-" + size.width + ".png"), fullPage: false });
         if (result.status !== 200) errors.push(route + " " + size.width + ": status " + result.status);
-        if (documentWidth > viewportWidth + 1) errors.push(route + " " + size.width + ": horizontal overflow " + documentWidth + " > " + viewportWidth);
-        if (!h1) errors.push(route + " " + size.width + ": missing H1");
-        if (headerBackground !== "rgb(255, 255, 255)") errors.push(route + " " + size.width + ": header not white: " + headerBackground);
-        if (heroBackground !== "rgb(255, 255, 255)") errors.push(route + " " + size.width + ": hero not white: " + heroBackground);
+        if (result.documentWidth > result.viewportWidth + 1) errors.push(route + " " + size.width + ": horizontal overflow " + result.documentWidth + " > " + result.viewportWidth);
+        if (!result.h1) errors.push(route + " " + size.width + ": missing H1");
+        if (result.headerBackground !== "rgb(255, 255, 255)") errors.push(route + " " + size.width + ": header not white: " + result.headerBackground);
+        if (result.heroBackground !== "rgb(255, 255, 255)") errors.push(route + " " + size.width + ": hero not white: " + result.heroBackground);
         if (pageErrors.length) errors.push(route + " " + size.width + ": page errors " + pageErrors.join("; "));
         if (route === "/vuokraus" && (result.rentalPhotos.length !== 2 || result.rentalPhotos.some((p) => !p.loaded || p.width < 1200))) {
           errors.push(route + " " + size.width + ": expected two loaded original customer photos at >=1200px");
