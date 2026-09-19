@@ -157,6 +157,9 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.55); }
   font-weight: 500;
 }
 .client-home-actions .button.button-outline:hover { background: #fff; border-color: #225f79; color: #225f79; }
+.business-section {
+  padding-top: 68px;
+}
 .business-section .section-heading {
   display: block;
   text-align: center;
@@ -174,7 +177,7 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.55); }
   max-width: 760px;
   margin: 22px auto 0;
 }
-.business-section .section-heading .eyebrow { color: #506e7e; }
+.business-section .section-heading .eyebrow { display: none; }
 
 .hero:not(.client-home-hero), .subhero, .process-section, .contact-section { color: #123750; background: #ffffff; }
 .hero:not(.client-home-hero)::before, .subhero::before { display: none; }
