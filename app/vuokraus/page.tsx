@@ -33,7 +33,7 @@ export default async function VuokrausPage() {
               </div>
             </div>
             <div className="hero-visual rental-blueprint rental-client-image">
-              <img src="/images/jkp-vuokraus-kohde.webp" alt="JKP Groupin vuokrattava kohde" />
+              <img src="/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg" alt="JKP Groupin oma vuokrakohde, asiakkaan toimittama valokuva" width={1536} height={1022} loading="eager" decoding="async" />
               <div className="rental-image-caption">
                 <span>JKP / SPACE</span>
                 <strong>Omat kohteet.</strong>
@@ -48,7 +48,7 @@ export default async function VuokrausPage() {
             <p>Liike- ja toimitiloissa painotus on Jyväskylän seudulla. Loma-asuntojen tarkat sijainnit julkaistaan kohdekohtaisesti vain vahvistettujen tietojen perusteella.</p>
           </div>
           <div className="shell" style={{ marginBottom: 32 }}>
-            <img src="/images/jkp-vuokraus-kohde.webp" alt="JKP Groupin vuokrattava kohde" fetchPriority="high" style={{ display: "block", width: "100%", height: "auto", maxHeight: 560, objectFit: "cover", borderRadius: 2 }} />
+            <img src="/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg" alt="JKP Groupin oma vuokrakohde, asiakkaan toimittama valokuva" width={1536} height={1022} loading="lazy" decoding="async" className="rental-client-inline-image" style={{ display: "block", width: "100%", height: "auto", maxHeight: 560, objectFit: "cover", borderRadius: 2 }} />
           </div>
           {properties.length > 0 ? <div className="shell property-grid">{properties.map((property) => <Link className="property-card" href={`/vuokraus/${property.slug}`} key={property.id}><div className="property-media" style={property.mainImage ? { backgroundImage: `url("${property.mainImage}")` } : undefined} /><div className="property-content"><small>{property.city || typeLabels[property.type]}</small><h3>{property.title}</h3><p>{property.summary || property.description}</p><div className="hero-actions">{property.price ? <strong>{property.price}</strong> : null}<span>Tutustu kohteeseen →</span></div></div></Link>)}</div> : <div className="shell rental-category-grid"><article className="rental-category"><span>01</span><h3>Liike- ja toimitilat</h3><p>Omat liike- ja toimitilat yritysten tarpeisiin, erityisesti Jyväskylän seudulla.</p></article><article className="rental-category"><span>02</span><h3>Asunnot</h3><p>Omat vuokra-asunnot. Vapaat kohteet julkaistaan, kun niiden tiedot on vahvistettu.</p></article><article className="rental-category"><span>03</span><h3>Loma-asunnot</h3><p>Loma-asuntoja ja lomakohteita. Tarkat kohdetiedot julkaistaan erikseen vahvistettuna.</p></article></div>}
         </section>
