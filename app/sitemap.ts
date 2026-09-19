@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://jkpgroup.fi";
+  const base = process.env.VERCEL_ENV === "production" ? "https://www.jkpgroup.fi" : process.env.NEXT_PUBLIC_SITE_URL || "https://jkp-group-asiakas.vercel.app";
   const paths = [
     "",
     "/yritys",
