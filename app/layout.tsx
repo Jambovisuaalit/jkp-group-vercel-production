@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./client-theme.css";
 import "./home-mobile-fix.css";
+import "./content-finish.css";
 
 const PRODUCTION_URL = "https://www.jkpgroup.fi";
 const PREVIEW_FALLBACK_URL = "https://jkp-group-asiakas.vercel.app";
