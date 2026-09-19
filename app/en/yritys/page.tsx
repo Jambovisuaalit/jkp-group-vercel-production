@@ -63,7 +63,7 @@ export default async function CompanyPage() {
             </div>
             <p>
               Building services and project management form one area, while the rental
-              of JKP Group's own properties forms the other.
+              of JKP Group&apos;s own properties forms the other.
             </p>
           </div>
           <div className="shell business-grid">
