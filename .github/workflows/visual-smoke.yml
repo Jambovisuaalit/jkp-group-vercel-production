@@ -1,0 +1,35 @@
+name: JKP 390 and 1440 visual smoke
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visual-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --no-save --no-audit --no-fund playwright
+          npx playwright install --with-deps chromium
+      - name: Smoke live JKP at 390 and 1440
+        run: node scripts/smoke-visual.mjs
+        env:
+          JKP_BASE_URL: https://www.jkpgroup.fi
+      - name: Save 390 and 1440 screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jkp-customer-390-1440
+          path: qa-screenshots/*.png
+          if-no-files-found: warn
+          retention-days: 14
