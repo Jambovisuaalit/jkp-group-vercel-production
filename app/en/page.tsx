@@ -11,10 +11,11 @@ export default async function EnglishHome() {
   const content = await getSiteContent();
   return <><Header email={content.company.email} variant="light" locale="en" /><main>
     <section className="hero client-home-hero"><div className="shell client-home-hero-inner"><div className="client-home-hero-copy">
-      <p className="client-home-kicker"><span aria-hidden="true" />SINCE 1993</p>
-      <h1>Expert services for <em>construction and property</em> projects.</h1>
-      <p className="client-home-lead">Building services expertise since 1993.</p>
-      <div className="hero-actions client-home-actions"><Link className="button" href="/en/talotekniikka">Explore services</Link><a className="text-link dark-link" href="#contact">Contact us →</a></div>
+      <p className="client-home-company">JKP GROUP OY</p>
+      <p className="client-home-subtitle">Building services – properties</p>
+      <h1>Functional building services since 1993.</h1>
+      <p className="client-home-lead">Design, supervision and project management for demanding new-build and renovation projects.</p>
+      <div className="hero-actions client-home-actions"><Link className="button" href="/en/talotekniikka">Explore services</Link><a className="button button-outline" href="#contact">Contact us</a></div>
     </div></div></section>
     <section className="section business-section"><div className="shell section-heading"><div><p className="eyebrow">Two service areas</p><h2>Construction project or property need — one clear route forward.</h2></div><p>Building services and project expertise are presented separately from JKP Group&apos;s own property rental business.</p></div>
       <div className="shell business-grid"><Link className="business-card" href="/en/talotekniikka"><span className="eyebrow">01</span><div><h3>Building services & project management</h3><p>Project management, technical supervision and commissioning across the project lifecycle.</p></div><span className="card-arrow">↗</span></Link><Link className="business-card" href="/en/vuokraus"><span className="eyebrow">02</span><div><h3>Property rental</h3><p>Commercial premises, apartments and holiday properties from our own portfolio.</p></div><span className="card-arrow">↗</span></Link></div>
