@@ -4,7 +4,7 @@ import path from "node:path";
 
 const base = process.env.JKP_BASE_URL || "https://www.jkpgroup.fi";
 const output = "qa-screenshots";
-const sizes = [{ width: 390, height: 844 }, { width: 1440, height: 900 }];
+const sizes = [{ width: 390, height: 844 }, { width: 1200, height: 750 }, { width: 1440, height: 900 }];
 const paths = ["/", "/yritys", "/lvia-valvonta", "/vuokraus", "/referenssit"];
 const rentalImage = "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg";
 const expectedReferences = ["GOOGLE Oy", "HELEN Oy", "UPM BIOCHEMICALS GmbH", "METSÄ FIBRE OY", "AGNICO EAGLE", "LAHTI ENERGY", "FINAVIA", "FIMPEC"];
@@ -32,12 +32,15 @@ try {
           const photos = all.filter((im) => new URL(im.src).pathname === rentalImage);
           const bg = (el) => el ? getComputedStyle(el).backgroundColor : null;
           const bodyBackground = bg(document.body);
+          const heroPhoto = hero ? getComputedStyle(hero).backgroundImage.includes("jkp-teollisuus-hero-asiakkaan-kuva.jpeg") : false;
+          const headlineFont = h1 ? getComputedStyle(h1).fontFamily : "";
           const headerBackground = bg(header);
           const heroBackground = bg(hero);
           const documentWidth = document.documentElement.scrollWidth;
           const viewportWidth = window.innerWidth;
           return {
-            bodyBackground, headerBackground, heroBackground,
+            bodyBackground, headerBackground, heroBackground, heroPhoto, headlineFont,
+            heroButtonCount: document.querySelectorAll(".client-home-actions .button").length,
             documentWidth, viewportWidth,
             title: document.title, h1: h1?.textContent?.trim() || "",
             images: all.map((im) => ({ src: im.currentSrc, loaded: im.complete && im.naturalWidth > 0, width: im.naturalWidth, height: im.naturalHeight })),
@@ -55,6 +58,9 @@ try {
         if (result.headerBackground !== "rgb(255, 255, 255)") errors.push(route + " " + size.width + ": header not white: " + result.headerBackground);
         if (result.heroBackground !== "rgb(255, 255, 255)") errors.push(route + " " + size.width + ": hero not white: " + result.heroBackground);
         if (pageErrors.length) errors.push(route + " " + size.width + ": page errors " + pageErrors.join("; "));
+        if (route === "/" && (!result.heroPhoto || result.heroButtonCount !== 2 || /Georgia|Times/i.test(result.headlineFont))) {
+          errors.push(route + " " + size.width + ": screenshot-based photo hero, two CTAs or sans-serif typography missing");
+        }
         if (route === "/vuokraus" && (result.rentalPhotos.length !== 2 || result.rentalPhotos.some((p) => !p.loaded || p.width < 1200))) {
           errors.push(route + " " + size.width + ": expected two loaded original customer photos at >=1200px");
         }
