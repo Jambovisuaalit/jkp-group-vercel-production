@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function Header({ email, variant = "dark", locale = "fi" }: { email: string; variant?: "dark" | "light"; locale?: "fi" | "en" }) {
+export function Header({ email, variant = "light", locale = "fi" }: { email: string; variant?: "dark" | "light"; locale?: "fi" | "en" }) {
   const en = locale === "en";
   const prefix = en ? "/en" : "";
   return (
