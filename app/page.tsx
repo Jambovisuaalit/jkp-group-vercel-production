@@ -16,15 +16,13 @@ export default async function HomePage() {
         <section className="hero client-home-hero">
           <div className="shell client-home-hero-inner">
             <div className="client-home-hero-copy">
-              <p className="client-home-kicker"><span aria-hidden="true" />VUODESTA 1993</p>
-              <h1>
-                Rakentamisen ja kiinteistöliiketoiminnan{" "}
-                <em>asiantuntijapalveluita</em> vuosien kokemuksella
-              </h1>
-              <p className="client-home-lead">Toimivaa talotekniikkaa vuodesta 1993.</p>
+              <p className="client-home-company">JKP GROUP OY</p>
+              <p className="client-home-subtitle">Talotekniikka – kiinteistöt</p>
+              <h1>Toimivaa talotekniikkaa vuodesta 1993.</h1>
+              <p className="client-home-lead">Suunnittelua, valvontaa ja rakennuttamista vaativiin kiinteistö- ja rakennushankkeisiin uudis- ja peruskorjauskohteissa.</p>
               <div className="hero-actions client-home-actions">
                 <Link className="button" href="/talotekniikka">Tutustu palveluihin</Link>
-                <a className="text-link dark-link" href="#yhteys">Ota yhteyttä →</a>
+                <a className="button button-outline" href="#yhteys">Ota yhteyttä</a>
               </div>
             </div>
           </div>
