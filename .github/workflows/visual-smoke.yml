@@ -1,4 +1,4 @@
-name: JKP 390 and 1440 visual smoke
+name: JKP release visual and SEO gates
 
 on:
   push:
@@ -9,31 +9,55 @@ permissions:
   contents: read
 
 jobs:
-  visual-smoke:
+  qa-current-commit:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 23
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install Playwright
+          cache: npm
+      - name: Install dependencies and browser
         run: |
-          npm install --no-save --no-audit --no-fund playwright
+          npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
-      - name: Smoke live JKP at 390 and 1440
+      - name: Build the actual commit under test
+        env:
+          DATA_BACKEND: static
+          VERCEL_ENV: production
+          NEXT_PUBLIC_SITE_URL: https://www.jkpgroup.fi
+        run: npm run build
+      - name: Start local QA server and wait for readiness
+        env:
+          DATA_BACKEND: static
+          VERCEL_ENV: production
+          NEXT_PUBLIC_SITE_URL: https://www.jkpgroup.fi
+        run: |
+          npm run start -- -p 3100 > /tmp/jkp-qa-server.log 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:3100/ > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/jkp-qa-server.log
+          exit 1
+      - name: Browser QA 390 / 768 / 1200 / 1440
+        env:
+          JKP_BASE_URL: http://127.0.0.1:3100
         run: node scripts/smoke-visual.mjs
+      - name: SEO QA for all 12 FI/EN pages
         env:
-          JKP_BASE_URL: https://www.jkpgroup.fi
-      - name: Verify all FI/EN canonical, og:locale and hreflang pairs
+          JKP_BASE_URL: http://127.0.0.1:3100
         run: node scripts/smoke-seo.mjs
+      - name: Check privacy, customer copy, form fields and fail-closed API
         env:
-          JKP_BASE_URL: https://www.jkpgroup.fi
-      - name: Save 390 and 1440 screenshots
+          JKP_BASE_URL: http://127.0.0.1:3100
+        run: node scripts/smoke-p0.mjs
+      - name: Save current-commit screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jkp-customer-390-1440
+          name: jkp-current-commit-390-768-1200-1440
           path: qa-screenshots/*.png
           if-no-files-found: warn
           retention-days: 14
