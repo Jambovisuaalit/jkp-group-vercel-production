@@ -103,3 +103,15 @@
   .home-reference-gallery { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
   .technical-image-slot, .technical-image-slot img { min-height: 225px; }
 }
+
+.admin-media-editor { margin: 24px 0; padding: 28px; background: #fff; border: 1px solid #dce8ee; color: #123750; }
+.admin-media-editor h2 { margin: 0 0 10px; font-size: 22px; }
+.admin-media-editor > p { color: #526b7a; margin: 0 0 22px; }
+.admin-media-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 17px; }
+.admin-media-field { display: grid; align-content: start; gap: 10px; min-width: 0; }
+.admin-media-field strong { font-size: 14px; line-height: 1.4; }
+.admin-media-field > img { width: 100%; height: 140px; object-fit: cover; background: #f3f7fa; }
+.admin-media-empty { display: grid; place-items: center; min-height: 140px; background: #f3f7fa; color: #526b7a; font-size: 13px; }
+.admin-media-button { display: block; position: relative; padding: 9px 13px; background: #225f79; color: white; cursor: pointer; text-align: center; }
+.admin-media-button input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
+.admin-media-remove { border: 1px solid #dce8ee; background: #fff; padding: 8px; color: #123750; cursor: pointer; }

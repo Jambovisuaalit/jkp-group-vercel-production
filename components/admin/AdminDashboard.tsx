@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import type { SiteContent } from "@/content/defaults";
+import { AdminMediaEditor } from "@/components/admin/AdminMediaEditor";
 import type {
   AdminReference,
   AdminRental,
@@ -643,10 +644,23 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                     <Field label="Ingressi" wide><textarea rows={4} value={content.hero.lead} onChange={(e) => setContent({ ...content, hero: { ...content.hero, lead: e.target.value } })} /></Field>
                     <Field label="Hero-kuva" hint="JPEG, PNG tai WebP. Kuva muunnetaan automaattisesti WebP-muotoon." wide><div className={styles.imageField}>{content.hero.imageUrl ? <img src={content.hero.imageUrl} alt="Nykyinen hero" /> : <span>Ei kuvaa</span>}<label className={styles.uploadButton}><Icon name="upload" />Vaihda kuva<input hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void (async () => { const file = event.target.files?.[0]; if (!file) return; try { setLoading(true); const url = await uploadImage(file, "site"); setContent({ ...content, hero: { ...content.hero, imageUrl: url } }); showNotice({ kind: "info", message: "Kuva ladattiin. Tallenna muutokset julkaistaksesi sen." }); } catch (error) { showNotice({ kind: "error", message: (error as Error).message }); } finally { setLoading(false); } })()} /></label></div></Field>
                   </div></div>
+                  <AdminMediaEditor
+                    scope="home"
+                    media={content.media}
+                    onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
+                    upload={uploadImage}
+                  />
                   <div className={styles.editorSection}><p className={styles.kicker}>YRITYSESITTELY</p><h2>Yrityksestä</h2><div className={styles.formGrid}><Field label="Otsikko" wide><input value={content.about.title} onChange={(e) => setContent({ ...content, about: { ...content.about, title: e.target.value } })} /></Field><Field label="Esittelyteksti" wide><textarea rows={6} value={content.about.body} onChange={(e) => setContent({ ...content, about: { ...content.about, body: e.target.value } })} /></Field></div></div>
                 </> : null}
+                {view === "tech-content" ? <AdminMediaEditor
+                  scope="tech"
+                  media={content.media}
+                  onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
+                  upload={uploadImage}
+                /> : null}
                 {view === "tech-content" ? <div className={styles.editorSection}><p className={styles.kicker}>PALVELUT</p><h2>Talotekniikan palvelut</h2><div className={styles.serviceEditor}>{content.services.map((service, index) => <div key={index}><span>{String(index + 1).padStart(2, "0")}</span><Field label="Palvelun nimi"><input value={service.title} onChange={(e) => { const services = content.services.map((item, itemIndex) => itemIndex === index ? { ...item, title: e.target.value } : item); setContent({ ...content, services }); }} /></Field><Field label="Kuvaus" wide><textarea rows={4} value={service.description} onChange={(e) => { const services = content.services.map((item, itemIndex) => itemIndex === index ? { ...item, description: e.target.value } : item); setContent({ ...content, services }); }} /></Field></div>)}</div></div> : null}
                 {view === "contact-content" ? <>
+                  <AdminMediaEditor scope="contact" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} />
                   <div className={styles.editorSection}><p className={styles.kicker}>YRITYSTIEDOT</p><h2>Yhteystiedot</h2><div className={styles.formGrid}><Field label="Yrityksen nimi"><input value={content.company.name} onChange={(e) => setContent({ ...content, company: { ...content.company, name: e.target.value } })} /></Field><Field label="Sähköposti"><input type="email" value={content.company.email} onChange={(e) => setContent({ ...content, company: { ...content.company, email: e.target.value } })} /></Field><Field label="Puhelin"><input value={content.company.phone} onChange={(e) => setContent({ ...content, company: { ...content.company, phone: e.target.value } })} /></Field><Field label="Toiminta-alue"><input value={content.company.area} onChange={(e) => setContent({ ...content, company: { ...content.company, area: e.target.value } })} /></Field></div></div>
                   <div className={styles.editorSection}><p className={styles.kicker}>YHTEYDENOTTO</p><h2>Yhteydenotto-osio</h2><div className={styles.formGrid}><Field label="Otsikko" wide><input value={content.contact.title} onChange={(e) => setContent({ ...content, contact: { ...content.contact, title: e.target.value } })} /></Field><Field label="Teksti" wide><textarea rows={4} value={content.contact.body} onChange={(e) => setContent({ ...content, contact: { ...content.contact, body: e.target.value } })} /></Field></div></div>
                 </> : null}
