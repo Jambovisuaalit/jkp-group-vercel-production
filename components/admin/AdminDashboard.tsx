@@ -238,16 +238,27 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [rentalData, referenceData, submissionData, contentData] = await Promise.all([
+      // Public-site editing is the essential module. A legacy reference archive
+      // or submission API outage must not prevent Jari from editing website copy.
+      const contentData = await api<SiteContent>("/api/admin/content");
+      setContent(contentData);
+      const [rentalResult, referenceResult, submissionResult] = await Promise.allSettled([
         api<{ items: AdminRental[] }>("/api/admin/rentals"),
         api<{ items: AdminReference[] }>("/api/admin/references"),
         api<{ items: AdminSubmission[] }>("/api/admin/submissions"),
-        api<SiteContent>("/api/admin/content"),
       ]);
-      setRentals(rentalData.items);
-      setReferences(referenceData.items);
-      setSubmissions(submissionData.items);
-      setContent(contentData);
+      if (rentalResult.status === "fulfilled") setRentals(rentalResult.value.items);
+      if (referenceResult.status === "fulfilled") setReferences(referenceResult.value.items);
+      if (submissionResult.status === "fulfilled") setSubmissions(submissionResult.value.items);
+      const failed = [rentalResult, referenceResult, submissionResult].filter((result) => result.status === "rejected");
+      if (failed.length) {
+        if (failed.some(result => result.status === "rejected" && (result.reason as ApiError)?.status === 401)) {
+          setSessionState("signed-out");
+          setUser(null);
+          return;
+        }
+        showNotice({ kind: "info", message: "Sisältöeditori toimii, mutta osa vuokraus- tai viestimoduuleista ei latautunut." });
+      }
     } catch (error) {
       const apiError = error as ApiError;
       if (apiError.status === 401) {
