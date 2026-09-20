@@ -32,6 +32,10 @@ function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteCo
       fi: { ...base.homeCopy.fi, ...incoming.homeCopy?.fi },
       en: { ...base.homeCopy.en, ...incoming.homeCopy?.en },
     },
+    lviaPage: {
+      fi: { ...base.lviaPage.fi, ...incoming.lviaPage?.fi },
+      en: { ...base.lviaPage.en, ...incoming.lviaPage?.en },
+    },
     heroEn: { ...base.heroEn, ...incoming.heroEn },
     contactEn: { ...base.contactEn, ...incoming.contactEn },
     technicalPage: {

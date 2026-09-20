@@ -18,6 +18,12 @@ export type HomeCopy = {
   referenceHeading: string;
 };
 export type TechnicalPhase = { number: string; title: string; items: string[] };
+export type LviaPhase = { number: string; title: string; description: string; items: string[] };
+export type LviaPageCopy = {
+  title: string; lead: string; phasesHeading: string; phasesLead: string;
+  phases: LviaPhase[]; proofTitle: string; proofLead: string;
+  contactTitle: string; contactLead: string;
+};
 export type TechnicalPageCopy = {
   title: string; lead: string; phases: TechnicalPhase[];
   supervisionTitle: string; supervisionLead: string;
@@ -43,9 +49,84 @@ export type SiteContent = {
   };
   companyPage: { fi: CompanyPageCopy; en: CompanyPageCopy };
   homeCopy: { fi: HomeCopy; en: HomeCopy };
+  lviaPage: {
+    fi: {
+      title: "Toimivat ja kustannustehokkaat LVI-ratkaisut koko elinkaarelle.",
+      lead: "JKP Group tukee hanketta suunnitelmien arvioinnista asennusten valvontaan, testaukseen, käyttöönottoon ja vastaanottoon. Valvonnan tavoitteena on toimiva tekninen toteutus, joka on taloudellinen toteuttaa ja ylläpitää.",
+      phasesHeading: "Selkeä vastuu suunnitelmista vastaanottoon.",
+      phasesLead: "Työn sisältö ja vastuun laajuus määritellään hankekohtaisesti. Valvonta voidaan toteuttaa erillisenä toimeksiantona tai osana rakennuttamisen kokonaisuutta.",
+      phases: [
+  {
+    number: "01",
+    title: "Suunnitelmat ja toteutettavuus",
+    description: "LVI-teknisten suunnitelmien, laitteistojen ja rajapintojen läpikäynti ennen toteutusta. Tarkastelu kohdistuu toimivuuteen, toteutettavuuteen ja ylläpidettävyyteen.",
+    items: ["Suunnitelmien läpikäynti", "Teknisten ratkaisujen yhteensovitus", "Elinkaaren kustannusten huomiointi"],
+  },
+  {
+    number: "02",
+    title: "Rakentamisen valvonta",
+    description: "Asennusten laadun, suunnitelmien mukaisuuden ja työvaiheiden seuranta työmaalla sekä havaintojen dokumentointi ja käsittely hankkeen osapuolten kanssa.",
+    items: ["Asennusten tekninen ja laadullinen seuranta", "Poikkeamien ja korjausten seuranta", "Aikataulun ja kustannusten seurannan tuki"],
+  },
+  {
+    number: "03",
+    title: "Testaus ja käyttöönotto",
+    description: "LVI-järjestelmien toimintakokeiden, säätöjen ja käyttöönoton valmistelun ja toteutumisen seuranta. Tarkoitus on varmistaa toimivat järjestelmät ennen luovutusta.",
+    items: ["Toimintakokeiden ja testauksen seuranta", "Käyttöönoton vaiheistus", "Havaittujen puutteiden korjausten toteaminen"],
+  },
+  {
+    number: "04",
+    title: "Vastaanotto ja takuuaika",
+    description: "Järjestelmien toimivuuden ja luovutusaineiston tarkastelu vastaanottovaiheessa sekä sovittujen takuuajan tehtävien seuranta.",
+    items: ["Vastaanoton tekniset tarkastukset", "Luovutus- ja käyttöönottodokumentit", "Sovitut takuuajan tehtävät"],
+  },
+],
+      proofTitle: "Valvontaa myös vaativissa teknisissä hankkeissa.",
+      proofLead: "Asiakkaan toimittama referenssiaineisto kattaa muun muassa taloteknistä valvontaa ja käyttöönottoa teollisuuslaitoksissa, lentokenttäympäristössä ja muissa rakennushankkeissa.",
+      contactTitle: "Kerro hankkeesi nykytilanteesta.",
+      contactLead: "Ilmoita kohde ja sijainti, uudis- tai korjaushankkeen vaihe, tarvittavat järjestelmät, tavoiteaikataulu sekä valvonnan toivottu laajuus. Sovitaan tarkempi sisältö hankekohtaisesti.",
+    },
+    en: {
+      title: "Functional and cost-efficient HVAC solutions throughout the building lifecycle.",
+      lead: "JKP Group supports projects from design review through site supervision, system testing, commissioning and handover. The aim is a functional technical solution that is economical to implement and maintain.",
+      phasesHeading: "Clearly defined responsibilities from plans to handover.",
+      phasesLead: "The scope is agreed for each project. Supervision can be provided as a specific assignment or as part of a wider project-management responsibility.",
+      phases: [
+  {
+    number: "01",
+    title: "Design review and feasibility",
+    description: "Review of HVAC plans, interfaces and equipment with attention to practical implementation, system performance and maintainability.",
+    items: ["HVAC design review", "Coordination of technical interfaces", "Consideration of lifecycle costs"],
+  },
+  {
+    number: "02",
+    title: "Construction supervision",
+    description: "Site follow-up for technical quality, conformity with plans and implementation progress, including documenting and following up observations.",
+    items: ["Technical and quality supervision of installations", "Observation and corrective-action follow-up", "Support for schedule and cost follow-up"],
+  },
+  {
+    number: "03",
+    title: "Testing and commissioning",
+    description: "Follow-up of system tests, adjustments and commissioning activities, with a focus on operational systems before handover.",
+    items: ["Testing and functional checks", "Commissioning preparation and follow-up", "Verification of corrective actions"],
+  },
+  {
+    number: "04",
+    title: "Handover and warranty period",
+    description: "Review of system operation and handover documentation, followed by agreed warranty-period tasks where included in the assignment.",
+    items: ["Technical handover checks", "Commissioning and handover documents", "Agreed warranty-period follow-up"],
+  },
+],
+      proofTitle: "Supervision in technically demanding environments.",
+      proofLead: "The customer-supplied reference material includes HVAC supervision and commissioning in industrial facilities, airport environments and other construction projects.",
+      contactTitle: "Tell us about your project.",
+      contactLead: "Share the property and location, current project phase, relevant HVAC systems, target schedule and expected scope. Responsibilities are agreed for each assignment.",
+    },
+  },
   heroEn: { title: string; lead: string };
   contactEn: { title: string; body: string };
   technicalPage: { fi: TechnicalPageCopy; en: TechnicalPageCopy };
+  lviaPage: { fi: LviaPageCopy; en: LviaPageCopy };
   businessAreas: Array<{
     slug: "talotekniikka" | "vuokraus";
     title: string;
