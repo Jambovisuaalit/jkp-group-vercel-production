@@ -28,7 +28,7 @@ export default async function CompanyPage() {
           <p className="eyebrow">JKP Group Oy / Company</p>
           <h1>Service backed by years of experience.</h1>
           <p>Our aim is to find affordable, modern solutions for customers. We begin by understanding their needs and seek a comprehensive result at a reasonable cost.</p>
-          <p>We consider the property's lifecycle requirements and environmental economics. Openness, reliability and honesty are central to how we work.</p>
+          <p>We consider the property&apos;s lifecycle requirements and environmental economics. Openness, reliability and honesty are central to how we work.</p>
           <p>We respond to a changing world by adapting and following developments. We continually improve our planning and operating methods while maintaining profitable operations.</p>
         </div>
         <figure className="company-photo">{content.media.companyImageUrl ? <img src={content.media.companyImageUrl} alt="Customer-provided building services project photograph" loading="eager" /> : null}</figure>
