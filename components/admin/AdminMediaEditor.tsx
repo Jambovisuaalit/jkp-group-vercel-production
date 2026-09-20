@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import type { SiteContent } from "@/content/defaults";
+import { MediaLibrarySelector } from "@/components/admin/MediaLibrarySelector";
 
 type Media = SiteContent["media"];
 type Slot = { key: string; label: string; value: string; update: (url: string) => Media };
@@ -77,6 +78,7 @@ export function AdminMediaEditor({
               .finally(() => setBusy(""));
           }} />
         </label>
+        <MediaLibrarySelector onSelect={url => onChange(slot.update(url))} />
         {slot.value && <button type="button" className="admin-media-remove" onClick={() => onChange(slot.update(""))}>Poista kuva</button>}
       </div>)}
     </div>
