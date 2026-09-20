@@ -12,6 +12,7 @@ import type { SiteContent } from "@/content/defaults";
 import { AdminMediaEditor } from "@/components/admin/AdminMediaEditor";
 import { MediaLibrarySelector } from "@/components/admin/MediaLibrarySelector";
 import { LviaContentEditor } from "@/components/admin/LviaContentEditor";
+import { RentalCopyEditor } from "@/components/admin/RentalCopyEditor";
 import { CompanyContentEditor, HomeCopyEditor, TechnicalContentEditor } from "@/components/admin/ContentEditors";
 import type {
   AdminReference,
@@ -30,6 +31,7 @@ type View =
   | "company-content"
   | "tech-content"
   | "lvia-content"
+  | "rental-content"
   | "contact-content"
   | "submissions"
   | "account";
@@ -529,6 +531,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
     { view: "company-content", label: "Yritys / Historia", icon: "edit" },
     { view: "tech-content", label: "Talotekniikka", icon: "edit" },
     { view: "lvia-content", label: "LVIA-valvonta", icon: "edit" },
+    { view: "rental-content", label: "Vuokraussivun tekstit", icon: "edit" },
     { view: "contact-content", label: "Yhteystiedot", icon: "edit" },
     { section: "ASIOINTI", view: "submissions", label: "Lomakeviestit", icon: "inbox" },
     { section: "ASETUKSET", view: "account", label: "Oma tili", icon: "user" },
@@ -678,10 +681,10 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             </section>
           ) : null}
 
-          {(view === "home-content" || view === "company-content" || view === "tech-content" || view === "lvia-content" || view === "contact-content") && content ? (
+          {(view === "home-content" || view === "company-content" || view === "tech-content" || view === "lvia-content" || view === "rental-content" || view === "contact-content") && content ? (
             <form onSubmit={saveContent}>
               <div className={styles.pageHeading}>
-                <div><p className={styles.kicker}>SIVUSTON SISÄLTÖ</p><h1>{view === "home-content" ? "Etusivu" : view === "company-content" ? "Yritys ja historia" : view === "tech-content" ? "Talotekniikka" : view === "lvia-content" ? "LVIA-valvonta" : "Yhteystiedot"}</h1><p>Muuta vain vahvistettuja tekstejä ja kuvia. Sivuston rakennetta ei voi rikkoa tästä näkymästä.</p></div>
+                <div><p className={styles.kicker}>SIVUSTON SISÄLTÖ</p><h1>{view === "home-content" ? "Etusivu" : view === "company-content" ? "Yritys ja historia" : view === "tech-content" ? "Talotekniikka" : view === "lvia-content" ? "LVIA-valvonta" : view === "rental-content" ? "Vuokraussivu" : "Yhteystiedot"}</h1><p>Muuta vain vahvistettuja tekstejä ja kuvia. Sivuston rakennetta ei voi rikkoa tästä näkymästä.</p></div>
                 <button className={styles.primaryButton} disabled={loading} type="submit">Tallenna muutokset</button>
               </div>
               <section className={styles.editorPanel}>
@@ -709,6 +712,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                 /> : null}
                 {view === "tech-content" ? <TechnicalContentEditor content={content} onChange={setContent} /> : null}
                 {view === "lvia-content" ? <LviaContentEditor content={content} onChange={setContent} /> : null}
+                {view === "rental-content" ? <RentalCopyEditor content={content} onChange={setContent} /> : null}
                 {view === "contact-content" ? <>
                   <AdminMediaEditor scope="contact" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} />
                   <div className={styles.editorSection}><p className={styles.kicker}>YRITYSTIEDOT</p><h2>Yhteystiedot</h2><div className={styles.formGrid}><Field label="Yrityksen nimi"><input value={content.company.name} onChange={(e) => setContent({ ...content, company: { ...content.company, name: e.target.value } })} /></Field><Field label="Sähköposti"><input type="email" value={content.company.email} onChange={(e) => setContent({ ...content, company: { ...content.company, email: e.target.value } })} /></Field><Field label="Puhelin"><input value={content.company.phone} onChange={(e) => setContent({ ...content, company: { ...content.company, phone: e.target.value } })} /></Field><Field label="Toiminta-alue"><input value={content.company.area} onChange={(e) => setContent({ ...content, company: { ...content.company, area: e.target.value } })} /></Field></div></div>

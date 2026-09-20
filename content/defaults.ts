@@ -63,6 +63,7 @@ export type SiteContent = {
     title: string;
     lead: string;
   };
+  rentalEn: { title: string; lead: string };
   contact: {
     title: string;
     body: string;
@@ -255,6 +256,10 @@ export const defaultContent: SiteContent = {
         "Vastaanotto-, luovutus- ja takuuajan tehtävät sekä taloteknisten järjestelmien toimivuuden varmistaminen.",
     },
   ],
+  rentalEn: {
+    title: "Commercial premises, apartments and holiday properties.",
+    lead: "JKP Group rents its own properties to companies and private customers. Availability and details are discussed directly.",
+  },
   rental: {
     title: "Liike- ja toimitiloja, asuntoja sekä loma-asuntoja",
     lead:

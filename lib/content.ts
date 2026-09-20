@@ -43,6 +43,7 @@ function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteCo
       en: { ...base.technicalPage.en, ...incoming.technicalPage?.en },
     },
     rental: { ...base.rental, ...incoming.rental },
+    rentalEn: { ...base.rentalEn, ...incoming.rentalEn },
     contact: { ...base.contact, ...incoming.contact },
     references: Array.isArray(incoming.references) ? incoming.references : base.references,
     media: {
