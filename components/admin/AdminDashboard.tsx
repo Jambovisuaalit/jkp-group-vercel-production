@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { SiteContent } from "@/content/defaults";
 import { AdminMediaEditor } from "@/components/admin/AdminMediaEditor";
+import { MediaLibrarySelector } from "@/components/admin/MediaLibrarySelector";
 import { CompanyContentEditor, HomeCopyEditor, TechnicalContentEditor } from "@/components/admin/ContentEditors";
 import type {
   AdminReference,
@@ -655,6 +656,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                       value={item.imageUrl || ""}
                       onChange={event => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: event.target.value } : entry) } : current)}
                     /></label>
+                    <MediaLibrarySelector onSelect={url => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: url } : entry) } : current)} />
                     <button type="button" onClick={() => {
                       if (!window.confirm("Poistetaanko tämä referenssi julkisesta luettelosta?")) return;
                       setContent(current => current ? { ...current, references: current.references.filter((_,i)=>i!==index) } : current);
@@ -685,7 +687,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                     <Field label="Yläotsikko" wide><input value={content.hero.eyebrow} onChange={(e) => setContent({ ...content, hero: { ...content.hero, eyebrow: e.target.value } })} /></Field>
                     <Field label="Pääotsikko" wide><textarea rows={3} value={content.hero.title} onChange={(e) => setContent({ ...content, hero: { ...content.hero, title: e.target.value } })} /></Field>
                     <Field label="Ingressi" wide><textarea rows={4} value={content.hero.lead} onChange={(e) => setContent({ ...content, hero: { ...content.hero, lead: e.target.value } })} /></Field>
-                    <Field label="Hero-kuva" hint="JPEG, PNG tai WebP. Kuva muunnetaan automaattisesti WebP-muotoon." wide><div className={styles.imageField}>{content.hero.imageUrl ? <img src={content.hero.imageUrl} alt="Nykyinen hero" /> : <span>Ei kuvaa</span>}<label className={styles.uploadButton}><Icon name="upload" />Vaihda kuva<input hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void (async () => { const file = event.target.files?.[0]; if (!file) return; try { setLoading(true); const url = await uploadImage(file, "site"); setContent({ ...content, hero: { ...content.hero, imageUrl: url } }); showNotice({ kind: "info", message: "Kuva ladattiin. Tallenna muutokset julkaistaksesi sen." }); } catch (error) { showNotice({ kind: "error", message: (error as Error).message }); } finally { setLoading(false); } })()} /></label></div></Field>
+                    <Field label="Hero-kuva" hint="JPEG, PNG tai WebP. Kuva muunnetaan automaattisesti WebP-muotoon." wide><div className={styles.imageField}>{content.hero.imageUrl ? <img src={content.hero.imageUrl} alt="Nykyinen hero" /> : <span>Ei kuvaa</span>}<label className={styles.uploadButton}><Icon name="upload" />Vaihda kuva<input hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void (async () => { const file = event.target.files?.[0]; if (!file) return; try { setLoading(true); const url = await uploadImage(file, "site"); setContent({ ...content, hero: { ...content.hero, imageUrl: url } }); showNotice({ kind: "info", message: "Kuva ladattiin. Tallenna muutokset julkaistaksesi sen." }); } catch (error) { showNotice({ kind: "error", message: (error as Error).message }); } finally { setLoading(false); } })()} /></label><MediaLibrarySelector onSelect={url => setContent(current => current ? { ...current, hero: { ...current.hero, imageUrl: url } } : current)} /></div></Field>
                   </div></div>
                   <AdminMediaEditor
                     scope="home"
