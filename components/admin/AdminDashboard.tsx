@@ -585,7 +585,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
               <div className={styles.statsGrid}>
                 <article><span>Julkaistut vuokrakohteet</span><strong>{publishedRentals}</strong><small>{rentals.length} kohdetta yhteensä</small></article>
                 <article><span>Uudet yhteydenotot</span><strong>{newSubmissions}</strong><small>{submissions.length} viestiä yhteensä</small></article>
-                <article><span>Julkaistut referenssit</span><strong>{references.filter((item) => item.publicationState === "published").length}</strong><small>{references.length} referenssiä yhteensä</small></article>
+                <article><span>Julkiset referenssit</span><strong>{content?.references.length ?? 0}</strong><small>Julkisella referenssisivulla</small></article>
               </div>
               <div className={styles.dashboardGrid}>
                 <section className={styles.panel}>
@@ -596,7 +596,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                   <div className={styles.panelHeading}><div><p className={styles.kicker}>PIKATOIMINNOT</p><h2>Yleisimmät tehtävät</h2></div></div>
                   <div className={styles.quickActions}>
                     <button onClick={() => { setRentalDraft(emptyRental()); navigate("rentals"); }}><Icon name="building" /><span><strong>Lisää vuokrakohde</strong><small>Luo uusi luonnos</small></span>→</button>
-                    <button onClick={() => { setReferenceDraft(emptyReference()); navigate("references"); }}><Icon name="reference" /><span><strong>Lisää referenssi</strong><small>Dokumentoi valmistunut projekti</small></span>→</button>
+                    <button onClick={() => { navigate("references"); }}><Icon name="reference" /><span><strong>Lisää referenssi</strong><small>Päivitä sivuston julkinen projektirivi</small></span>→</button>
                     <button onClick={() => navigate("home-content")}><Icon name="edit" /><span><strong>Muokkaa etusivua</strong><small>Päivitä pääviesti tai kuva</small></span>→</button>
                   </div>
                 </section>
@@ -631,9 +631,9 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             <section>
               <div className={styles.pageHeading}>
                 <div><p className={styles.kicker}>REFERENSSIT</p><h1>Referenssit</h1><p>Julkaise vain asiakkaan hyväksymät projektit ja kuvat.</p></div>
-                <button className={styles.primaryButton} onClick={() => setReferenceDraft(emptyReference())}><Icon name="plus" />Lisää referenssi</button>
+                <a className={styles.primaryButton} href="#jkp-public-references"><Icon name="plus" />Lisää projektirivi alla olevasta luettelosta</a>
               </div>
-              {content ? <form onSubmit={saveContent} className="admin-reference-master">
+              {content ? <form onSubmit={saveContent} className="admin-reference-master" id="jkp-public-references">
                 <h2>Asiakkaan julkinen referenssiluettelo</h2>
                 <p>Tämä luettelo näkyy suoraan sivuilla /referenssit ja /en/referenssit. Vahvista projektin tiedot ja julkaisulupa ennen tallennusta.</p>
                 {content.references.map((item, index) => (
@@ -674,11 +674,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                   <button className={styles.primaryButton} type="submit" disabled={loading}>Tallenna julkinen referenssiluettelo</button>
                 </div>
               </form> : null}
-              <div className={styles.cardGrid}>
-                {references.map((item) => <button className={styles.referenceCard} key={item.id} onClick={() => setReferenceDraft({ ...item })}>{item.imageUrl ? <img src={item.imageUrl} alt="" /> : <div className={styles.imagePlaceholder}>JKP</div>}<div><StatusBadge state={item.publicationState} /><h2>{item.title}</h2><p>{[item.category, item.location, item.year].filter(Boolean).join(" · ") || "Tiedot täydentämättä"}</p><small>{item.permissionConfirmed ? "Julkaisulupa vahvistettu" : "Julkaisulupa puuttuu"}</small></div></button>)}
-                {!references.length ? <div className={styles.emptyState}>Referenssejä ei ole vielä lisätty.</div> : null}
-              </div>
-            </section>
+                          </section>
           ) : null}
 
           {(view === "home-content" || view === "company-content" || view === "tech-content" || view === "lvia-content" || view === "rental-content" || view === "contact-content") && content ? (
