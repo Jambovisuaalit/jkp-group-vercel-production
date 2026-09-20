@@ -24,6 +24,20 @@ function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteCo
     company: { ...base.company, ...incoming.company },
     hero: { ...base.hero, ...incoming.hero },
     about: { ...base.about, ...incoming.about },
+    companyPage: {
+      fi: { ...base.companyPage.fi, ...incoming.companyPage?.fi },
+      en: { ...base.companyPage.en, ...incoming.companyPage?.en },
+    },
+    homeCopy: {
+      fi: { ...base.homeCopy.fi, ...incoming.homeCopy?.fi },
+      en: { ...base.homeCopy.en, ...incoming.homeCopy?.en },
+    },
+    heroEn: { ...base.heroEn, ...incoming.heroEn },
+    contactEn: { ...base.contactEn, ...incoming.contactEn },
+    technicalPage: {
+      fi: { ...base.technicalPage.fi, ...incoming.technicalPage?.fi },
+      en: { ...base.technicalPage.en, ...incoming.technicalPage?.en },
+    },
     rental: { ...base.rental, ...incoming.rental },
     contact: { ...base.contact, ...incoming.contact },
     references: Array.isArray(incoming.references) ? incoming.references : base.references,

@@ -25,7 +25,7 @@ export default async function HomePage() {
         <section className="hero client-home-hero" style={{ backgroundImage: `linear-gradient(rgba(255,255,255,.79),rgba(255,255,255,.79)),url("${content.hero.imageUrl || "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg"}")` }}>
           <div className="shell client-home-hero-inner">
             <div className="client-home-hero-copy">
-              <p className="client-home-company">JKP GROUP OY</p>
+              <p className="client-home-company">{content.hero.eyebrow}</p>
               <p className="client-home-subtitle">Talotekniikka – kiinteistöt</p>
               <h1>{content.hero.title}</h1>
               <p className="client-home-lead">{content.hero.lead}</p>
