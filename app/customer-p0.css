@@ -140,3 +140,23 @@
     z-index: 300;
   }
 }
+
+/* Customer company PDF: quiet white editorial presentation; no new design system. */
+.company-hero { background: #fff; color: #123750; padding-block: clamp(55px, 7vw, 100px); }
+.company-hero h1 { font: 600 clamp(37px, 5vw, 70px)/1.1 Arial, Helvetica, sans-serif; color: #123750; }
+.company-hero p:not(.eyebrow) { max-width: 680px; color: #526b7a; }
+.company-profile, .company-history { background: #fff; }
+.company-profile-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 5vw, 90px); align-items: start; }
+.company-profile-text h2, .company-history h2 { color: #123750; font: 600 clamp(29px, 3vw, 45px)/1.18 Arial, Helvetica, sans-serif; margin: 14px 0 24px; }
+.company-profile-text p:not(.eyebrow), .company-history p { color: #526b7a; font-size: 16px; line-height: 1.76; margin: 0 0 16px; }
+.company-profile-image { background: #f3f7fa; overflow: hidden; }
+.company-profile-image img { display: block; width: 100%; height: auto; max-height: 475px; object-fit: cover; }
+.company-history-list { margin-bottom: 38px; }
+.company-history-item { display: grid; grid-template-columns: minmax(140px, .33fr) 1fr; gap: clamp(25px, 5vw, 80px); padding: 34px 0; border-top: 1px solid rgba(18,55,80,.14); }
+.company-history-item:last-child { border-bottom: 1px solid rgba(18,55,80,.14); }
+.company-history-item h3 { margin: 0; color: #123750; font: 600 clamp(22px,2vw,29px)/1.22 Arial,Helvetica,sans-serif; }
+@media (max-width: 760px) {
+  .company-profile-grid, .company-history-item { grid-template-columns: 1fr; }
+  .company-history-item { gap: 18px; }
+  .company-profile-image img { max-height: 340px; }
+}

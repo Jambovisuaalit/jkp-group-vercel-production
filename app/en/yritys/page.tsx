@@ -8,98 +8,92 @@ import { getSiteContent } from "@/lib/content";
 
 export const metadata: Metadata = withLocalizedSeo({
   title: "Company",
-  description:
-    "JKP Group Oy is a building services, project management and property company founded in 1993 and based in Central Finland.",
+  description: "JKP Group Oy's principles and history: HVAC contracting, design, consultancy, rental of own properties, construction project management and technical supervision.",
 }, "/yritys", "en");
-
 export const dynamic = "force-dynamic";
+
+const phases = [
+  {
+    title: "Early operations and the 1990s",
+    paragraphs: [
+      "Operations began under the name LVI-insinööritoimisto Mikroplast Oy. The company later became JKP Group Oy following a business transaction.",
+      "In the 1990s, the business included HVAC contracting and turnkey building projects. Installation work was carried out by subcontractors, while planning, documentation and project management were handled in-house.",
+      "Projects included housing, commercial premises and small-scale industrial construction.",
+    ],
+  },
+  {
+    title: "The 2000s",
+    paragraphs: [
+      "As demand for HVAC design grew, the company discontinued turnkey contracting and concentrated on HVAC design and consultancy.",
+      "The work covered HVAC design and supervision, technical surveys and condition assessments for residential, commercial, industrial and public-sector buildings, including new-build and renovation projects.",
+    ],
+  },
+  {
+    title: "The 2010s",
+    paragraphs: [
+      "Following a business transaction, operations continued mainly through the rental of the company's own commercial premises and tenant-specific modifications to those properties.",
+    ],
+  },
+  {
+    title: "2016 and beyond",
+    paragraphs: [
+      "In 2016, JKP Group and Fimpec Oy jointly established Fimpec Talotekniikka Oy, in which JKP Group held a 20 percent stake.",
+      "The stake was later sold in connection with transactions involving the parent company, while cooperation with Fimpec Oy continued. Project management, supervision and major industrial projects became central areas of activity.",
+    ],
+  },
+];
 
 export default async function CompanyPage() {
   const content = await getSiteContent();
-
+  const image = content.media.technicalImageUrl || "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg";
   return (
     <>
       <Header email={content.company.email} locale="en" />
       <main>
-        <section className="subhero">
+        <section className="subhero company-hero">
           <div className="shell narrow">
-            <p className="eyebrow">JKP Group Oy / since 1993</p>
-            <h1>Building services, project management and property expertise.</h1>
-            <p>
-              JKP Group Oy supports construction projects through building services
-              supervision and project management, and rents its own commercial premises,
-              apartments and holiday properties.
-            </p>
+            <p className="eyebrow">Company</p>
+            <h1>JKP Group Oy</h1>
+            <p>Building services project management, technical supervision and property operations.</p>
           </div>
         </section>
-
-        <section className="section about-section">
-          <div className="shell about-grid">
-            <div className="about-panel">
-              <span>1993</span>
-              <strong>founded</strong>
-              <p>Jyväskylä and Central Finland</p>
+        <section className="section company-profile">
+          <div className="shell company-profile-grid">
+            <div className="company-profile-text">
+              <p className="eyebrow">Our approach</p>
+              <h2>Practical solutions based on our clients&apos; needs.</h2>
+              <p>Our aim is to identify modern, cost-effective solutions. We first establish the client&apos;s needs and seek an overall outcome at a reasonable cost.</p>
+              <p>We consider the building&apos;s lifecycle requirements and environmental economics, with an emphasis on openness, reliability and integrity.</p>
+              <p>We adapt to changing circumstances and continuously develop our planning and operating methods to support a viable business.</p>
             </div>
-            <div className="about-copy">
-              <p className="eyebrow">Operating model</p>
-              <h2>Clear responsibility from planning to handover.</h2>
-              <p>
-                JKP Group combines project management and building services expertise
-                with an emphasis on quality, feasibility, documentation and long-term
-                functionality.
-              </p>
-              <Link className="text-link dark-link" href="/en/referenssit">
-                View references →
-              </Link>
+            <div className="company-profile-image">
+              <img src={image} alt="JKP Group Oy building services illustration" loading="lazy" />
             </div>
           </div>
         </section>
-
-        <section className="section business-section">
-          <div className="shell section-heading">
-            <div>
-              <p className="eyebrow">Business areas</p>
-              <h2>Two service areas, one direct point of contact.</h2>
+        <section className="section company-history" id="history">
+          <div className="shell">
+            <p className="eyebrow">Our background</p>
+            <h2>History</h2>
+            <div className="company-history-list">
+              {phases.map((phase) => (
+                <article className="company-history-item" key={phase.title}>
+                  <h3>{phase.title}</h3>
+                  <div>{phase.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+                </article>
+              ))}
             </div>
-            <p>
-              Building services and project management form one area, while the rental
-              of JKP Group&apos;s own properties forms the other.
-            </p>
-          </div>
-          <div className="shell business-grid">
-            <Link className="business-card" href="/en/talotekniikka">
-              <span className="eyebrow">01</span>
-              <div>
-                <h3>Building Services</h3>
-                <p>Project management, supervision, commissioning and handover support.</p>
-              </div>
-              <span className="card-arrow" aria-hidden="true">↗</span>
-            </Link>
-            <Link className="business-card" href="/en/vuokraus">
-              <span className="eyebrow">02</span>
-              <div>
-                <h3>Properties</h3>
-                <p>Commercial premises, apartments and holiday properties owned by JKP Group.</p>
-              </div>
-              <span className="card-arrow" aria-hidden="true">↗</span>
-            </Link>
+            <Link href="/en/referenssit" className="text-link dark-link">View project references →</Link>
           </div>
         </section>
-
         <section className="contact-section" id="contact">
           <div className="shell contact-grid">
             <div>
               <p className="eyebrow">Direct contact</p>
               <h2>Jari Koskela</h2>
               <p>Managing Director / JKP Group Oy</p>
-              <a className="contact-email" href={`mailto:${content.company.email}`}>
-                {content.company.email}
-              </a>
-              {content.company.phone ? (
-                <a className="contact-email" href={`tel:${content.company.phone.replace(/\s/g, "")}`}>
-                  {content.company.phone}
-                </a>
-              ) : null}
+              <a className="contact-email" href={"mailto:" + content.company.email}>{content.company.email}</a>
+              {content.company.phone ? <a className="contact-email" href={"tel:" + content.company.phone.replace(/\s/g, "")}>{content.company.phone}</a> : null}
             </div>
             <ContactForm subject="Contact request / Company" locale="en" />
           </div>
