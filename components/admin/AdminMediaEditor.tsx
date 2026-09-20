@@ -8,7 +8,7 @@ type Slot = { key: string; label: string; value: string; update: (url: string) =
 export function AdminMediaEditor({
   scope, media, onChange, upload,
 }: {
-  scope: "home" | "tech" | "contact";
+  scope: "home" | "tech" | "company" | "contact";
   media: Media;
   onChange: (media: Media) => void;
   upload: (file: File, folder: string) => Promise<string>;
@@ -41,6 +41,11 @@ export function AdminMediaEditor({
       },
     }));
   }
+  if (scope === "company") slots.push({
+    key: "company", label: "Yritys-sivun kuvituskuva",
+    value: media.companyImageUrl,
+    update: url => ({ ...media, companyImageUrl: url }),
+  });
   if (scope === "tech") slots.push({
     key: "technical", label: "Talotekniikan yläosan esimerkkikuva",
     value: media.technicalImageUrl, update: url => ({ ...media, technicalImageUrl: url }),
@@ -51,7 +56,7 @@ export function AdminMediaEditor({
   });
 
   return <section className="admin-media-editor">
-    <h2>{scope === "tech" ? "Talotekniikan kuva" : scope === "contact" ? "Yhteystietojen kuva" : "Etusivun vaihdettavat kuvat"}</h2>
+    <h2>{scope === "tech" ? "Talotekniikan kuva" : scope === "company" ? "Yritys-sivun kuva" : scope === "contact" ? "Yhteystietojen kuva" : "Etusivun vaihdettavat kuvat"}</h2>
     <p>Valitse asiakkaan hyväksymä JPEG-, PNG- tai WebP-kuva. Lataa kuva, ja paina sen jälkeen sivun Tallenna muutokset -painiketta.</p>
     <div className="admin-media-grid">
       {slots.map(slot => <div className="admin-media-field" key={slot.key}>

@@ -39,6 +39,7 @@ export type SiteContent = {
   references: ClientReference[];
   media: {
     technicalImageUrl: string;
+    companyImageUrl: string;
     rentalImageUrl: string;
     serviceImages: string[];
     referenceImages: string[];
@@ -111,6 +112,7 @@ export const defaultContent: SiteContent = {
   references: clientReferences.map((entry) => ({ ...entry, areas: entry.areas ? [...entry.areas] : undefined })),
   media: {
     technicalImageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
+    companyImageUrl: "/images/jkp-pdf-reference-02.jpg",
     rentalImageUrl: "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg",
     serviceImages: [
       "/images/jkp-pdf-reference-01.jpg",

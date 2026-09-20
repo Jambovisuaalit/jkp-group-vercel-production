@@ -5,6 +5,7 @@ import "./client-theme.css";
 import "./home-mobile-fix.css";
 import "./content-finish.css";
 import "./customer-p0.css";
+import "./customer-company.css";
 
 const PRODUCTION_URL = "https://www.jkpgroup.fi";
 const PREVIEW_FALLBACK_URL = "https://jkp-group-asiakas.vercel.app";

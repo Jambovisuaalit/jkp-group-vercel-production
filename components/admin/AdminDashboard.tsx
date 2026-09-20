@@ -690,6 +690,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                     onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
                     upload={uploadImage}
                   />
+                  <AdminMediaEditor scope="company" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} />
                   <div className={styles.editorSection}><p className={styles.kicker}>YRITYSESITTELY</p><h2>Yrityksestä</h2><div className={styles.formGrid}><Field label="Otsikko" wide><input value={content.about.title} onChange={(e) => setContent({ ...content, about: { ...content.about, title: e.target.value } })} /></Field><Field label="Esittelyteksti" wide><textarea rows={6} value={content.about.body} onChange={(e) => setContent({ ...content, about: { ...content.about, body: e.target.value } })} /></Field></div></div>
                 </> : null}
                 {view === "tech-content" ? <AdminMediaEditor
