@@ -663,6 +663,20 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                       onChange={event => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: event.target.value } : entry) } : current)}
                     /></label>
                     <MediaLibrarySelector onSelect={url => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: url } : entry) } : current)} />
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                      <button type="button" disabled={index === 0} onClick={() => setContent(current => {
+                        if (!current || index === 0) return current;
+                        const entries = [...current.references];
+                        [entries[index - 1], entries[index]] = [entries[index], entries[index - 1]];
+                        return { ...current, references: entries };
+                      })}>Siirrä ylemmäs ↑</button>
+                      <button type="button" disabled={index === content.references.length - 1} onClick={() => setContent(current => {
+                        if (!current || index >= current.references.length - 1) return current;
+                        const entries = [...current.references];
+                        [entries[index], entries[index + 1]] = [entries[index + 1], entries[index]];
+                        return { ...current, references: entries };
+                      })}>Siirrä alemmas ↓</button>
+                    </div>
                     <button type="button" onClick={() => {
                       if (!window.confirm("Poistetaanko tämä referenssi julkisesta luettelosta?")) return;
                       setContent(current => current ? { ...current, references: current.references.filter((_,i)=>i!==index) } : current);
