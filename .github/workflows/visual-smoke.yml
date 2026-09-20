@@ -3,6 +3,8 @@ name: JKP release visual and SEO gates
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -53,6 +55,10 @@ jobs:
         env:
           JKP_BASE_URL: http://127.0.0.1:3100
         run: node scripts/smoke-p0.mjs
+      - name: Verify customer-supplied images and company history on actual commit
+        env:
+          JKP_BASE_URL: http://127.0.0.1:3100
+        run: node scripts/smoke-release-media.mjs
       - name: Save current-commit screenshots
         if: always()
         uses: actions/upload-artifact@v4
