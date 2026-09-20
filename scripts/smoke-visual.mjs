@@ -5,7 +5,7 @@ import path from "node:path";
 const base = process.env.JKP_BASE_URL || "https://www.jkpgroup.fi";
 const output = "qa-screenshots";
 const sizes = [{ width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1200, height: 750 }, { width: 1440, height: 900 }];
-const paths = ["/", "/yritys", "/talotekniikka", "/lvia-valvonta", "/vuokraus", "/referenssit", "/en", "/en/talotekniikka", "/en/vuokraus", "/en/referenssit"];
+const paths = ["/", "/yritys", "/talotekniikka", "/lvia-valvonta", "/vuokraus", "/referenssit", "/en", "/en/yritys", "/en/talotekniikka", "/en/lvia-valvonta", "/en/vuokraus", "/en/referenssit"];
 const rentalImage = "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg";
 const expectedReferences = ["GOOGLE Oy", "HELEN Oy", "UPM BIOCHEMICALS GmbH", "METSÄ FIBRE OY", "AGNICO EAGLE", "LAHTI ENERGY", "FINAVIA", "FIMPEC"];
 
@@ -26,7 +26,7 @@ try {
         const response = await page.goto(base + route, { waitUntil: "networkidle", timeout: 90000 });
         const state = await page.evaluate(({route, rentalImage, expectedReferences}) => {
           const header = document.querySelector("header");
-          const hero = document.querySelector(".hero, .subhero");
+          const hero = document.querySelector(".hero, .subhero, .company-intro");
           const h1 = document.querySelector("h1");
           const all = [...document.querySelectorAll("img")];
           const photos = all.filter((im) => new URL(im.src).pathname === rentalImage);
