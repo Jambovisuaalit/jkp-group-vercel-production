@@ -49,6 +49,76 @@ export type SiteContent = {
   };
   companyPage: { fi: CompanyPageCopy; en: CompanyPageCopy };
   homeCopy: { fi: HomeCopy; en: HomeCopy };
+  heroEn: { title: string; lead: string };
+  contactEn: { title: string; body: string };
+  technicalPage: { fi: TechnicalPageCopy; en: TechnicalPageCopy };
+  lviaPage: { fi: LviaPageCopy; en: LviaPageCopy };
+  businessAreas: Array<{
+    slug: "talotekniikka" | "vuokraus";
+    title: string;
+    summary: string;
+  }>;
+  services: ServiceItem[];
+  rental: {
+    title: string;
+    lead: string;
+  };
+  contact: {
+    title: string;
+    body: string;
+  };
+  references: ClientReference[];
+  media: {
+    technicalImageUrl: string;
+    companyImageUrl: string;
+    rentalImageUrl: string;
+    serviceImages: string[];
+    referenceImages: string[];
+    contactImageUrl: string;
+    /** Distinguish deliberate admin edits from legacy empty image slots. */
+    imageSlotsVersion?: number;
+  };
+};
+
+export const defaultContent: SiteContent = {
+  company: {
+    name: "JKP Group Oy",
+    email: "jari.koskela@jkpgroup.fi",
+    phone: "+358 50 068 9855",
+    area: "Jyväskylä ja Keski-Suomi",
+  },
+  hero: {
+    eyebrow: "JKP GROUP OY",
+    title: "Toimivaa talotekniikkaa vuodesta 1993.",
+    lead:
+      "Suunnittelua, valvontaa ja rakennuttamista vaativiin kiinteistö- ja rakennushankkeisiin uudis- ja peruskorjauskohteissa.",
+    imageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
+  },
+  about: {
+    title: "Kokonaisuus hallintaan suunnittelusta vastaanottoon",
+    body:
+      "Rakennuttamisessa huolehdimme kokonaisuudesta ja kokoamme hankkeen tarvitsemat asiantuntijapalvelut yhteen. Taloteknisessä valvonnassa painotamme laatua, toteutettavuutta, dokumentointia ja ratkaisujen toimivuutta kiinteistön elinkaaren aikana.",
+  },
+  companyPage: {
+    fi: { title: "Palvelua vuosien kokemuksella.", intro: ["Tavoitteenamme on löytää asiakkaalle edulliset ja nykyaikaiset kokonaisratkaisut. Selvitämme aina ensin asiakkaan tarpeet ja pyrimme löytämään hyvän kokonaisvaltaisen lopputuloksen kohtuullisin kustannuksin.","Otamme huomioon kiinteistön elinkaarivaatimukset ja ympäristötaloudellisuuden. Panostamme avoimuuteen, luotettavuuteen ja rehellisyyteen.","Tämän päivän muuttuva maailma tuo jatkuvasti mukanaan uusia haasteita, joihin vastaamme mukautumiskyvyllämme ja aikaa seuraamalla. Toimintamme perustuu kannattavuuteen, ja siksi kehitämme jatkuvasti uusia suunnittelu- ja toimintamalleja."], historyTitle: "Historia", history: [
+  { era: "Alkuvaiheet", texts: ["Toiminta alkoi nimellä LVI-insinööritoimisto Mikroplast Oy. Liiketoimintakaupan myötä nimi muuttui myöhemmin JKP Group Oy:ksi."] },
+  { era: "1990-luku", texts: ["Olimme mukana LVI-urakoinnissa ja toteutimme KVR-kohteita avaimet käteen -periaatteella. Projektikohteiden asennustöitä hoidettiin alihankintana; omaan työhön kuuluivat suunnittelu, dokumentointi ja projektinjohto.", "Kohteita olivat asuntotuotanto sekä liike-, toimitila- ja pk-teollinen rakentaminen. Näissä hankkeissa karttui käytännön osaamista kokonaistaloudellisten ratkaisujen löytämiseen."] },
+  { era: "2000-luku", texts: ["LVI-suunnittelutöiden kysynnän kasvaessa KVR-hankkeet jäivät pois. Toiminta keskittyi LVI-suunnitteluun ja konsultointiin: suunnitteluun, valvontaan, selvityksiin ja kuntoarvioihin.", "Kohteet kattoivat asuntotuotantoa, liike- ja teollista rakentamista sekä julkishallinnollisia uudis- ja saneerauskohteita."] },
+  { era: "2010-luku", texts: ["Liiketoimintakaupan myötä toiminta jatkui lähinnä omien liike- ja toimitilojen vuokraamisella ja niihin tehtävillä asiakasmuutoksilla."] },
+  { era: "2016 ja sen jälkeen", texts: ["Perustimme yhdessä Fimpec Oy:n kanssa Fimpec Talotekniikka Oy:n, jossa osuutemme oli 20 %. Emoyhtiön yrityskauppojen myötä myimme osuutemme ja jatkoimme yhteistyötä Fimpec Oy:n kanssa.", "Tänä aikana toiminnan painopisteenä olivat rakennuttamis- ja valvontatehtävät. Myös suurteollisuuden hankkeet tulivat mukaan."] },
+] },
+    en: { title: "Service backed by years of experience.", intro: ["Our aim is to find affordable, modern solutions for customers. We begin by understanding their needs and seek a comprehensive result at a reasonable cost.","We consider the property's lifecycle requirements and environmental economics. Openness, reliability and honesty are central to how we work.","We respond to a changing world by adapting and following developments. We continually improve our planning and operating methods while maintaining profitable operations."], historyTitle: "History", history: [
+  { era: "Origins", texts: ["The business began under the name LVI-insinööritoimisto Mikroplast Oy and later became JKP Group Oy following a business transaction."] },
+  { era: "1990s", texts: ["We carried out turnkey HVAC contracting in housing, commercial premises and smaller industrial construction. Installation work was handled by subcontractors, while our own work included design, documentation and project management.", "This contracting experience provided practical knowledge of cost-efficient overall solutions."] },
+  { era: "2000s", texts: ["As demand for HVAC design grew, turnkey contracting was phased out and the business focused on HVAC design, consulting, supervision, studies and condition assessments.", "Projects included housing, commercial, industrial and public-sector buildings, covering both new-build and renovation work."] },
+  { era: "2010s", texts: ["Following a business transaction, operations focused primarily on renting our own commercial premises and making customer-specific alterations to them."] },
+  { era: "2016 onwards", texts: ["Together with Fimpec Oy, we established Fimpec Talotekniikka Oy in 2016, with a 20% ownership interest. Following transactions involving the parent company, we sold our share and continued our cooperation with Fimpec Oy.", "Project management and supervision became central business activities, including projects in large-scale industry."] },
+] },
+  },
+  homeCopy: {
+    fi: { serviceHeading: "TALOTEKNIIKAN RAKENNUTTAMIS- JA VALVONTATEHTÄVIÄ VUOSIEN KOKEMUKSELLA", tiles: ["Talotekniikan rakennuttamispalvelut", "Valvontapalvelut", "Vuokrauspalvelut"], referenceHeading: "Referenssejä" },
+    en: { serviceHeading: "BUILDING SERVICES PROJECT MANAGEMENT AND SUPERVISION — YEARS OF EXPERIENCE", tiles: ["Building services project management", "Supervision services", "Property rental"], referenceHeading: "References" },
+  },
   lviaPage: {
     fi: {
       title: "Toimivat ja kustannustehokkaat LVI-ratkaisut koko elinkaarelle.",
@@ -122,76 +192,6 @@ export type SiteContent = {
       contactTitle: "Tell us about your project.",
       contactLead: "Share the property and location, current project phase, relevant HVAC systems, target schedule and expected scope. Responsibilities are agreed for each assignment.",
     },
-  },
-  heroEn: { title: string; lead: string };
-  contactEn: { title: string; body: string };
-  technicalPage: { fi: TechnicalPageCopy; en: TechnicalPageCopy };
-  lviaPage: { fi: LviaPageCopy; en: LviaPageCopy };
-  businessAreas: Array<{
-    slug: "talotekniikka" | "vuokraus";
-    title: string;
-    summary: string;
-  }>;
-  services: ServiceItem[];
-  rental: {
-    title: string;
-    lead: string;
-  };
-  contact: {
-    title: string;
-    body: string;
-  };
-  references: ClientReference[];
-  media: {
-    technicalImageUrl: string;
-    companyImageUrl: string;
-    rentalImageUrl: string;
-    serviceImages: string[];
-    referenceImages: string[];
-    contactImageUrl: string;
-    /** Distinguish deliberate admin edits from legacy empty image slots. */
-    imageSlotsVersion?: number;
-  };
-};
-
-export const defaultContent: SiteContent = {
-  company: {
-    name: "JKP Group Oy",
-    email: "jari.koskela@jkpgroup.fi",
-    phone: "+358 50 068 9855",
-    area: "Jyväskylä ja Keski-Suomi",
-  },
-  hero: {
-    eyebrow: "JKP GROUP OY",
-    title: "Toimivaa talotekniikkaa vuodesta 1993.",
-    lead:
-      "Suunnittelua, valvontaa ja rakennuttamista vaativiin kiinteistö- ja rakennushankkeisiin uudis- ja peruskorjauskohteissa.",
-    imageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
-  },
-  about: {
-    title: "Kokonaisuus hallintaan suunnittelusta vastaanottoon",
-    body:
-      "Rakennuttamisessa huolehdimme kokonaisuudesta ja kokoamme hankkeen tarvitsemat asiantuntijapalvelut yhteen. Taloteknisessä valvonnassa painotamme laatua, toteutettavuutta, dokumentointia ja ratkaisujen toimivuutta kiinteistön elinkaaren aikana.",
-  },
-  companyPage: {
-    fi: { title: "Palvelua vuosien kokemuksella.", intro: ["Tavoitteenamme on löytää asiakkaalle edulliset ja nykyaikaiset kokonaisratkaisut. Selvitämme aina ensin asiakkaan tarpeet ja pyrimme löytämään hyvän kokonaisvaltaisen lopputuloksen kohtuullisin kustannuksin.","Otamme huomioon kiinteistön elinkaarivaatimukset ja ympäristötaloudellisuuden. Panostamme avoimuuteen, luotettavuuteen ja rehellisyyteen.","Tämän päivän muuttuva maailma tuo jatkuvasti mukanaan uusia haasteita, joihin vastaamme mukautumiskyvyllämme ja aikaa seuraamalla. Toimintamme perustuu kannattavuuteen, ja siksi kehitämme jatkuvasti uusia suunnittelu- ja toimintamalleja."], historyTitle: "Historia", history: [
-  { era: "Alkuvaiheet", texts: ["Toiminta alkoi nimellä LVI-insinööritoimisto Mikroplast Oy. Liiketoimintakaupan myötä nimi muuttui myöhemmin JKP Group Oy:ksi."] },
-  { era: "1990-luku", texts: ["Olimme mukana LVI-urakoinnissa ja toteutimme KVR-kohteita avaimet käteen -periaatteella. Projektikohteiden asennustöitä hoidettiin alihankintana; omaan työhön kuuluivat suunnittelu, dokumentointi ja projektinjohto.", "Kohteita olivat asuntotuotanto sekä liike-, toimitila- ja pk-teollinen rakentaminen. Näissä hankkeissa karttui käytännön osaamista kokonaistaloudellisten ratkaisujen löytämiseen."] },
-  { era: "2000-luku", texts: ["LVI-suunnittelutöiden kysynnän kasvaessa KVR-hankkeet jäivät pois. Toiminta keskittyi LVI-suunnitteluun ja konsultointiin: suunnitteluun, valvontaan, selvityksiin ja kuntoarvioihin.", "Kohteet kattoivat asuntotuotantoa, liike- ja teollista rakentamista sekä julkishallinnollisia uudis- ja saneerauskohteita."] },
-  { era: "2010-luku", texts: ["Liiketoimintakaupan myötä toiminta jatkui lähinnä omien liike- ja toimitilojen vuokraamisella ja niihin tehtävillä asiakasmuutoksilla."] },
-  { era: "2016 ja sen jälkeen", texts: ["Perustimme yhdessä Fimpec Oy:n kanssa Fimpec Talotekniikka Oy:n, jossa osuutemme oli 20 %. Emoyhtiön yrityskauppojen myötä myimme osuutemme ja jatkoimme yhteistyötä Fimpec Oy:n kanssa.", "Tänä aikana toiminnan painopisteenä olivat rakennuttamis- ja valvontatehtävät. Myös suurteollisuuden hankkeet tulivat mukaan."] },
-] },
-    en: { title: "Service backed by years of experience.", intro: ["Our aim is to find affordable, modern solutions for customers. We begin by understanding their needs and seek a comprehensive result at a reasonable cost.","We consider the property's lifecycle requirements and environmental economics. Openness, reliability and honesty are central to how we work.","We respond to a changing world by adapting and following developments. We continually improve our planning and operating methods while maintaining profitable operations."], historyTitle: "History", history: [
-  { era: "Origins", texts: ["The business began under the name LVI-insinööritoimisto Mikroplast Oy and later became JKP Group Oy following a business transaction."] },
-  { era: "1990s", texts: ["We carried out turnkey HVAC contracting in housing, commercial premises and smaller industrial construction. Installation work was handled by subcontractors, while our own work included design, documentation and project management.", "This contracting experience provided practical knowledge of cost-efficient overall solutions."] },
-  { era: "2000s", texts: ["As demand for HVAC design grew, turnkey contracting was phased out and the business focused on HVAC design, consulting, supervision, studies and condition assessments.", "Projects included housing, commercial, industrial and public-sector buildings, covering both new-build and renovation work."] },
-  { era: "2010s", texts: ["Following a business transaction, operations focused primarily on renting our own commercial premises and making customer-specific alterations to them."] },
-  { era: "2016 onwards", texts: ["Together with Fimpec Oy, we established Fimpec Talotekniikka Oy in 2016, with a 20% ownership interest. Following transactions involving the parent company, we sold our share and continued our cooperation with Fimpec Oy.", "Project management and supervision became central business activities, including projects in large-scale industry."] },
-] },
-  },
-  homeCopy: {
-    fi: { serviceHeading: "TALOTEKNIIKAN RAKENNUTTAMIS- JA VALVONTATEHTÄVIÄ VUOSIEN KOKEMUKSELLA", tiles: ["Talotekniikan rakennuttamispalvelut", "Valvontapalvelut", "Vuokrauspalvelut"], referenceHeading: "Referenssejä" },
-    en: { serviceHeading: "BUILDING SERVICES PROJECT MANAGEMENT AND SUPERVISION — YEARS OF EXPERIENCE", tiles: ["Building services project management", "Supervision services", "Property rental"], referenceHeading: "References" },
   },
   heroEn: { title: "Functional building services since 1993.", lead: "Design, supervision and project management for demanding new-build and renovation projects." },
   contactEn: { title: "Let's discuss your project or property requirement.", body: "Contact JKP Group when you need project or building services expertise, or are looking for a rental property." },
