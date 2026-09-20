@@ -50,7 +50,7 @@ try {
             rentalPhotos: photos.map((im) => ({ loaded: im.complete && im.naturalWidth > 0, width: im.naturalWidth, height: im.naturalHeight })),
             oldReferenceCount: document.body.innerText.includes("Kiipulasäätiö") ? 1 : 0,
             referencesPresent: route.endsWith("/referenssit") ? expectedReferences.map((s) => document.body.innerText.includes(s)) : [],
-            lviaPhases: route === "/lvia-valvonta" ? document.querySelectorAll(".lvia-phase").length : 0,
+            lviaPhases: (route === "/lvia-valvonta" || route === "/en/lvia-valvonta") ? document.querySelectorAll(".lvia-phase").length : 0,
           };
         }, { route, rentalImage, expectedReferences });
         result = { ...result, status: response?.status() ?? null, ...state, pageErrors };
