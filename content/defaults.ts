@@ -43,6 +43,8 @@ export type SiteContent = {
     serviceImages: string[];
     referenceImages: string[];
     contactImageUrl: string;
+    /** Distinguish deliberate admin edits from legacy empty image slots. */
+    imageSlotsVersion?: number;
   };
 };
 
@@ -110,9 +112,24 @@ export const defaultContent: SiteContent = {
   media: {
     technicalImageUrl: "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg",
     rentalImageUrl: "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg",
-    serviceImages: ["", "", ""],
-    referenceImages: ["", "", "", "", "", "", "", "", ""],
+    serviceImages: [
+      "/images/jkp-pdf-reference-01.jpg",
+      "/images/jkp-pdf-reference-06.jpg",
+      "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg",
+    ],
+    referenceImages: [
+      "/images/jkp-pdf-reference-01.jpg",
+      "/images/jkp-pdf-reference-02.jpg",
+      "/images/jkp-pdf-reference-05.jpg",
+      "/images/jkp-pdf-reference-03.jpg",
+      "/images/jkp-pdf-reference-04.jpg",
+      "/images/jkp-pdf-reference-06.jpg",
+      "/images/jkp-pdf-reference-07.jpg",
+      "/images/jkp-pdf-reference-08.jpg",
+      "/images/jkp-pdf-reference-09.jpg",
+    ],
     contactImageUrl: "",
+    imageSlotsVersion: 1,
   },
   contact: {
     title: "Keskustellaan hankkeestasi tai vuokratarpeestasi.",
