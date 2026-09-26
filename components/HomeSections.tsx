@@ -10,7 +10,10 @@ export function HomeSections({ content, locale = "fi" }: { content: SiteContent;
     { slug: "lvia-valvonta", title: homeCopy.tiles[1] },
     { slug: "vuokraus", title: homeCopy.tiles[2] },
   ];
-  const gallery = content.media.referenceImages.filter(Boolean);
+  // Media presence does not prove publication rights. Show only photos explicitly approved in CMS.
+  const approvedReferenceImages = new Set(Array.isArray(content.media.approvedReferenceImageUrls)
+    ? content.media.approvedReferenceImageUrls : []);
+  const gallery = content.media.referenceImages.filter(src => Boolean(src) && approvedReferenceImages.has(src));
   return (
     <>
       <section className="section home-service-section" id={en ? "services" : "palvelut"}>
