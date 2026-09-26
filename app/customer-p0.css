@@ -183,6 +183,14 @@
 }
 .contact-section .contact-grid { gap: clamp(30px, 5vw, 82px); }
 .contact-section .contact-grid > * { min-width: 0; }
+.contact-section .contact-grid > div h2 {
+  max-width: 100%;
+  font-size: clamp(34px, 3.25vw, 46px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
 .contact-section .contact-form {
   padding: clamp(24px, 3vw, 38px);
   box-shadow: 0 18px 42px rgba(18, 55, 80, .07);
