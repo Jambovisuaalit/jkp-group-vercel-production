@@ -33,6 +33,20 @@ try {
           const serviceImages = [...document.querySelectorAll(".home-service-tile > img")];
           const contactLinks = [...document.querySelectorAll(".home-contact-details .contact-email")];
           const contactHeading = document.querySelector(".contact-section .contact-grid > div h2");
+          let contactPunctuationAttached = true;
+          const headingNode = contactHeading?.firstChild;
+          if (headingNode?.nodeType === Node.TEXT_NODE && (headingNode.textContent || "").endsWith(".")) {
+            const len = headingNode.textContent.length;
+            if (len > 1) {
+              const before = document.createRange();
+              before.setStart(headingNode, len - 2);
+              before.setEnd(headingNode, len - 1);
+              const period = document.createRange();
+              period.setStart(headingNode, len - 1);
+              period.setEnd(headingNode, len);
+              contactPunctuationAttached = Math.abs(before.getBoundingClientRect().top - period.getBoundingClientRect().top) < 2;
+            }
+          }
           const heroOverlay = hero?.matches(".client-home-hero") ? getComputedStyle(hero, "::before").backgroundColor : "";
           const bg = (el) => el ? getComputedStyle(el).backgroundColor : null;
           const bodyBackground = bg(document.body);
@@ -58,6 +72,7 @@ try {
             heroOverlay,
             separatedContactLinks: contactLinks.length === 2 && contactLinks[1].getBoundingClientRect().top > contactLinks[0].getBoundingClientRect().bottom,
             contactHeadingFits: Boolean(contactHeading && contactHeading.scrollWidth <= contactHeading.clientWidth + 1),
+            contactPunctuationAttached,
             oldReferenceCount: document.body.innerText.includes("Kiipulasäätiö") ? 1 : 0,
             referencesPresent: route.endsWith("/referenssit") ? expectedReferences.map((s) => document.body.innerText.includes(s)) : [],
             lviaPhases: (route === "/lvia-valvonta" || route === "/en/lvia-valvonta") ? document.querySelectorAll(".lvia-phase").length : 0,
@@ -83,6 +98,7 @@ try {
           if (result.referenceGalleryPhotos !== 0) errors.push(route + " " + size.width + ": unapproved reference gallery exposed");
           if (!result.separatedContactLinks) errors.push(route + " " + size.width + ": email and phone must be on separate lines");
           if (!result.contactHeadingFits) errors.push(route + " " + size.width + ": contact heading overflows its column");
+          if (!result.contactPunctuationAttached) errors.push(route + " " + size.width + ": contact heading period wraps to its own line");
           const expectedOverlay = size.width <= 640 ? "rgba(255, 255, 255, 0.7)" : "rgba(255, 255, 255, 0.62)";
           if (result.heroOverlay !== expectedOverlay) errors.push(route + " " + size.width + ": unexpected hero overlay " + result.heroOverlay);
         }
