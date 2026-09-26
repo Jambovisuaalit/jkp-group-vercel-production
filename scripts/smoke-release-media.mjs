@@ -13,13 +13,14 @@ for (const locale of ["fi", "en"]) {
   const home = await fetch(base + (locale === "fi" ? "/" : "/en"));
   assert.equal(home.status, 200);
   const html = await home.text();
-  for (const src of photoNames) {
-    assert.ok(html.includes(src), locale + " missing gallery image " + src);
-  }
   for (const src of servicePhotos) {
     assert.ok(html.includes(src), locale + " missing service photo " + src);
   }
-  assert.ok(html.includes("home-reference-gallery"), locale + " gallery not rendered");
+  // The supplied nine photos are available to the CMS, but none may be
+  // published until the client confirms the specific image rights.
+  assert.ok(!html.includes('class="home-reference-gallery"'), locale + " published unapproved gallery");
+  assert.ok(html.includes("home-reference-empty"), locale + " missing pending-approval state");
+  assert.ok(!html.includes("home-image-placeholder"), locale + " shows service placeholders");
   assert.ok(html.includes("home-service-grid"), locale + " service grid not rendered");
   const page = await fetch(base + (locale === "fi" ? "/yritys" : "/en/yritys"));
   assert.equal(page.status, 200);
@@ -29,4 +30,4 @@ for (const locale of ["fi", "en"]) {
     : ["LVI-insinööritoimisto Mikroplast Oy", "1990s", "2000s", "2010s", "Fimpec Talotekniikka Oy"];
   expected.forEach(term => assert.ok(company.includes(term), locale + " company text missing " + term));
 }
-console.log("JKP_RELEASE_MEDIA_SUMMARY=" + JSON.stringify({ passed: true, imageFiles: 11, galleryImages: 9, serviceImages: 3, companyPages: 2 }));
+console.log("JKP_RELEASE_MEDIA_SUMMARY=" + JSON.stringify({ passed: true, imageFiles: 11, galleryImages: 0, serviceImages: 3, companyPages: 2 }));
