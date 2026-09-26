@@ -37,8 +37,13 @@ export function AdminMediaEditor({
       value: media.referenceImages[index] || "",
       update: url => {
         const referenceImages = [...media.referenceImages];
+        const previousUrl = referenceImages[index] || "";
         referenceImages[index] = url;
-        return { ...media, referenceImages };
+        // Switching or removing a photo revokes its previous approval.
+        const approvedReferenceImageUrls = previousUrl && previousUrl !== url
+          ? (media.approvedReferenceImageUrls || []).filter(approved => approved !== previousUrl)
+          : (media.approvedReferenceImageUrls || []);
+        return { ...media, referenceImages, approvedReferenceImageUrls };
       },
     }));
   }
