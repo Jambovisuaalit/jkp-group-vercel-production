@@ -75,6 +75,8 @@ export type SiteContent = {
     rentalImageUrl: string;
     serviceImages: string[];
     referenceImages: string[];
+    /** Publish only reference photos explicitly approved by the client via the account manager. */
+    approvedReferenceImageUrls: string[];
     contactImageUrl: string;
     /** Distinguish deliberate admin edits from legacy empty image slots. */
     imageSlotsVersion?: number;
@@ -286,6 +288,8 @@ export const defaultContent: SiteContent = {
       "/images/jkp-pdf-reference-08.jpg",
       "/images/jkp-pdf-reference-09.jpg",
     ],
+    // The nine customer-PDF photos are media assets, not automatically publication-approved.
+    approvedReferenceImageUrls: [],
     contactImageUrl: "",
     imageSlotsVersion: 1,
   },
