@@ -30,6 +30,9 @@ try {
           const h1 = document.querySelector("h1");
           const all = [...document.querySelectorAll("img")];
           const photos = all.filter((im) => new URL(im.src).pathname === rentalImage);
+          const serviceImages = [...document.querySelectorAll(".home-service-tile > img")];
+          const contactLinks = [...document.querySelectorAll(".home-contact-details .contact-email")];
+          const heroOverlay = hero?.matches(".client-home-hero") ? getComputedStyle(hero, "::before").backgroundColor : "";
           const bg = (el) => el ? getComputedStyle(el).backgroundColor : null;
           const bodyBackground = bg(document.body);
           const heroPhoto = hero ? getComputedStyle(hero).backgroundImage.includes("jkp-teollisuus-hero-asiakkaan-kuva.jpeg") : false;
@@ -48,6 +51,11 @@ try {
             title: document.title, h1: h1?.textContent?.trim() || "",
             images: all.map((im) => ({ src: im.currentSrc, loaded: im.complete && im.naturalWidth > 0, width: im.naturalWidth, height: im.naturalHeight })),
             rentalPhotos: photos.map((im) => ({ loaded: im.complete && im.naturalWidth > 0, width: im.naturalWidth, height: im.naturalHeight })),
+            servicePhotos: serviceImages.map((im) => ({ src: im.getAttribute("src"), loaded: im.complete && im.naturalWidth > 0 })),
+            servicePlaceholders: document.querySelectorAll(".home-image-placeholder").length,
+            referenceGalleryPhotos: document.querySelectorAll(".home-reference-gallery img").length,
+            heroOverlay,
+            separatedContactLinks: contactLinks.length === 2 && contactLinks[1].getBoundingClientRect().top > contactLinks[0].getBoundingClientRect().bottom,
             oldReferenceCount: document.body.innerText.includes("Kiipulasäätiö") ? 1 : 0,
             referencesPresent: route.endsWith("/referenssit") ? expectedReferences.map((s) => document.body.innerText.includes(s)) : [],
             lviaPhases: (route === "/lvia-valvonta" || route === "/en/lvia-valvonta") ? document.querySelectorAll(".lvia-phase").length : 0,
@@ -65,6 +73,15 @@ try {
         }
         if (route === "/referenssit" && !result.referencesPresent.every(Boolean)) errors.push(route + " " + size.width + ": customer project references missing");
         if (route === "/" && result.services !== 3) errors.push(route + " " + size.width + ": customer service image cards missing");
+        if (route === "/" || route === "/en") {
+          if (result.servicePhotos.length !== 3 || result.servicePhotos.some(p => !p.loaded) || result.servicePlaceholders) {
+            errors.push(route + " " + size.width + ": 3 approved service images must load without placeholders");
+          }
+          if (result.referenceGalleryPhotos !== 0) errors.push(route + " " + size.width + ": unapproved reference gallery exposed");
+          if (!result.separatedContactLinks) errors.push(route + " " + size.width + ": email and phone must be on separate lines");
+          const expectedOverlay = size.width <= 640 ? "rgba(255, 255, 255, 0.7)" : "rgba(255, 255, 255, 0.62)";
+          if (result.heroOverlay !== expectedOverlay) errors.push(route + " " + size.width + ": unexpected hero overlay " + result.heroOverlay);
+        }
         if ((route === "/" || route === "/en") && (size.width === 390 || size.width === 1440)) {
           const menu = page.locator(".service-menu summary");
           await menu.click();
