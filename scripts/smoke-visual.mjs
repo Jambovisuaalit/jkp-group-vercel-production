@@ -62,7 +62,8 @@ try {
           };
         }, { route, rentalImage, expectedReferences });
         result = { ...result, status: response?.status() ?? null, ...state, pageErrors };
-        await page.screenshot({ path: path.join(output, (route === "/" ? "home" : route.slice(1)) + "-" + size.width + ".png"), fullPage: false });
+        const wholeHome = (route === "/" || route === "/en") && (size.width === 390 || size.width === 1440);
+        await page.screenshot({ path: path.join(output, (route === "/" ? "home" : route.slice(1)) + "-" + size.width + ".png"), fullPage: wholeHome });
         if (result.status !== 200) errors.push(route + " " + size.width + ": status " + result.status);
         if (!result.hasDropdown) errors.push(route + " " + size.width + ": service dropdown missing");
         if ((route === "/vuokraus" || route === "/en/vuokraus") && result.forms !== 2) {
