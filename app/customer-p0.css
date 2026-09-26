@@ -111,6 +111,8 @@
 .admin-media-field { display: grid; align-content: start; gap: 10px; min-width: 0; }
 .admin-media-field strong { font-size: 14px; line-height: 1.4; }
 .admin-media-field > img { width: 100%; height: 140px; object-fit: cover; background: #f3f7fa; }
+.admin-media-approval { display: flex; align-items: flex-start; gap: 9px; font: 500 12px/1.5 Arial,Helvetica,sans-serif; color: #243e4b; cursor: pointer; }
+.admin-media-approval input { width: 16px; height: 16px; flex: 0 0 16px; margin-top: 1px; accent-color: #225f79; }
 .admin-media-empty { display: grid; place-items: center; min-height: 140px; background: #f3f7fa; color: #526b7a; font-size: 13px; }
 .admin-media-button { display: block; position: relative; padding: 9px 13px; background: #225f79; color: white; cursor: pointer; text-align: center; }
 .admin-media-button input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
