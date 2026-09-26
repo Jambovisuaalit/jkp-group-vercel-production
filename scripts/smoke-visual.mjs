@@ -32,6 +32,7 @@ try {
           const photos = all.filter((im) => new URL(im.src).pathname === rentalImage);
           const serviceImages = [...document.querySelectorAll(".home-service-tile > img")];
           const contactLinks = [...document.querySelectorAll(".home-contact-details .contact-email")];
+          const contactHeading = document.querySelector(".contact-section .contact-grid > div h2");
           const heroOverlay = hero?.matches(".client-home-hero") ? getComputedStyle(hero, "::before").backgroundColor : "";
           const bg = (el) => el ? getComputedStyle(el).backgroundColor : null;
           const bodyBackground = bg(document.body);
@@ -56,6 +57,7 @@ try {
             referenceGalleryPhotos: document.querySelectorAll(".home-reference-gallery img").length,
             heroOverlay,
             separatedContactLinks: contactLinks.length === 2 && contactLinks[1].getBoundingClientRect().top > contactLinks[0].getBoundingClientRect().bottom,
+            contactHeadingFits: Boolean(contactHeading && contactHeading.scrollWidth <= contactHeading.clientWidth + 1),
             oldReferenceCount: document.body.innerText.includes("Kiipulasäätiö") ? 1 : 0,
             referencesPresent: route.endsWith("/referenssit") ? expectedReferences.map((s) => document.body.innerText.includes(s)) : [],
             lviaPhases: (route === "/lvia-valvonta" || route === "/en/lvia-valvonta") ? document.querySelectorAll(".lvia-phase").length : 0,
@@ -80,6 +82,7 @@ try {
           }
           if (result.referenceGalleryPhotos !== 0) errors.push(route + " " + size.width + ": unapproved reference gallery exposed");
           if (!result.separatedContactLinks) errors.push(route + " " + size.width + ": email and phone must be on separate lines");
+          if (!result.contactHeadingFits) errors.push(route + " " + size.width + ": contact heading overflows its column");
           const expectedOverlay = size.width <= 640 ? "rgba(255, 255, 255, 0.7)" : "rgba(255, 255, 255, 0.62)";
           if (result.heroOverlay !== expectedOverlay) errors.push(route + " " + size.width + ": unexpected hero overlay " + result.heroOverlay);
         }
