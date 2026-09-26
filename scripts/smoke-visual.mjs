@@ -5,7 +5,7 @@ import path from "node:path";
 const base = process.env.JKP_BASE_URL || "https://www.jkpgroup.fi";
 const output = "qa-screenshots";
 const sizes = [{ width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1200, height: 750 }, { width: 1440, height: 900 }];
-const paths = ["/", "/yritys", "/talotekniikka", "/lvia-valvonta", "/vuokraus", "/referenssit", "/en", "/en/talotekniikka", "/en/vuokraus", "/en/referenssit"];
+const paths = ["/", "/yritys", "/talotekniikka", "/lvia-valvonta", "/vuokraus", "/referenssit", "/en", "/en/yritys", "/en/talotekniikka", "/en/lvia-valvonta", "/en/vuokraus", "/en/referenssit"];
 const rentalImage = "/images/jkp-asiakkaan-vuokrakohde-2026-09-18.jpg";
 const expectedReferences = ["GOOGLE Oy", "HELEN Oy", "UPM BIOCHEMICALS GmbH", "METSÄ FIBRE OY", "AGNICO EAGLE", "LAHTI ENERGY", "FINAVIA", "FIMPEC"];
 
@@ -26,10 +26,28 @@ try {
         const response = await page.goto(base + route, { waitUntil: "networkidle", timeout: 90000 });
         const state = await page.evaluate(({route, rentalImage, expectedReferences}) => {
           const header = document.querySelector("header");
-          const hero = document.querySelector(".hero, .subhero");
+          const hero = document.querySelector(".hero, .subhero, .company-intro");
           const h1 = document.querySelector("h1");
           const all = [...document.querySelectorAll("img")];
           const photos = all.filter((im) => new URL(im.src).pathname === rentalImage);
+          const serviceImages = [...document.querySelectorAll(".home-service-tile > img")];
+          const contactLinks = [...document.querySelectorAll(".home-contact-details .contact-email")];
+          const contactHeading = document.querySelector(".contact-section .contact-grid > div h2");
+          let contactPunctuationAttached = true;
+          const headingNode = contactHeading?.firstChild;
+          if (headingNode?.nodeType === Node.TEXT_NODE && (headingNode.textContent || "").endsWith(".")) {
+            const len = headingNode.textContent.length;
+            if (len > 1) {
+              const before = document.createRange();
+              before.setStart(headingNode, len - 2);
+              before.setEnd(headingNode, len - 1);
+              const period = document.createRange();
+              period.setStart(headingNode, len - 1);
+              period.setEnd(headingNode, len);
+              contactPunctuationAttached = Math.abs(before.getBoundingClientRect().top - period.getBoundingClientRect().top) < 2;
+            }
+          }
+          const heroOverlay = hero?.matches(".client-home-hero") ? getComputedStyle(hero, "::before").backgroundColor : "";
           const bg = (el) => el ? getComputedStyle(el).backgroundColor : null;
           const bodyBackground = bg(document.body);
           const heroPhoto = hero ? getComputedStyle(hero).backgroundImage.includes("jkp-teollisuus-hero-asiakkaan-kuva.jpeg") : false;
@@ -48,13 +66,21 @@ try {
             title: document.title, h1: h1?.textContent?.trim() || "",
             images: all.map((im) => ({ src: im.currentSrc, loaded: im.complete && im.naturalWidth > 0, width: im.naturalWidth, height: im.naturalHeight })),
             rentalPhotos: photos.map((im) => ({ loaded: im.complete && im.naturalWidth > 0, width: im.naturalWidth, height: im.naturalHeight })),
+            servicePhotos: serviceImages.map((im) => ({ src: im.getAttribute("src"), loaded: im.complete && im.naturalWidth > 0 })),
+            servicePlaceholders: document.querySelectorAll(".home-image-placeholder").length,
+            referenceGalleryPhotos: document.querySelectorAll(".home-reference-gallery img").length,
+            heroOverlay,
+            separatedContactLinks: contactLinks.length === 2 && contactLinks[1].getBoundingClientRect().top > contactLinks[0].getBoundingClientRect().bottom,
+            contactHeadingFits: Boolean(contactHeading && contactHeading.scrollWidth <= contactHeading.clientWidth + 1),
+            contactPunctuationAttached,
             oldReferenceCount: document.body.innerText.includes("Kiipulasäätiö") ? 1 : 0,
             referencesPresent: route.endsWith("/referenssit") ? expectedReferences.map((s) => document.body.innerText.includes(s)) : [],
-            lviaPhases: route === "/lvia-valvonta" ? document.querySelectorAll(".lvia-phase").length : 0,
+            lviaPhases: (route === "/lvia-valvonta" || route === "/en/lvia-valvonta") ? document.querySelectorAll(".lvia-phase").length : 0,
           };
         }, { route, rentalImage, expectedReferences });
         result = { ...result, status: response?.status() ?? null, ...state, pageErrors };
-        await page.screenshot({ path: path.join(output, (route === "/" ? "home" : route.slice(1)) + "-" + size.width + ".png"), fullPage: false });
+        const wholeHome = (route === "/" || route === "/en") && (size.width === 390 || size.width === 1440);
+        await page.screenshot({ path: path.join(output, (route === "/" ? "home" : route.slice(1)) + "-" + size.width + ".png"), fullPage: wholeHome });
         if (result.status !== 200) errors.push(route + " " + size.width + ": status " + result.status);
         if (!result.hasDropdown) errors.push(route + " " + size.width + ": service dropdown missing");
         if ((route === "/vuokraus" || route === "/en/vuokraus") && result.forms !== 2) {
@@ -65,6 +91,17 @@ try {
         }
         if (route === "/referenssit" && !result.referencesPresent.every(Boolean)) errors.push(route + " " + size.width + ": customer project references missing");
         if (route === "/" && result.services !== 3) errors.push(route + " " + size.width + ": customer service image cards missing");
+        if (route === "/" || route === "/en") {
+          if (result.servicePhotos.length !== 3 || result.servicePhotos.some(p => !p.loaded) || result.servicePlaceholders) {
+            errors.push(route + " " + size.width + ": 3 approved service images must load without placeholders");
+          }
+          if (result.referenceGalleryPhotos !== 0) errors.push(route + " " + size.width + ": unapproved reference gallery exposed");
+          if (!result.separatedContactLinks) errors.push(route + " " + size.width + ": email and phone must be on separate lines");
+          if (!result.contactHeadingFits) errors.push(route + " " + size.width + ": contact heading overflows its column");
+          if (!result.contactPunctuationAttached) errors.push(route + " " + size.width + ": contact heading period wraps to its own line");
+          const expectedOverlay = size.width <= 640 ? "rgba(255, 255, 255, 0.7)" : "rgba(255, 255, 255, 0.62)";
+          if (result.heroOverlay !== expectedOverlay) errors.push(route + " " + size.width + ": unexpected hero overlay " + result.heroOverlay);
+        }
         if ((route === "/" || route === "/en") && (size.width === 390 || size.width === 1440)) {
           const menu = page.locator(".service-menu summary");
           await menu.click();

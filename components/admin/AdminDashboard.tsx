@@ -10,6 +10,10 @@ import {
 } from "react";
 import type { SiteContent } from "@/content/defaults";
 import { AdminMediaEditor } from "@/components/admin/AdminMediaEditor";
+import { MediaLibrarySelector } from "@/components/admin/MediaLibrarySelector";
+import { LviaContentEditor } from "@/components/admin/LviaContentEditor";
+import { RentalCopyEditor } from "@/components/admin/RentalCopyEditor";
+import { CompanyContentEditor, HomeCopyEditor, TechnicalContentEditor } from "@/components/admin/ContentEditors";
 import type {
   AdminReference,
   AdminRental,
@@ -24,7 +28,10 @@ type View =
   | "rentals"
   | "references"
   | "home-content"
+  | "company-content"
   | "tech-content"
+  | "lvia-content"
+  | "rental-content"
   | "contact-content"
   | "submissions"
   | "account";
@@ -231,16 +238,27 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [rentalData, referenceData, submissionData, contentData] = await Promise.all([
+      // Public-site editing is the essential module. A legacy reference archive
+      // or submission API outage must not prevent Jari from editing website copy.
+      const contentData = await api<SiteContent>("/api/admin/content");
+      setContent(contentData);
+      const [rentalResult, referenceResult, submissionResult] = await Promise.allSettled([
         api<{ items: AdminRental[] }>("/api/admin/rentals"),
         api<{ items: AdminReference[] }>("/api/admin/references"),
         api<{ items: AdminSubmission[] }>("/api/admin/submissions"),
-        api<SiteContent>("/api/admin/content"),
       ]);
-      setRentals(rentalData.items);
-      setReferences(referenceData.items);
-      setSubmissions(submissionData.items);
-      setContent(contentData);
+      if (rentalResult.status === "fulfilled") setRentals(rentalResult.value.items);
+      if (referenceResult.status === "fulfilled") setReferences(referenceResult.value.items);
+      if (submissionResult.status === "fulfilled") setSubmissions(submissionResult.value.items);
+      const failed = [rentalResult, referenceResult, submissionResult].filter((result) => result.status === "rejected");
+      if (failed.length) {
+        if (failed.some(result => result.status === "rejected" && (result.reason as ApiError)?.status === 401)) {
+          setSessionState("signed-out");
+          setUser(null);
+          return;
+        }
+        showNotice({ kind: "info", message: "Sisältöeditori toimii, mutta osa vuokraus- tai viestimoduuleista ei latautunut." });
+      }
     } catch (error) {
       const apiError = error as ApiError;
       if (apiError.status === 401) {
@@ -521,7 +539,10 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
     { section: "SISÄLTÖ", view: "rentals", label: "Vuokrakohteet", icon: "building" },
     { view: "references", label: "Referenssit", icon: "reference" },
     { section: "SIVUSTO", view: "home-content", label: "Etusivu", icon: "edit" },
+    { view: "company-content", label: "Yritys / Historia", icon: "edit" },
     { view: "tech-content", label: "Talotekniikka", icon: "edit" },
+    { view: "lvia-content", label: "LVIA-valvonta", icon: "edit" },
+    { view: "rental-content", label: "Vuokraussivun tekstit", icon: "edit" },
     { view: "contact-content", label: "Yhteystiedot", icon: "edit" },
     { section: "ASIOINTI", view: "submissions", label: "Lomakeviestit", icon: "inbox" },
     { section: "ASETUKSET", view: "account", label: "Oma tili", icon: "user" },
@@ -575,7 +596,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
               <div className={styles.statsGrid}>
                 <article><span>Julkaistut vuokrakohteet</span><strong>{publishedRentals}</strong><small>{rentals.length} kohdetta yhteensä</small></article>
                 <article><span>Uudet yhteydenotot</span><strong>{newSubmissions}</strong><small>{submissions.length} viestiä yhteensä</small></article>
-                <article><span>Julkaistut referenssit</span><strong>{references.filter((item) => item.publicationState === "published").length}</strong><small>{references.length} referenssiä yhteensä</small></article>
+                <article><span>Julkiset referenssit</span><strong>{content?.references.length ?? 0}</strong><small>Julkisella referenssisivulla</small></article>
               </div>
               <div className={styles.dashboardGrid}>
                 <section className={styles.panel}>
@@ -586,7 +607,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                   <div className={styles.panelHeading}><div><p className={styles.kicker}>PIKATOIMINNOT</p><h2>Yleisimmät tehtävät</h2></div></div>
                   <div className={styles.quickActions}>
                     <button onClick={() => { setRentalDraft(emptyRental()); navigate("rentals"); }}><Icon name="building" /><span><strong>Lisää vuokrakohde</strong><small>Luo uusi luonnos</small></span>→</button>
-                    <button onClick={() => { setReferenceDraft(emptyReference()); navigate("references"); }}><Icon name="reference" /><span><strong>Lisää referenssi</strong><small>Dokumentoi valmistunut projekti</small></span>→</button>
+                    <button onClick={() => { navigate("references"); }}><Icon name="reference" /><span><strong>Lisää referenssi</strong><small>Päivitä sivuston julkinen projektirivi</small></span>→</button>
                     <button onClick={() => navigate("home-content")}><Icon name="edit" /><span><strong>Muokkaa etusivua</strong><small>Päivitä pääviesti tai kuva</small></span>→</button>
                   </div>
                 </section>
@@ -621,9 +642,9 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             <section>
               <div className={styles.pageHeading}>
                 <div><p className={styles.kicker}>REFERENSSIT</p><h1>Referenssit</h1><p>Julkaise vain asiakkaan hyväksymät projektit ja kuvat.</p></div>
-                <button className={styles.primaryButton} onClick={() => setReferenceDraft(emptyReference())}><Icon name="plus" />Lisää referenssi</button>
+                <a className={styles.primaryButton} href="#jkp-public-references"><Icon name="plus" />Lisää projektirivi alla olevasta luettelosta</a>
               </div>
-              {content ? <form onSubmit={saveContent} className="admin-reference-master">
+              {content ? <form onSubmit={saveContent} className="admin-reference-master" id="jkp-public-references">
                 <h2>Asiakkaan julkinen referenssiluettelo</h2>
                 <p>Tämä luettelo näkyy suoraan sivuilla /referenssit ja /en/referenssit. Vahvista projektin tiedot ja julkaisulupa ennen tallennusta.</p>
                 {content.references.map((item, index) => (
@@ -652,6 +673,21 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                       value={item.imageUrl || ""}
                       onChange={event => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: event.target.value } : entry) } : current)}
                     /></label>
+                    <MediaLibrarySelector onSelect={url => setContent(current => current ? { ...current, references: current.references.map((entry,i) => i === index ? { ...entry, imageUrl: url } : entry) } : current)} />
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                      <button type="button" disabled={index === 0} onClick={() => setContent(current => {
+                        if (!current || index === 0) return current;
+                        const entries = [...current.references];
+                        [entries[index - 1], entries[index]] = [entries[index], entries[index - 1]];
+                        return { ...current, references: entries };
+                      })}>Siirrä ylemmäs ↑</button>
+                      <button type="button" disabled={index === content.references.length - 1} onClick={() => setContent(current => {
+                        if (!current || index >= current.references.length - 1) return current;
+                        const entries = [...current.references];
+                        [entries[index], entries[index + 1]] = [entries[index + 1], entries[index]];
+                        return { ...current, references: entries };
+                      })}>Siirrä alemmas ↓</button>
+                    </div>
                     <button type="button" onClick={() => {
                       if (!window.confirm("Poistetaanko tämä referenssi julkisesta luettelosta?")) return;
                       setContent(current => current ? { ...current, references: current.references.filter((_,i)=>i!==index) } : current);
@@ -663,17 +699,13 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                   <button className={styles.primaryButton} type="submit" disabled={loading}>Tallenna julkinen referenssiluettelo</button>
                 </div>
               </form> : null}
-              <div className={styles.cardGrid}>
-                {references.map((item) => <button className={styles.referenceCard} key={item.id} onClick={() => setReferenceDraft({ ...item })}>{item.imageUrl ? <img src={item.imageUrl} alt="" /> : <div className={styles.imagePlaceholder}>JKP</div>}<div><StatusBadge state={item.publicationState} /><h2>{item.title}</h2><p>{[item.category, item.location, item.year].filter(Boolean).join(" · ") || "Tiedot täydentämättä"}</p><small>{item.permissionConfirmed ? "Julkaisulupa vahvistettu" : "Julkaisulupa puuttuu"}</small></div></button>)}
-                {!references.length ? <div className={styles.emptyState}>Referenssejä ei ole vielä lisätty.</div> : null}
-              </div>
-            </section>
+                          </section>
           ) : null}
 
-          {(view === "home-content" || view === "tech-content" || view === "contact-content") && content ? (
+          {(view === "home-content" || view === "company-content" || view === "tech-content" || view === "lvia-content" || view === "rental-content" || view === "contact-content") && content ? (
             <form onSubmit={saveContent}>
               <div className={styles.pageHeading}>
-                <div><p className={styles.kicker}>SIVUSTON SISÄLTÖ</p><h1>{view === "home-content" ? "Etusivu" : view === "tech-content" ? "Talotekniikka" : "Yhteystiedot"}</h1><p>Muuta vain vahvistettuja tekstejä ja kuvia. Sivuston rakennetta ei voi rikkoa tästä näkymästä.</p></div>
+                <div><p className={styles.kicker}>SIVUSTON SISÄLTÖ</p><h1>{view === "home-content" ? "Etusivu" : view === "company-content" ? "Yritys ja historia" : view === "tech-content" ? "Talotekniikka" : view === "lvia-content" ? "LVIA-valvonta" : view === "rental-content" ? "Vuokraussivu" : "Yhteystiedot"}</h1><p>Muuta vain vahvistettuja tekstejä ja kuvia. Sivuston rakennetta ei voi rikkoa tästä näkymästä.</p></div>
                 <button className={styles.primaryButton} disabled={loading} type="submit">Tallenna muutokset</button>
               </div>
               <section className={styles.editorPanel}>
@@ -682,7 +714,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                     <Field label="Yläotsikko" wide><input value={content.hero.eyebrow} onChange={(e) => setContent({ ...content, hero: { ...content.hero, eyebrow: e.target.value } })} /></Field>
                     <Field label="Pääotsikko" wide><textarea rows={3} value={content.hero.title} onChange={(e) => setContent({ ...content, hero: { ...content.hero, title: e.target.value } })} /></Field>
                     <Field label="Ingressi" wide><textarea rows={4} value={content.hero.lead} onChange={(e) => setContent({ ...content, hero: { ...content.hero, lead: e.target.value } })} /></Field>
-                    <Field label="Hero-kuva" hint="JPEG, PNG tai WebP. Kuva muunnetaan automaattisesti WebP-muotoon." wide><div className={styles.imageField}>{content.hero.imageUrl ? <img src={content.hero.imageUrl} alt="Nykyinen hero" /> : <span>Ei kuvaa</span>}<label className={styles.uploadButton}><Icon name="upload" />Vaihda kuva<input hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void (async () => { const file = event.target.files?.[0]; if (!file) return; try { setLoading(true); const url = await uploadImage(file, "site"); setContent({ ...content, hero: { ...content.hero, imageUrl: url } }); showNotice({ kind: "info", message: "Kuva ladattiin. Tallenna muutokset julkaistaksesi sen." }); } catch (error) { showNotice({ kind: "error", message: (error as Error).message }); } finally { setLoading(false); } })()} /></label></div></Field>
+                    <Field label="Hero-kuva" hint="JPEG, PNG tai WebP. Kuva muunnetaan automaattisesti WebP-muotoon." wide><div className={styles.imageField}>{content.hero.imageUrl ? <img src={content.hero.imageUrl} alt="Nykyinen hero" /> : <span>Ei kuvaa</span>}<label className={styles.uploadButton}><Icon name="upload" />Vaihda kuva<input hidden type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void (async () => { const file = event.target.files?.[0]; if (!file) return; try { setLoading(true); const url = await uploadImage(file, "site"); setContent({ ...content, hero: { ...content.hero, imageUrl: url } }); showNotice({ kind: "info", message: "Kuva ladattiin. Tallenna muutokset julkaistaksesi sen." }); } catch (error) { showNotice({ kind: "error", message: (error as Error).message }); } finally { setLoading(false); } })()} /></label><MediaLibrarySelector onSelect={url => setContent(current => current ? { ...current, hero: { ...current.hero, imageUrl: url } } : current)} /></div></Field>
                   </div></div>
                   <AdminMediaEditor
                     scope="home"
@@ -690,15 +722,18 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                     onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
                     upload={uploadImage}
                   />
-                  <div className={styles.editorSection}><p className={styles.kicker}>YRITYSESITTELY</p><h2>Yrityksestä</h2><div className={styles.formGrid}><Field label="Otsikko" wide><input value={content.about.title} onChange={(e) => setContent({ ...content, about: { ...content.about, title: e.target.value } })} /></Field><Field label="Esittelyteksti" wide><textarea rows={6} value={content.about.body} onChange={(e) => setContent({ ...content, about: { ...content.about, body: e.target.value } })} /></Field></div></div>
+                  <HomeCopyEditor content={content} onChange={setContent} />
                 </> : null}
+                {view === "company-content" ? <><CompanyContentEditor content={content} onChange={setContent} /><AdminMediaEditor scope="company" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} /></> : null}
                 {view === "tech-content" ? <AdminMediaEditor
                   scope="tech"
                   media={content.media}
                   onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
                   upload={uploadImage}
                 /> : null}
-                {view === "tech-content" ? <div className={styles.editorSection}><p className={styles.kicker}>PALVELUT</p><h2>Talotekniikan palvelut</h2><div className={styles.serviceEditor}>{content.services.map((service, index) => <div key={index}><span>{String(index + 1).padStart(2, "0")}</span><Field label="Palvelun nimi"><input value={service.title} onChange={(e) => { const services = content.services.map((item, itemIndex) => itemIndex === index ? { ...item, title: e.target.value } : item); setContent({ ...content, services }); }} /></Field><Field label="Kuvaus" wide><textarea rows={4} value={service.description} onChange={(e) => { const services = content.services.map((item, itemIndex) => itemIndex === index ? { ...item, description: e.target.value } : item); setContent({ ...content, services }); }} /></Field></div>)}</div></div> : null}
+                {view === "tech-content" ? <TechnicalContentEditor content={content} onChange={setContent} /> : null}
+                {view === "lvia-content" ? <LviaContentEditor content={content} onChange={setContent} /> : null}
+                {view === "rental-content" ? <RentalCopyEditor content={content} onChange={setContent} /> : null}
                 {view === "contact-content" ? <>
                   <AdminMediaEditor scope="contact" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} />
                   <div className={styles.editorSection}><p className={styles.kicker}>YRITYSTIEDOT</p><h2>Yhteystiedot</h2><div className={styles.formGrid}><Field label="Yrityksen nimi"><input value={content.company.name} onChange={(e) => setContent({ ...content, company: { ...content.company, name: e.target.value } })} /></Field><Field label="Sähköposti"><input type="email" value={content.company.email} onChange={(e) => setContent({ ...content, company: { ...content.company, email: e.target.value } })} /></Field><Field label="Puhelin"><input value={content.company.phone} onChange={(e) => setContent({ ...content, company: { ...content.company, phone: e.target.value } })} /></Field><Field label="Toiminta-alue"><input value={content.company.area} onChange={(e) => setContent({ ...content, company: { ...content.company, area: e.target.value } })} /></Field></div></div>

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import type { SiteContent } from "@/content/defaults";
+import { MediaLibrarySelector } from "@/components/admin/MediaLibrarySelector";
 
 type Media = SiteContent["media"];
 type Slot = { key: string; label: string; value: string; update: (url: string) => Media };
@@ -8,7 +9,7 @@ type Slot = { key: string; label: string; value: string; update: (url: string) =
 export function AdminMediaEditor({
   scope, media, onChange, upload,
 }: {
-  scope: "home" | "tech" | "contact";
+  scope: "home" | "tech" | "company" | "contact";
   media: Media;
   onChange: (media: Media) => void;
   upload: (file: File, folder: string) => Promise<string>;
@@ -36,11 +37,21 @@ export function AdminMediaEditor({
       value: media.referenceImages[index] || "",
       update: url => {
         const referenceImages = [...media.referenceImages];
+        const previousUrl = referenceImages[index] || "";
         referenceImages[index] = url;
-        return { ...media, referenceImages };
+        // Switching or removing a photo revokes its previous approval.
+        const approvedReferenceImageUrls = previousUrl && previousUrl !== url
+          ? (media.approvedReferenceImageUrls || []).filter(approved => approved !== previousUrl)
+          : (media.approvedReferenceImageUrls || []);
+        return { ...media, referenceImages, approvedReferenceImageUrls };
       },
     }));
   }
+  if (scope === "company") slots.push({
+    key: "company", label: "Yritys-sivun kuvituskuva",
+    value: media.companyImageUrl,
+    update: url => ({ ...media, companyImageUrl: url }),
+  });
   if (scope === "tech") slots.push({
     key: "technical", label: "Talotekniikan yläosan esimerkkikuva",
     value: media.technicalImageUrl, update: url => ({ ...media, technicalImageUrl: url }),
@@ -51,7 +62,7 @@ export function AdminMediaEditor({
   });
 
   return <section className="admin-media-editor">
-    <h2>{scope === "tech" ? "Talotekniikan kuva" : scope === "contact" ? "Yhteystietojen kuva" : "Etusivun vaihdettavat kuvat"}</h2>
+    <h2>{scope === "tech" ? "Talotekniikan kuva" : scope === "company" ? "Yritys-sivun kuva" : scope === "contact" ? "Yhteystietojen kuva" : "Etusivun vaihdettavat kuvat"}</h2>
     <p>Valitse asiakkaan hyväksymä JPEG-, PNG- tai WebP-kuva. Lataa kuva, ja paina sen jälkeen sivun Tallenna muutokset -painiketta.</p>
     <div className="admin-media-grid">
       {slots.map(slot => <div className="admin-media-field" key={slot.key}>
@@ -72,6 +83,20 @@ export function AdminMediaEditor({
               .finally(() => setBusy(""));
           }} />
         </label>
+        <MediaLibrarySelector onSelect={url => onChange(slot.update(url))} />
+        {slot.key.startsWith("reference-") && slot.value ? <label className="admin-media-approval">
+          <input
+            type="checkbox"
+            checked={(media.approvedReferenceImageUrls || []).includes(slot.value)}
+            onChange={event => {
+              const currentlyApproved = media.approvedReferenceImageUrls || [];
+              onChange({ ...media, approvedReferenceImageUrls: event.target.checked
+                ? [...new Set([...currentlyApproved, slot.value])]
+                : currentlyApproved.filter(url => url !== slot.value) });
+            }}
+          />
+          Julkaisulupa vahvistettu asiakkaalta Villen kautta tälle kuvalle.
+        </label> : null}
         {slot.value && <button type="button" className="admin-media-remove" onClick={() => onChange(slot.update(""))}>Poista kuva</button>}
       </div>)}
     </div>

@@ -4,17 +4,21 @@ import type { SiteContent } from "@/content/defaults";
 export function HomeSections({ content, locale = "fi" }: { content: SiteContent; locale?: "fi" | "en" }) {
   const en = locale === "en";
   const prefix = en ? "/en" : "";
+  const homeCopy = en ? content.homeCopy.en : content.homeCopy.fi;
   const tiles = [
-    { slug: "talotekniikka", title: en ? "Building services project management" : "Talotekniikan rakennuttamispalvelut" },
-    { slug: "lvia-valvonta", title: en ? "Supervision services" : "Valvontapalvelut" },
-    { slug: "vuokraus", title: en ? "Property rental" : "Vuokrauspalvelut" },
+    { slug: "talotekniikka", title: homeCopy.tiles[0] },
+    { slug: "lvia-valvonta", title: homeCopy.tiles[1] },
+    { slug: "vuokraus", title: homeCopy.tiles[2] },
   ];
-  const gallery = content.media.referenceImages.filter(Boolean);
+  // Media presence does not prove publication rights. Show only photos explicitly approved in CMS.
+  const approvedReferenceImages = new Set(Array.isArray(content.media.approvedReferenceImageUrls)
+    ? content.media.approvedReferenceImageUrls : []);
+  const gallery = content.media.referenceImages.filter(src => Boolean(src) && approvedReferenceImages.has(src));
   return (
     <>
       <section className="section home-service-section" id={en ? "services" : "palvelut"}>
         <div className="shell">
-          <h2 className="home-service-heading">{en ? "BUILDING SERVICES PROJECT MANAGEMENT AND SUPERVISION — YEARS OF EXPERIENCE" : "TALOTEKNIIKAN RAKENNUTTAMIS- JA VALVONTATEHTÄVIÄ VUOSIEN KOKEMUKSELLA"}</h2>
+          <h2 className="home-service-heading">{homeCopy.serviceHeading}</h2>
           <div className="home-service-grid">
             {tiles.map((tile, index) => (
               <Link className="home-service-tile" href={`${prefix}/${tile.slug}`} key={tile.slug}>
@@ -31,7 +35,7 @@ export function HomeSections({ content, locale = "fi" }: { content: SiteContent;
       </section>
       <section className="section home-references-section">
         <div className="shell">
-          <div className="home-reference-heading"><h2>{en ? "References" : "Referenssejä"}</h2><Link href={`${prefix}/referenssit`}>{en ? "View the project reference list" : "Katso referenssiluettelo"} →</Link></div>
+          <div className="home-reference-heading"><h2>{homeCopy.referenceHeading}</h2><Link href={`${prefix}/referenssit`}>{en ? "View the project reference list" : "Katso referenssiluettelo"} →</Link></div>
           {gallery.length ? (
             <div className="home-reference-gallery">{gallery.map((src, index) => <Link href={`${prefix}/referenssit`} key={index}><img src={src} alt={en ? `JKP Group project reference photo ${index + 1}` : `JKP Groupin referenssikuva ${index + 1}`} loading="lazy" /></Link>)}</div>
           ) : (
