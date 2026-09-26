@@ -79,6 +79,19 @@ export function AdminMediaEditor({
           }} />
         </label>
         <MediaLibrarySelector onSelect={url => onChange(slot.update(url))} />
+        {slot.key.startsWith("reference-") && slot.value ? <label className="admin-media-approval">
+          <input
+            type="checkbox"
+            checked={(media.approvedReferenceImageUrls || []).includes(slot.value)}
+            onChange={event => {
+              const currentlyApproved = media.approvedReferenceImageUrls || [];
+              onChange({ ...media, approvedReferenceImageUrls: event.target.checked
+                ? [...new Set([...currentlyApproved, slot.value])]
+                : currentlyApproved.filter(url => url !== slot.value) });
+            }}
+          />
+          Julkaisulupa vahvistettu asiakkaalta Villen kautta tälle kuvalle.
+        </label> : null}
         {slot.value && <button type="button" className="admin-media-remove" onClick={() => onChange(slot.update(""))}>Poista kuva</button>}
       </div>)}
     </div>
