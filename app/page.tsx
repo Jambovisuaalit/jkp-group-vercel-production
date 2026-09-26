@@ -22,7 +22,7 @@ export default async function HomePage() {
     <>
       <Header email={content.company.email} variant="light" />
       <main>
-        <section className="hero client-home-hero" style={{ backgroundImage: `linear-gradient(rgba(255,255,255,.79),rgba(255,255,255,.79)),url("${content.hero.imageUrl || "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg"}")` }}>
+        <section className="hero client-home-hero" style={{ backgroundImage: `url("${content.hero.imageUrl || "/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg"}")` }}>
           <div className="shell client-home-hero-inner">
             <div className="client-home-hero-copy">
               <p className="client-home-company">{content.hero.eyebrow}</p>
@@ -46,8 +46,10 @@ export default async function HomePage() {
               <h2>{content.contact.title}</h2>
               <p>{content.contact.body}</p>
               {content.media.contactImageUrl ? <img className="home-contact-image" src={content.media.contactImageUrl} alt="JKP Groupin yhteyshenkilö" loading="lazy" /> : null}
-              <a className="contact-email" href={`mailto:${content.company.email}`}>{content.company.email}</a>
-              {content.company.phone ? <a className="contact-email" href={`tel:${content.company.phone.replace(/\s/g, "")}`}>{content.company.phone}</a> : null}
+              <address className="home-contact-details">
+                <a className="contact-email" href={`mailto:${content.company.email}`}>{content.company.email}</a>
+                {content.company.phone ? <a className="contact-email" href={`tel:${content.company.phone.replace(/\s/g, "")}`}>{content.company.phone}</a> : null}
+              </address>
             </div>
             <ContactForm />
           </div>
