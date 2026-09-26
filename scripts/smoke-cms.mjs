@@ -5,7 +5,7 @@ const base = process.env.JKP_BASE_URL || "http://127.0.0.1:3100";
 const use = [
   ["app/page.tsx", ["content.hero.title", "content.hero.lead", "content.hero.imageUrl", "HomeSections content={content}"]],
   ["app/en/page.tsx", ["content.heroEn.title", "content.heroEn.lead", "content.contactEn"]],
-  ["components/HomeSections.tsx", ["content.homeCopy.fi", "content.homeCopy.en", "content.media.serviceImages", "content.media.referenceImages"]],
+  ["components/HomeSections.tsx", ["content.homeCopy.fi", "content.homeCopy.en", "content.media.serviceImages", "content.media.referenceImages", "approvedReferenceImageUrls"]],
   ["app/yritys/page.tsx", ["content.companyPage.fi.title", "content.companyPage.fi.intro", "content.companyPage.fi.history"]],
   ["app/en/yritys/page.tsx", ["content.companyPage.en.title", "content.companyPage.en.intro", "content.companyPage.en.history"]],
   ["app/talotekniikka/page.tsx", ["content.technicalPage.fi.title", "content.technicalPage.fi.phases"]],
