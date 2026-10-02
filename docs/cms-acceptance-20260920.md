@@ -20,6 +20,6 @@
 
 ## HOLD
 
-Asiakkaan 1992/1993/1995-vuosilukujen sanamuodot, referenssikuvien julkaisu-/käyttöluvat sekä yhteydenoton hyväksytty kuva tai nimenomainen kuvattomuuspäätös odottavat Jaria. Hyväksyttyä kuvallista Rouhento-inspiroitua designia ei muuteta.
+Jari vahvisti 27.9.2026 vuoden 1993, kaikkien yhdeksän referenssikuvan yleisen julkaisuluvan sekä yhteydenotto-osion ilman kuvaa. Sisältöasiat on ratkaistu; admin-/lomaketestit ja lopullinen sivustohyväksyntä ovat erillisiä portteja. Hyväksyttyä kuvallista Rouhento-inspiroitua designia ei muuteta.
 
 **Automatisoidut static/CI-testit eivät korvaa kohtia 1–8:** ne eivät käytä Jarin tunnuksia, kirjoita tuotannon Supabaseen tai todista sähköpostin perillemenoa.

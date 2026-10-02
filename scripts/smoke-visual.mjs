@@ -95,7 +95,7 @@ try {
           if (result.servicePhotos.length !== 3 || result.servicePhotos.some(p => !p.loaded) || result.servicePlaceholders) {
             errors.push(route + " " + size.width + ": 3 approved service images must load without placeholders");
           }
-          if (result.referenceGalleryPhotos !== 0) errors.push(route + " " + size.width + ": unapproved reference gallery exposed");
+          if (result.referenceGalleryPhotos !== 9) errors.push(route + " " + size.width + ": expected nine approved reference photos");
           if (!result.separatedContactLinks) errors.push(route + " " + size.width + ": email and phone must be on separate lines");
           if (!result.contactHeadingFits) errors.push(route + " " + size.width + ": contact heading overflows its column");
           if (!result.contactPunctuationAttached) errors.push(route + " " + size.width + ": contact heading period wraps to its own line");

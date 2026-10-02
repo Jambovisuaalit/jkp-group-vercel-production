@@ -31,6 +31,8 @@ export type TechnicalPageCopy = {
 };
 
 export type SiteContent = {
+  /** Version of the client-confirmed corrections applied to legacy CMS content. */
+  clientConfirmationVersion?: number;
   company: {
     name: string;
     email: string;
@@ -84,6 +86,7 @@ export type SiteContent = {
 };
 
 export const defaultContent: SiteContent = {
+  clientConfirmationVersion: 1,
   company: {
     name: "JKP Group Oy",
     email: "jari.koskela@jkpgroup.fi",
@@ -104,14 +107,14 @@ export const defaultContent: SiteContent = {
   },
   companyPage: {
     fi: { title: "Palvelua vuosien kokemuksella.", intro: ["Tavoitteenamme on löytää asiakkaalle edulliset ja nykyaikaiset kokonaisratkaisut. Selvitämme aina ensin asiakkaan tarpeet ja pyrimme löytämään hyvän kokonaisvaltaisen lopputuloksen kohtuullisin kustannuksin.","Otamme huomioon kiinteistön elinkaarivaatimukset ja ympäristötaloudellisuuden. Panostamme avoimuuteen, luotettavuuteen ja rehellisyyteen.","Tämän päivän muuttuva maailma tuo jatkuvasti mukanaan uusia haasteita, joihin vastaamme mukautumiskyvyllämme ja aikaa seuraamalla. Toimintamme perustuu kannattavuuteen, ja siksi kehitämme jatkuvasti uusia suunnittelu- ja toimintamalleja."], historyTitle: "Historia", history: [
-  { era: "Alkuvaiheet", texts: ["Toiminta alkoi nimellä LVI-insinööritoimisto Mikroplast Oy. Liiketoimintakaupan myötä nimi muuttui myöhemmin JKP Group Oy:ksi."] },
+  { era: "1993", texts: ["Toiminta alkoi vuonna 1993 nimellä LVI-insinööritoimisto Mikroplast Oy. Liiketoimintakaupan myötä nimi muuttui myöhemmin JKP Group Oy:ksi."] },
   { era: "1990-luku", texts: ["Olimme mukana LVI-urakoinnissa ja toteutimme KVR-kohteita avaimet käteen -periaatteella. Projektikohteiden asennustöitä hoidettiin alihankintana; omaan työhön kuuluivat suunnittelu, dokumentointi ja projektinjohto.", "Kohteita olivat asuntotuotanto sekä liike-, toimitila- ja pk-teollinen rakentaminen. Näissä hankkeissa karttui käytännön osaamista kokonaistaloudellisten ratkaisujen löytämiseen."] },
   { era: "2000-luku", texts: ["LVI-suunnittelutöiden kysynnän kasvaessa KVR-hankkeet jäivät pois. Toiminta keskittyi LVI-suunnitteluun ja konsultointiin: suunnitteluun, valvontaan, selvityksiin ja kuntoarvioihin.", "Kohteet kattoivat asuntotuotantoa, liike- ja teollista rakentamista sekä julkishallinnollisia uudis- ja saneerauskohteita."] },
   { era: "2010-luku", texts: ["Liiketoimintakaupan myötä toiminta jatkui lähinnä omien liike- ja toimitilojen vuokraamisella ja niihin tehtävillä asiakasmuutoksilla."] },
   { era: "2016 ja sen jälkeen", texts: ["Perustimme yhdessä Fimpec Oy:n kanssa Fimpec Talotekniikka Oy:n, jossa osuutemme oli 20 %. Emoyhtiön yrityskauppojen myötä myimme osuutemme ja jatkoimme yhteistyötä Fimpec Oy:n kanssa.", "Tänä aikana toiminnan painopisteenä olivat rakennuttamis- ja valvontatehtävät. Myös suurteollisuuden hankkeet tulivat mukaan."] },
 ] },
     en: { title: "Service backed by years of experience.", intro: ["Our aim is to find affordable, modern solutions for customers. We begin by understanding their needs and seek a comprehensive result at a reasonable cost.","We consider the property's lifecycle requirements and environmental economics. Openness, reliability and honesty are central to how we work.","We respond to a changing world by adapting and following developments. We continually improve our planning and operating methods while maintaining profitable operations."], historyTitle: "History", history: [
-  { era: "Origins", texts: ["The business began under the name LVI-insinööritoimisto Mikroplast Oy and later became JKP Group Oy following a business transaction."] },
+  { era: "1993", texts: ["The business began in 1993 under the name LVI-insinööritoimisto Mikroplast Oy and later became JKP Group Oy following a business transaction."] },
   { era: "1990s", texts: ["We carried out turnkey HVAC contracting in housing, commercial premises and smaller industrial construction. Installation work was handled by subcontractors, while our own work included design, documentation and project management.", "This contracting experience provided practical knowledge of cost-efficient overall solutions."] },
   { era: "2000s", texts: ["As demand for HVAC design grew, turnkey contracting was phased out and the business focused on HVAC design, consulting, supervision, studies and condition assessments.", "Projects included housing, commercial, industrial and public-sector buildings, covering both new-build and renovation work."] },
   { era: "2010s", texts: ["Following a business transaction, operations focused primarily on renting our own commercial premises and making customer-specific alterations to them."] },
@@ -288,8 +291,9 @@ export const defaultContent: SiteContent = {
       "/images/jkp-pdf-reference-08.jpg",
       "/images/jkp-pdf-reference-09.jpg",
     ],
-    // The nine customer-PDF photos are media assets, not automatically publication-approved.
-    approvedReferenceImageUrls: [],
+    // Jari confirmed all nine photos for a general reference gallery on 2026-09-27.
+    approvedReferenceImageUrls: Array.from({ length: 9 }, (_, index) =>
+      `/images/jkp-pdf-reference-${String(index + 1).padStart(2, "0")}.jpg`),
     contactImageUrl: "",
     imageSlotsVersion: 1,
   },

@@ -32,7 +32,7 @@ const pages = [
   ["/", ["Toimivaa talotekniikkaa vuodesta 1993", "TALOTEKNIIKAN RAKENNUTTAMIS"]],
   ["/en", ["Functional building services since 1993", "BUILDING SERVICES PROJECT"]],
   ["/yritys", ["Palvelua vuosien kokemuksella", "1990-luku", "2016 ja sen jälkeen"]],
-  ["/en/yritys", ["Service backed by years of experience", "Origins", "2016 onwards"]],
+  ["/en/yritys", ["Service backed by years of experience", "1993", "2016 onwards"]],
   ["/talotekniikka", ["Suunnittelijoiden ja urakoitsijoiden valinta ja ohjaus"]],
   ["/en/talotekniikka", ["Selection and management of designers and contractors"]],
   ["/lvia-valvonta", ["Suunnitelmat ja toteutettavuus", "Vastaanotto ja takuuaika"]],

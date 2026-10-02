@@ -33,7 +33,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     email: "jari.koskela@jkpgroup.fi",
     telephone: "+358500689855",
     areaServed: "Keski-Suomi",
-    foundingDate: "1993-05-12",
+    foundingDate: "1993",
     identifier: "0923519-9",
     employee: { "@type": "Person", name: "Jari Koskela", jobTitle: "Toimitusjohtaja" },
   };
