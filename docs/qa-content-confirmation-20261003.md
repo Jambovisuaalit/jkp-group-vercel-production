@@ -22,6 +22,16 @@ Testit ajettiin DATA_BACKEND=static-tilassa. Tämä ei todista oikean tietokanna
 kirjautuneen adminin tai sähköpostitoimituksen toimintaa. Paikallinen Node 24.19;
 repositoryn CI käyttää Node 22:ta. Selain-QA: Chromium 134 / Playwright 1.51.1.
 
+## Live release audit — 3.10.2026
+
+- Authoritative release: `Jambovisuaalit/jkp-group-vercel-production`, PR #5, branch `release/customer-final-20260920`.
+- Ennen tätä audit-commitia release-head `e6b19dd7fb14b445fc99a1c9c92ac5f166abe33f`; molemmat head-kohtaiset GitHub Actions -ajot PASS.
+- Vercelin viimeisin READY deployment käyttää vanhaa commitia `d3181143a6d857ef4577e0cfbf707716dccbd0c6`; exact-head deploy on siksi edelleen release-gate.
+- Supabase `jkp-group-production` on ACTIVE_HEALTHY. Varmennettu: yksi `jkp_site_content`-rivi, ei julkaistuja vuokrakohteita, ei lomaketestijäämiä, yksi aktiivinen admin-rivi ja `jkp-media` private.
+- Resend-domain `jkpgroup.fi` on edelleen FAILED; DKIM TXT sekä `send`-aliverkkotunnuksen SPF MX/TXT eivät ole varmennettuja. Lomakkeiden sähköpostitoimitusta ei merkitä PASS ennen DNS-korjausta ja oikeaa toimitustestiä.
+- Jari vahvisti 27.9.: vuosi vain 1993, yhdeksän kuvaa yleiseen referenssigalleriaan ja yhteydenotto ilman kuvaa. 2.10. Jari kysyi etenemisestä; lopullista hyväksyntää ajantasaiselle exact-head previewlle ei ole vielä pyydetty.
+- Production/mainia ei muuteta ennen alla olevia portteja.
+
 ## Jäljellä ennen julkaisua
 - Samalle commitille READY-esikatselu ja vihreät GitHub Actions -ajot.
 - Adminin kirjautuminen, tekstin/kuvan/referenssin tallennus, julkinen FI/EN-luku ja palautus.
