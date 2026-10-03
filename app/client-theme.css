@@ -77,15 +77,24 @@ select:focus-visible { outline-color: rgba(121, 199, 242, 0.55); }
   min-height: 530px;
   padding: 0;
   color: #24333b;
-  background-image: linear-gradient(rgba(255,255,255,.79), rgba(255,255,255,.79)), url("/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg");
+  background-image: url("/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg");
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
   overflow: hidden;
 }
-.hero.client-home-hero::before { display: none; }
+.hero.client-home-hero::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, .62);
+  pointer-events: none;
+  z-index: 0;
+}
 .client-home-hero-inner {
   position: relative;
+  z-index: 1;
   display: flex;
   min-height: 530px;
   justify-content: center;

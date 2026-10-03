@@ -7,29 +7,9 @@ import {
   isSupabaseConfigured,
 } from "@/lib/supabase/admin";
 
-const CONTENT_KEY = "main";
+import { mergeContent } from "@/lib/content-merge";
 
-function mergeContent(base: SiteContent, incoming: Partial<SiteContent>): SiteContent {
-  return {
-    ...base,
-    ...incoming,
-    company: { ...base.company, ...incoming.company },
-    hero: { ...base.hero, ...incoming.hero },
-    about: { ...base.about, ...incoming.about },
-    rental: { ...base.rental, ...incoming.rental },
-    contact: { ...base.contact, ...incoming.contact },
-    references: Array.isArray(incoming.references) ? incoming.references : base.references,
-    media: {
-      ...base.media, ...incoming.media,
-      serviceImages: Array.isArray(incoming.media?.serviceImages)
-        ? incoming.media.serviceImages : base.media.serviceImages,
-      referenceImages: Array.isArray(incoming.media?.referenceImages)
-        ? incoming.media.referenceImages : base.media.referenceImages,
-    },
-    businessAreas: incoming.businessAreas?.length ? incoming.businessAreas : base.businessAreas,
-    services: incoming.services?.length ? incoming.services : base.services,
-  };
-}
+const CONTENT_KEY = "main";
 
 export async function getSiteContent(): Promise<SiteContent> {
   if (!isSupabaseBackendEnabled()) return defaultContent;
@@ -65,7 +45,10 @@ export async function saveSiteContent(content: SiteContent): Promise<void> {
 
   const { error } = await supabase
     .from("jkp_site_content")
-    .upsert({ key: CONTENT_KEY, content }, { onConflict: "key" });
+    .upsert({
+      key: CONTENT_KEY,
+      content: { ...content, media: { ...content.media, imageSlotsVersion: 1 } },
+    }, { onConflict: "key" });
 
   if (error) throw new Error("Sisällön tallennus Supabaseen epäonnistui.");
 }

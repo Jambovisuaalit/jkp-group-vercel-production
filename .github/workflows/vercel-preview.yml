@@ -1,0 +1,75 @@
+name: JKP exact-SHA Vercel preview
+
+on:
+  push:
+    branches:
+      - release/customer-final-20260920
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  VERCEL_ORG_ID: team_zwsvoePoiBeskRuyl2Iar883
+  VERCEL_PROJECT_ID: prj_6R2VNoedHvdLR9wmbkMvLd70nWFe
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Verify Vercel token is configured
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Repository secret VERCEL_TOKEN is missing."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@59.25.4
+
+      - name: Pull preview environment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
+
+      - name: Build exact commit
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token="$VERCEL_TOKEN"
+
+      - name: Deploy exact commit as preview
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          URL="$(vercel deploy --prebuilt --token="$VERCEL_TOKEN")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          {
+            echo "## JKP exact-SHA preview"
+            echo ""
+            echo "- Commit: \`${GITHUB_SHA}\`"
+            echo "- Preview: $URL"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify deployment metadata
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel inspect "${{ steps.deploy.outputs.url }}" --token="$VERCEL_TOKEN"

@@ -5,7 +5,9 @@ import "./client-theme.css";
 import "./home-mobile-fix.css";
 import "./content-finish.css";
 import "./customer-p0.css";
+import "./customer-company.css";
 
+// Release audit trigger 2026-10-03: no runtime behavior change.
 const PRODUCTION_URL = "https://www.jkpgroup.fi";
 const PREVIEW_FALLBACK_URL = "https://jkp-group-asiakas.vercel.app";
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -32,7 +34,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     email: "jari.koskela@jkpgroup.fi",
     telephone: "+358500689855",
     areaServed: "Keski-Suomi",
-    foundingDate: "1993-05-12",
+    foundingDate: "1993",
     identifier: "0923519-9",
     employee: { "@type": "Person", name: "Jari Koskela", jobTitle: "Toimitusjohtaja" },
   };

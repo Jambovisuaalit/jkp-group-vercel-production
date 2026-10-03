@@ -32,10 +32,11 @@
   .hero.client-home-hero {
     min-height: 565px;
     padding: 0;
-    background-image: linear-gradient(rgba(255,255,255,.82),rgba(255,255,255,.82)),url("/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg");
+    background-image: url("/images/jkp-teollisuus-hero-asiakkaan-kuva.jpeg");
     background-position: 55% center;
     background-size: cover;
   }
+  .hero.client-home-hero::before { background: rgba(255, 255, 255, .70); }
   .client-home-hero-inner { min-height: 565px; }
   .client-home-hero-copy { padding: 54px 0; }
   .client-home-company { font-size: 24px; letter-spacing: .06em; }

@@ -111,6 +111,8 @@
 .admin-media-field { display: grid; align-content: start; gap: 10px; min-width: 0; }
 .admin-media-field strong { font-size: 14px; line-height: 1.4; }
 .admin-media-field > img { width: 100%; height: 140px; object-fit: cover; background: #f3f7fa; }
+.admin-media-approval { display: flex; align-items: flex-start; gap: 9px; font: 500 12px/1.5 Arial,Helvetica,sans-serif; color: #243e4b; cursor: pointer; }
+.admin-media-approval input { width: 16px; height: 16px; flex: 0 0 16px; margin-top: 1px; accent-color: #225f79; }
 .admin-media-empty { display: grid; place-items: center; min-height: 140px; background: #f3f7fa; color: #526b7a; font-size: 13px; }
 .admin-media-button { display: block; position: relative; padding: 9px 13px; background: #225f79; color: white; cursor: pointer; text-align: center; }
 .admin-media-button input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
@@ -139,4 +141,72 @@
     box-sizing: border-box;
     z-index: 300;
   }
+}
+
+/* Customer company PDF: quiet white editorial presentation; no new design system. */
+.company-hero { background: #fff; color: #123750; padding-block: clamp(55px, 7vw, 100px); }
+.company-hero h1 { font: 600 clamp(37px, 5vw, 70px)/1.1 Arial, Helvetica, sans-serif; color: #123750; }
+.company-hero p:not(.eyebrow) { max-width: 680px; color: #526b7a; }
+.company-profile, .company-history { background: #fff; }
+.company-profile-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 5vw, 90px); align-items: start; }
+.company-profile-text h2, .company-history h2 { color: #123750; font: 600 clamp(29px, 3vw, 45px)/1.18 Arial, Helvetica, sans-serif; margin: 14px 0 24px; }
+.company-profile-text p:not(.eyebrow), .company-history p { color: #526b7a; font-size: 16px; line-height: 1.76; margin: 0 0 16px; }
+.company-profile-image { background: #f3f7fa; overflow: hidden; }
+.company-profile-image img { display: block; width: 100%; height: auto; max-height: 475px; object-fit: cover; }
+.company-history-list { margin-bottom: 38px; }
+.company-history-item { display: grid; grid-template-columns: minmax(140px, .33fr) 1fr; gap: clamp(25px, 5vw, 80px); padding: 34px 0; border-top: 1px solid rgba(18,55,80,.14); }
+.company-history-item:last-child { border-bottom: 1px solid rgba(18,55,80,.14); }
+.company-history-item h3 { margin: 0; color: #123750; font: 600 clamp(22px,2vw,29px)/1.22 Arial,Helvetica,sans-serif; }
+@media (max-width: 760px) {
+  .company-profile-grid, .company-history-item { grid-template-columns: 1fr; }
+  .company-history-item { gap: 18px; }
+  .company-profile-image img { max-height: 340px; }
+}
+
+
+/* JKP approved-homepoint corrections: contact links and form readability. */
+.home-contact-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 25px;
+  font-style: normal;
+}
+.home-contact-details .contact-email {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.contact-section .contact-grid { gap: clamp(30px, 5vw, 82px); }
+.contact-section .contact-grid > * { min-width: 0; }
+.contact-section .contact-grid > div h2 {
+  max-width: 100%;
+  font-size: clamp(32px, 3vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.contact-section .contact-form {
+  padding: clamp(24px, 3vw, 38px);
+  box-shadow: 0 18px 42px rgba(18, 55, 80, .07);
+}
+.contact-section .contact-form .form-row > label { min-width: 0; }
+.contact-section .contact-form label { font-size: 12px; line-height: 1.4; }
+.contact-section .contact-form input:not([type="checkbox"]),
+.contact-section .contact-form select { min-height: 46px; }
+.contact-section .contact-form .privacy-row {
+  margin-top: 20px;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.contact-section .contact-form .button-submit { min-height: 46px; }
+@media (max-width: 640px) {
+  .home-contact-details { gap: 10px; margin-top: 20px; }
+  .contact-section .contact-form { padding: 22px; }
+  .contact-section .contact-form .form-row { grid-template-columns: minmax(0, 1fr); }
 }

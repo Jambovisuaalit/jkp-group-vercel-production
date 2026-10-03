@@ -48,9 +48,8 @@ async function clearSession() {
 }
 
 async function isAllowedAdmin(user: User): Promise<boolean> {
-  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  if (configuredEmail && user.email?.toLowerCase() === configuredEmail) return true;
-
+  // The active jkp_admin_users row is the only admin authorization source.
+  // ADMIN_EMAIL is a provisioning/recovery setting, never an access bypass.
   const admin = getSupabaseAdmin();
   if (!admin) return false;
 
