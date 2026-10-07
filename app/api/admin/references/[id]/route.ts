@@ -1,20 +1,16 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/auth";
-import {
-  normalizeReference,
-  publicationColumns,
-  stringArray,
-} from "@/lib/admin-records";
-import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getAdminAccessToken, getAdminUser } from "@/lib/auth";
+import { backendJson } from "@/lib/backend";
+import { normalizeReference, publicationColumns, stringArray } from "@/lib/admin-records";
 import type { AdminReference, PublicationState } from "@/types/admin";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
 export async function PUT(request: Request, context: RouteContext) {
   if (!(await getAdminUser())) return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ message: "Supabasea ei ole konfiguroitu." }, { status: 503 });
+  const token = await getAdminAccessToken();
+  if (!token) return NextResponse.json({ message: "Istunto puuttuu." }, { status: 401 });
 
   const { id } = await context.params;
   const body = (await request.json().catch(() => ({}))) as Partial<AdminReference>;
@@ -44,22 +40,27 @@ export async function PUT(request: Request, context: RouteContext) {
     ...publicationColumns(state),
   };
 
-  const { data, error } = await supabase.from("jkp_references").update(payload).eq("id", id).select("*").single();
-  if (error) return NextResponse.json({ message: "Referenssin tallennus epäonnistui." }, { status: 500 });
+  const result = await backendJson<{ item?: Record<string, unknown>; message?: string }>("admin-references-update", {
+    method: "POST", token, body: { id, payload },
+  });
+  if (!result.ok || !result.data.item) {
+    return NextResponse.json({ message: result.data.message || "Referenssin tallennus epäonnistui." }, { status: result.status || 500 });
+  }
 
   revalidatePath("/referenssit");
-  return NextResponse.json({ item: normalizeReference(data) });
+  return NextResponse.json({ item: normalizeReference(result.data.item) });
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
   if (!(await getAdminUser())) return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ message: "Supabasea ei ole konfiguroitu." }, { status: 503 });
-
+  const token = await getAdminAccessToken();
+  if (!token) return NextResponse.json({ message: "Istunto puuttuu." }, { status: 401 });
   const { id } = await context.params;
-  const { error } = await supabase.from("jkp_references").delete().eq("id", id);
-  if (error) return NextResponse.json({ message: "Referenssin poistaminen epäonnistui." }, { status: 500 });
 
+  const result = await backendJson<{ ok?: boolean; message?: string }>("admin-references-delete", {
+    method: "POST", token, body: { id },
+  });
+  if (!result.ok) return NextResponse.json({ message: result.data.message || "Referenssin poistaminen epäonnistui." }, { status: result.status });
   revalidatePath("/referenssit");
   return NextResponse.json({ ok: true });
 }
