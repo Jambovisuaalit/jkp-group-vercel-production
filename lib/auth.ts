@@ -2,7 +2,8 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
-import { getSupabaseAdmin, getSupabasePublicConfig } from "@/lib/supabase/admin";
+import { backendJson } from "@/lib/backend";
+import { getSupabasePublicConfig } from "@/lib/supabase/admin";
 
 const ACCESS_COOKIE = "jkp_admin_access";
 const REFRESH_COOKIE = "jkp_admin_refresh";
@@ -47,26 +48,20 @@ async function clearSession() {
   cookieStore.set(REFRESH_COOKIE, "", cookieOptions(0));
 }
 
-async function isAllowedAdmin(user: User): Promise<boolean> {
-  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  if (configuredEmail && user.email?.toLowerCase() === configuredEmail) return true;
-
-  const admin = getSupabaseAdmin();
-  if (!admin) return false;
-
-  const { data, error } = await admin
-    .from("jkp_admin_users")
-    .select("active")
-    .eq("user_id", user.id)
-    .eq("active", true)
-    .maybeSingle();
-
-  if (error) {
-    console.error("JKP admin authorization failed", error.message);
+async function isAllowedAdmin(accessToken: string): Promise<boolean> {
+  try {
+    const result = await backendJson<{ authenticated?: boolean }>("admin-check", {
+      token: accessToken,
+    });
+    return result.ok && result.data.authenticated === true;
+  } catch {
     return false;
   }
+}
 
-  return Boolean(data?.active);
+export async function getAdminAccessToken(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get(ACCESS_COOKIE)?.value || null;
 }
 
 export async function signInAdmin(email: string, password: string) {
@@ -78,7 +73,7 @@ export async function signInAdmin(email: string, password: string) {
     return { user: null, message: "Sähköposti tai salasana on virheellinen." };
   }
 
-  if (!(await isAllowedAdmin(data.user))) {
+  if (!(await isAllowedAdmin(data.session.access_token))) {
     await client.auth.signOut();
     return { user: null, message: "Käyttäjällä ei ole JKP Hallinnan käyttöoikeutta." };
   }
@@ -106,7 +101,7 @@ export async function getAdminUser(): Promise<User | null> {
     return null;
   }
 
-  if (!(await isAllowedAdmin(data.user))) {
+  if (!(await isAllowedAdmin(data.session.access_token))) {
     await clearSession();
     return null;
   }
@@ -185,9 +180,7 @@ export async function requestAdminPasswordReset(email: string, redirectTo: strin
   }
 
   const { error } = await client.auth.resetPasswordForEmail(normalizedEmail, { redirectTo });
-  if (error) {
-    console.error("JKP password reset request failed", error.message);
-  }
+  if (error) console.error("JKP password reset request failed", error.message);
 
   return { ok: true, message: "Jos käyttäjätili löytyy, palautuslinkki lähetetään sähköpostiin." };
 }
@@ -213,7 +206,7 @@ export async function completeAdminPasswordRecovery(
     return { ok: false, message: "Palautuslinkki on virheellinen tai vanhentunut." };
   }
 
-  if (!(await isAllowedAdmin(sessionData.user))) {
+  if (!(await isAllowedAdmin(sessionData.session.access_token))) {
     await client.auth.signOut();
     return { ok: false, message: "Käyttäjällä ei ole JKP Hallinnan käyttöoikeutta." };
   }
