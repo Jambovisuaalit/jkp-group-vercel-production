@@ -39,12 +39,17 @@ export async function POST(request: Request) {
     const folder = String(formData.get("folder") || "website").replace(/[^a-z0-9/-]/gi, "");
     const path = `${folder || "website"}/${new Date().toISOString().slice(0, 10)}/${randomUUID()}.webp`;
 
+    const uploadBody = optimized.buffer.slice(
+      optimized.byteOffset,
+      optimized.byteOffset + optimized.byteLength,
+    ) as ArrayBuffer;
+
     const response = await backendRequest("admin-media-upload", {
       method: "POST",
       token,
       params: { path },
       headers: { "Content-Type": "image/webp" },
-      rawBody: optimized,
+      rawBody: uploadBody,
     });
     const result = (await response.json().catch(() => ({}))) as { path?: string; message?: string };
 
