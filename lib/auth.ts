@@ -166,11 +166,52 @@ export async function changeAdminPassword(currentPassword: string, newPassword: 
   return { ok: true, message: "Salasana vaihdettiin." };
 }
 
-export async function requestAdminPasswordReset(email: string, redirectTo: string) {
-  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  const normalizedEmail = email.trim().toLowerCase();
+export async function changeAdminEmail(currentPassword: string, newEmail: string) {
+  const user = await getAdminUser();
+  if (!user?.email) return { ok: false, message: "Istunto on vanhentunut." };
 
-  if (!configuredEmail || normalizedEmail !== configuredEmail) {
+  const normalized = newEmail.trim().toLowerCase();
+  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalized) || normalized.length > 254) {
+    return { ok: false, message: "Anna kelvollinen sähköpostiosoite." };
+  }
+  if (normalized === user.email.toLowerCase()) {
+    return { ok: false, message: "Uusi sähköposti on sama kuin nykyinen." };
+  }
+
+  const client = createAuthClient();
+  if (!client) return { ok: false, message: "Supabase Authia ei ole konfiguroitu." };
+
+  // Re-authenticate with the current password before initiating a sensitive change.
+  const { data: login, error: loginError } = await client.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword,
+  });
+  if (loginError || !login.session || login.user.id !== user.id) {
+    return { ok: false, message: "Nykyinen salasana on virheellinen." };
+  }
+  if (!(await isAllowedAdmin(login.session.access_token))) {
+    return { ok: false, message: "Käyttäjällä ei ole käyttöoikeutta." };
+  }
+
+  // Supabase secure email change sends confirmation to both old and new addresses.
+  // The role remains linked to the immutable Auth UID. Do not change user email
+  // directly with service-role administrative APIs.
+  const { error } = await client.auth.updateUser({ email: normalized });
+  if (error) {
+    console.error("JKP email update request failed", error.message);
+    return { ok: false, message: "Sähköpostin vaihtopyyntö epäonnistui. Tarkista osoite ja yritä uudelleen." };
+  }
+  return {
+    ok: true,
+    message: "Sähköpostin vaihtopyyntö lähetettiin. Vahvista vaihto vanhaan ja uuteen osoitteeseen saapuvista viesteistä.",
+  };
+}
+
+export async function requestAdminPasswordReset(email: string, redirectTo: string) {
+  const normalizedEmail = email.trim().toLowerCase();
+  // The email of an administrator can change. Authorization remains tied to the
+  // immutable Auth user ID and the jkp_admin_users role, not a fixed email.
+  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalizedEmail) || normalizedEmail.length > 254) {
     return { ok: true, message: "Jos käyttäjätili löytyy, palautuslinkki lähetetään sähköpostiin." };
   }
 
