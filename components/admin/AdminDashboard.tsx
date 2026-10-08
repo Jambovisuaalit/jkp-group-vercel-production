@@ -422,7 +422,8 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
 
   async function changePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const newPassword = String(form.get("newPassword") || "");
     const confirmation = String(form.get("confirmation") || "");
     if (newPassword !== confirmation) {
@@ -438,7 +439,20 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
           newPassword,
         }),
       });
-      event.currentTarget.reset();
+      formElement.reset();
+      showNotice({ kind: "success", message: result.message });
+    } catch (error) {
+      showNotice({ kind: "error", message: (error as Error).message });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function inviteOwner() {
+    if (!window.confirm("Lähetetäänkö JKP Groupin pääkäyttäjälle henkilökohtainen aktivointikutsu?")) return;
+    setLoading(true);
+    try {
+      const result = await api<{ message: string }>("/api/admin/owner/invite", { method: "POST" });
       showNotice({ kind: "success", message: result.message });
     } catch (error) {
       showNotice({ kind: "error", message: (error as Error).message });
@@ -749,6 +763,9 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
               <div className={styles.accountGrid}>
                 <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>Oma käyttäjätili</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
                 <form className={styles.panel} onSubmit={changePassword}><p className={styles.kicker}>TIETOTURVA</p><h2>Vaihda salasana</h2><div className={styles.formStack}><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><Field label="Uusi salasana" hint="Vähintään 12 merkkiä"><input name="newPassword" type="password" autoComplete="new-password" minLength={12} required /></Field><Field label="Uusi salasana uudelleen"><input name="confirmation" type="password" autoComplete="new-password" minLength={12} required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Vaihda salasana</button></div></form>
+                {user?.email?.toLowerCase().endsWith("@vidosocial.com") ? (
+                  <section className={styles.panel}><p className={styles.kicker}>ASIAKKAAN KÄYTTÖÖNOTTO</p><h2>Kutsu JKP:n pääkäyttäjä</h2><p>Lähetä Jari Koskelalle henkilökohtainen aktivointikutsu. Kutsu edellyttää Supabase Auth -sähköpostilähetyksen toimivuutta ja voidaan lähettää vain kerran.</p><button className={styles.primaryButton} disabled={loading} type="button" onClick={inviteOwner}>Lähetä aktivointikutsu</button></section>
+                ) : null}
                 <form className={styles.panel} onSubmit={changeEmail}><p className={styles.kicker}>KIRJAUTUMISSÄHKÖPOSTI</p><h2>Vaihda sähköpostiosoite</h2><p>Uusi sähköpostiosoite otetaan käyttöön vasta vahvistuksen jälkeen. Tarkista vanha ja uusi sähköpostilaatikko.</p><div className={styles.formStack}><Field label="Uusi sähköpostiosoite"><input name="newEmail" type="email" autoComplete="email" maxLength={254} required /></Field><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Lähetä vahvistus</button></div></form>
               </div>
             </section>
