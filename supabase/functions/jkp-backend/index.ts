@@ -241,22 +241,36 @@ Deno.serve(async (req: Request) => {
       if (users.users.some((u) => u.email?.toLowerCase() === customerEmail)) {
         return json({ message: "Asiakastunnus on jo olemassa." }, 409);
       }
-      const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(customerEmail, {
-        redirectTo: "https://www.jkpgroup.fi/admin/reset-password",
-        data: { display_name: "Jari Koskela", account: "JKP Group" },
+      // Generate an invitation without Supabase SMTP. Only the authorized
+      // VIDO editor receives this one-time link and must deliver it privately.
+      const { data: invited, error: inviteError } = await admin.auth.admin.generateLink({
+        type: "invite",
+        email: customerEmail,
+        options: {
+          redirectTo: "https://www.jkpgroup.fi/admin/reset-password",
+          data: { display_name: "Jari Koskela", account: "JKP Group" },
+        },
       });
-      if (inviteError || !invited.user) {
-        console.error("JKP customer invite failed", inviteError?.message);
-        return json({ message: "Kutsun lähettäminen epäonnistui. Tarkista Supabase Auth -sähköpostipalvelu." }, 503);
+      const actionLink = invited?.properties?.action_link;
+      if (inviteError || !invited?.user?.id || !actionLink) {
+        console.error("JKP owner link generation failed", inviteError?.message);
+        return json({ message: "Aktivointilinkin luonti epäonnistui." }, 503);
       }
       const { error: roleError } = await admin.from("jkp_admin_users").upsert({
         user_id: invited.user.id, role: "owner", display_name: "Jari Koskela", active: true,
       }, { onConflict: "user_id" });
       if (roleError) {
         console.error("JKP owner role creation failed", roleError.message);
-        return json({ message: "Kutsu lähetettiin, mutta käyttöoikeuden asetus epäonnistui." }, 503);
+        // This user was just created by generateLink and did not exist beforehand.
+        await admin.auth.admin.deleteUser(invited.user.id);
+        return json({ message: "Käyttöoikeuden asetus epäonnistui; kutsu peruttiin." }, 503);
       }
-      return json({ ok: true, message: "Asiakkaan aktivointikutsu lähetetty." }, 201);
+      return json({
+        ok: true,
+        actionLink,
+        email: customerEmail,
+        message: "Henkilökohtainen aktivointilinkki luotiin. Toimita se asiakkaalle turvallisesti.",
+      }, 201);
     }
 
     if (action === "admin-check" && req.method === "GET") {
