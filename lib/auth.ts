@@ -196,7 +196,10 @@ export async function changeAdminEmail(currentPassword: string, newEmail: string
   // Supabase secure email change sends confirmation to both old and new addresses.
   // The role remains linked to the immutable Auth UID. Do not change user email
   // directly with service-role administrative APIs.
-  const { error } = await client.auth.updateUser({ email: normalized });
+  const { error } = await client.auth.updateUser(
+    { email: normalized },
+    { emailRedirectTo: "https://www.jkpgroup.fi/admin" },
+  );
   if (error) {
     console.error("JKP email update request failed", error.message);
     return { ok: false, message: "Sähköpostin vaihtopyyntö epäonnistui. Tarkista osoite ja yritä uudelleen." };
