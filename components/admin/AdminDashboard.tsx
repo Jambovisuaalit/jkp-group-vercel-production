@@ -447,6 +447,27 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
     }
   }
 
+  async function changeEmail(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const newEmail = String(form.get("newEmail") || "").trim();
+    const currentPassword = String(form.get("currentPassword") || "");
+    setLoading(true);
+    try {
+      const result = await api<{ message: string }>("/api/admin/email", {
+        method: "PUT",
+        body: JSON.stringify({ currentPassword, newEmail }),
+      });
+      formElement.reset();
+      showNotice({ kind: "success", message: result.message });
+    } catch (error) {
+      showNotice({ kind: "error", message: (error as Error).message });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const filteredRentals = useMemo(() => {
     const query = rentalSearch.trim().toLowerCase();
     return rentals.filter((item) => {
@@ -726,8 +747,9 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             <section>
               <div className={styles.pageHeading}><div><p className={styles.kicker}>OMA TILI</p><h1>Käyttäjätili</h1><p>Hallinnoi kirjautumistietojasi turvallisesti.</p></div></div>
               <div className={styles.accountGrid}>
-                <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>Jari Koskela</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Rooli</dt><dd>Pääkäyttäjä</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
+                <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>Oma käyttäjätili</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
                 <form className={styles.panel} onSubmit={changePassword}><p className={styles.kicker}>TIETOTURVA</p><h2>Vaihda salasana</h2><div className={styles.formStack}><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><Field label="Uusi salasana" hint="Vähintään 12 merkkiä"><input name="newPassword" type="password" autoComplete="new-password" minLength={12} required /></Field><Field label="Uusi salasana uudelleen"><input name="confirmation" type="password" autoComplete="new-password" minLength={12} required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Vaihda salasana</button></div></form>
+                <form className={styles.panel} onSubmit={changeEmail}><p className={styles.kicker}>KIRJAUTUMISSÄHKÖPOSTI</p><h2>Vaihda sähköpostiosoite</h2><p>Uusi sähköpostiosoite otetaan käyttöön vasta vahvistuksen jälkeen. Tarkista vanha ja uusi sähköpostilaatikko.</p><div className={styles.formStack}><Field label="Uusi sähköpostiosoite"><input name="newEmail" type="email" autoComplete="email" maxLength={254} required /></Field><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Lähetä vahvistus</button></div></form>
               </div>
             </section>
           ) : null}
