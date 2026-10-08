@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin, isSupabaseBackendEnabled } from "@/lib/supabase/admin";
+import { backendJson } from "@/lib/backend";
+import { isSupabaseBackendEnabled } from "@/lib/supabase/admin";
 
 function clean(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -89,13 +90,10 @@ export async function POST(request: Request) {
     if (!isSupabaseBackendEnabled()) {
       return NextResponse.json({ message: "Lomakepalvelu on tilapäisesti pois käytöstä. Ota yhteyttä sähköpostitse tai puhelimitse." }, { status: 503 });
     }
-    if (isSupabaseBackendEnabled()) {
-      const supabase = getSupabaseAdmin();
-      if (!supabase) {
-        return NextResponse.json({ message: "Tietokantatallennusta ei ole konfiguroitu." }, { status: 503 });
-      }
 
-      const { error: databaseError } = await supabase.from("jkp_form_submissions").insert({
+    const storageResult = await backendJson<{ stored?: boolean; message?: string }>("contact", {
+      method: "POST",
+      body: {
         kind,
         name,
         email,
@@ -106,13 +104,13 @@ export async function POST(request: Request) {
         message,
         details: buildDetails(body),
         consent: true,
-        source: "website",
-      });
-
-      if (databaseError) {
-        console.error("JKP form persistence failed", databaseError.message);
-        return NextResponse.json({ message: "Tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen." }, { status: 502 });
-      }
+      },
+    });
+    if (!storageResult.ok || !storageResult.data.stored) {
+      return NextResponse.json(
+        { message: storageResult.data.message || "Tietojen tallennus epäonnistui. Yritä myöhemmin uudelleen." },
+        { status: storageResult.status || 502 },
+      );
     }
 
     const apiKey = process.env.RESEND_API_KEY;

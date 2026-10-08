@@ -1,27 +1,14 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/auth";
+import { getAdminAccessToken, getAdminUser } from "@/lib/auth";
+import { backendJson } from "@/lib/backend";
 import { normalizeSubmission } from "@/lib/admin-records";
-import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export async function GET() {
-  if (!(await getAdminUser())) {
-    return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
-  }
+  if (!(await getAdminUser())) return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
+  const token = await getAdminAccessToken();
+  if (!token) return NextResponse.json({ message: "Istunto puuttuu." }, { status: 401 });
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) {
-    return NextResponse.json({ message: "Supabasea ei ole konfiguroitu." }, { status: 503 });
-  }
-
-  const { data, error } = await supabase
-    .from("jkp_form_submissions")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(500);
-
-  if (error) {
-    return NextResponse.json({ message: "Lomakeviestien lataus epäonnistui." }, { status: 500 });
-  }
-
-  return NextResponse.json({ items: (data || []).map((row) => normalizeSubmission(row)) });
+  const result = await backendJson<{ items?: Record<string, unknown>[]; message?: string }>("admin-submissions-list", { token });
+  if (!result.ok) return NextResponse.json({ message: result.data.message || "Lomakeviestien lataus epäonnistui." }, { status: result.status });
+  return NextResponse.json({ items: (result.data.items || []).map(normalizeSubmission) });
 }

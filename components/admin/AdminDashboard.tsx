@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { SiteContent } from "@/content/defaults";
 import { AdminMediaEditor } from "@/components/admin/AdminMediaEditor";
+import { CompanyContentEditor, HomeCopyEditor, TechnicalContentEditor } from "@/components/admin/ContentEditors";
 import type {
   AdminReference,
   AdminRental,
@@ -24,6 +25,7 @@ type View =
   | "rentals"
   | "references"
   | "home-content"
+  | "company-content"
   | "tech-content"
   | "contact-content"
   | "submissions"
@@ -420,7 +422,8 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
 
   async function changePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const newPassword = String(form.get("newPassword") || "");
     const confirmation = String(form.get("confirmation") || "");
     if (newPassword !== confirmation) {
@@ -436,7 +439,41 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
           newPassword,
         }),
       });
-      event.currentTarget.reset();
+      formElement.reset();
+      showNotice({ kind: "success", message: result.message });
+    } catch (error) {
+      showNotice({ kind: "error", message: (error as Error).message });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function inviteOwner() {
+    if (!window.confirm("Lähetetäänkö JKP Groupin pääkäyttäjälle henkilökohtainen aktivointikutsu?")) return;
+    setLoading(true);
+    try {
+      const result = await api<{ message: string }>("/api/admin/owner/invite", { method: "POST" });
+      showNotice({ kind: "success", message: result.message });
+    } catch (error) {
+      showNotice({ kind: "error", message: (error as Error).message });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function changeEmail(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    const newEmail = String(form.get("newEmail") || "").trim();
+    const currentPassword = String(form.get("currentPassword") || "");
+    setLoading(true);
+    try {
+      const result = await api<{ message: string }>("/api/admin/email", {
+        method: "PUT",
+        body: JSON.stringify({ currentPassword, newEmail }),
+      });
+      formElement.reset();
       showNotice({ kind: "success", message: result.message });
     } catch (error) {
       showNotice({ kind: "error", message: (error as Error).message });
@@ -521,6 +558,7 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
     { section: "SISÄLTÖ", view: "rentals", label: "Vuokrakohteet", icon: "building" },
     { view: "references", label: "Referenssit", icon: "reference" },
     { section: "SIVUSTO", view: "home-content", label: "Etusivu", icon: "edit" },
+    { view: "company-content", label: "Yritys / Historia", icon: "edit" },
     { view: "tech-content", label: "Talotekniikka", icon: "edit" },
     { view: "contact-content", label: "Yhteystiedot", icon: "edit" },
     { section: "ASIOINTI", view: "submissions", label: "Lomakeviestit", icon: "inbox" },
@@ -670,10 +708,10 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             </section>
           ) : null}
 
-          {(view === "home-content" || view === "tech-content" || view === "contact-content") && content ? (
+          {(view === "home-content" || view === "company-content" || view === "tech-content" || view === "contact-content") && content ? (
             <form onSubmit={saveContent}>
               <div className={styles.pageHeading}>
-                <div><p className={styles.kicker}>SIVUSTON SISÄLTÖ</p><h1>{view === "home-content" ? "Etusivu" : view === "tech-content" ? "Talotekniikka" : "Yhteystiedot"}</h1><p>Muuta vain vahvistettuja tekstejä ja kuvia. Sivuston rakennetta ei voi rikkoa tästä näkymästä.</p></div>
+                <div><p className={styles.kicker}>SIVUSTON SISÄLTÖ</p><h1>{view === "home-content" ? "Etusivu" : view === "company-content" ? "Yritys ja historia" : view === "tech-content" ? "Talotekniikka" : "Yhteystiedot"}</h1><p>Muuta vain vahvistettuja tekstejä ja kuvia. Sivuston rakennetta ei voi rikkoa tästä näkymästä.</p></div>
                 <button className={styles.primaryButton} disabled={loading} type="submit">Tallenna muutokset</button>
               </div>
               <section className={styles.editorPanel}>
@@ -690,15 +728,16 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
                     onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
                     upload={uploadImage}
                   />
-                  <div className={styles.editorSection}><p className={styles.kicker}>YRITYSESITTELY</p><h2>Yrityksestä</h2><div className={styles.formGrid}><Field label="Otsikko" wide><input value={content.about.title} onChange={(e) => setContent({ ...content, about: { ...content.about, title: e.target.value } })} /></Field><Field label="Esittelyteksti" wide><textarea rows={6} value={content.about.body} onChange={(e) => setContent({ ...content, about: { ...content.about, body: e.target.value } })} /></Field></div></div>
+                  <HomeCopyEditor content={content} onChange={setContent} />
                 </> : null}
+                {view === "company-content" ? <><CompanyContentEditor content={content} onChange={setContent} /><AdminMediaEditor scope="company" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} /></> : null}
                 {view === "tech-content" ? <AdminMediaEditor
                   scope="tech"
                   media={content.media}
                   onChange={(media) => setContent((current) => current ? { ...current, media } : current)}
                   upload={uploadImage}
                 /> : null}
-                {view === "tech-content" ? <div className={styles.editorSection}><p className={styles.kicker}>PALVELUT</p><h2>Talotekniikan palvelut</h2><div className={styles.serviceEditor}>{content.services.map((service, index) => <div key={index}><span>{String(index + 1).padStart(2, "0")}</span><Field label="Palvelun nimi"><input value={service.title} onChange={(e) => { const services = content.services.map((item, itemIndex) => itemIndex === index ? { ...item, title: e.target.value } : item); setContent({ ...content, services }); }} /></Field><Field label="Kuvaus" wide><textarea rows={4} value={service.description} onChange={(e) => { const services = content.services.map((item, itemIndex) => itemIndex === index ? { ...item, description: e.target.value } : item); setContent({ ...content, services }); }} /></Field></div>)}</div></div> : null}
+                {view === "tech-content" ? <TechnicalContentEditor content={content} onChange={setContent} /> : null}
                 {view === "contact-content" ? <>
                   <AdminMediaEditor scope="contact" media={content.media} onChange={(media) => setContent((current) => current ? { ...current, media } : current)} upload={uploadImage} />
                   <div className={styles.editorSection}><p className={styles.kicker}>YRITYSTIEDOT</p><h2>Yhteystiedot</h2><div className={styles.formGrid}><Field label="Yrityksen nimi"><input value={content.company.name} onChange={(e) => setContent({ ...content, company: { ...content.company, name: e.target.value } })} /></Field><Field label="Sähköposti"><input type="email" value={content.company.email} onChange={(e) => setContent({ ...content, company: { ...content.company, email: e.target.value } })} /></Field><Field label="Puhelin"><input value={content.company.phone} onChange={(e) => setContent({ ...content, company: { ...content.company, phone: e.target.value } })} /></Field><Field label="Toiminta-alue"><input value={content.company.area} onChange={(e) => setContent({ ...content, company: { ...content.company, area: e.target.value } })} /></Field></div></div>
@@ -722,8 +761,12 @@ export function AdminDashboard({ enabled }: { enabled: boolean }) {
             <section>
               <div className={styles.pageHeading}><div><p className={styles.kicker}>OMA TILI</p><h1>Käyttäjätili</h1><p>Hallinnoi kirjautumistietojasi turvallisesti.</p></div></div>
               <div className={styles.accountGrid}>
-                <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>Jari Koskela</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Rooli</dt><dd>Pääkäyttäjä</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
+                <section className={styles.panel}><p className={styles.kicker}>KÄYTTÄJÄ</p><h2>Oma käyttäjätili</h2><dl className={styles.accountDetails}><div><dt>Sähköposti</dt><dd>{user?.email}</dd></div><div><dt>Käyttöoikeus</dt><dd>Aktiivinen</dd></div></dl></section>
                 <form className={styles.panel} onSubmit={changePassword}><p className={styles.kicker}>TIETOTURVA</p><h2>Vaihda salasana</h2><div className={styles.formStack}><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><Field label="Uusi salasana" hint="Vähintään 12 merkkiä"><input name="newPassword" type="password" autoComplete="new-password" minLength={12} required /></Field><Field label="Uusi salasana uudelleen"><input name="confirmation" type="password" autoComplete="new-password" minLength={12} required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Vaihda salasana</button></div></form>
+                {user?.email?.toLowerCase().endsWith("@vidosocial.com") ? (
+                  <section className={styles.panel}><p className={styles.kicker}>ASIAKKAAN KÄYTTÖÖNOTTO</p><h2>Kutsu JKP:n pääkäyttäjä</h2><p>Lähetä Jari Koskelalle henkilökohtainen aktivointikutsu. Kutsu edellyttää Supabase Auth -sähköpostilähetyksen toimivuutta ja voidaan lähettää vain kerran.</p><button className={styles.primaryButton} disabled={loading} type="button" onClick={inviteOwner}>Lähetä aktivointikutsu</button></section>
+                ) : null}
+                <form className={styles.panel} onSubmit={changeEmail}><p className={styles.kicker}>KIRJAUTUMISSÄHKÖPOSTI</p><h2>Vaihda sähköpostiosoite</h2><p>Uusi sähköpostiosoite otetaan käyttöön vasta vahvistuksen jälkeen. Tarkista vanha ja uusi sähköpostilaatikko.</p><div className={styles.formStack}><Field label="Uusi sähköpostiosoite"><input name="newEmail" type="email" autoComplete="email" maxLength={254} required /></Field><Field label="Nykyinen salasana"><input name="currentPassword" type="password" autoComplete="current-password" required /></Field><button className={styles.primaryButton} disabled={loading} type="submit">Lähetä vahvistus</button></div></form>
               </div>
             </section>
           ) : null}

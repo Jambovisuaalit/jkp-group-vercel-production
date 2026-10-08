@@ -12,7 +12,7 @@ const panelStyle = {
 } as const;
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("jari.koskela@jkpgroup.fi");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 

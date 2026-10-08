@@ -2,7 +2,8 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
-import { getSupabaseAdmin, getSupabasePublicConfig } from "@/lib/supabase/admin";
+import { backendJson } from "@/lib/backend";
+import { getSupabasePublicConfig } from "@/lib/supabase/admin";
 
 const ACCESS_COOKIE = "jkp_admin_access";
 const REFRESH_COOKIE = "jkp_admin_refresh";
@@ -47,26 +48,20 @@ async function clearSession() {
   cookieStore.set(REFRESH_COOKIE, "", cookieOptions(0));
 }
 
-async function isAllowedAdmin(user: User): Promise<boolean> {
-  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  if (configuredEmail && user.email?.toLowerCase() === configuredEmail) return true;
-
-  const admin = getSupabaseAdmin();
-  if (!admin) return false;
-
-  const { data, error } = await admin
-    .from("jkp_admin_users")
-    .select("active")
-    .eq("user_id", user.id)
-    .eq("active", true)
-    .maybeSingle();
-
-  if (error) {
-    console.error("JKP admin authorization failed", error.message);
+async function isAllowedAdmin(accessToken: string): Promise<boolean> {
+  try {
+    const result = await backendJson<{ authenticated?: boolean }>("admin-check", {
+      token: accessToken,
+    });
+    return result.ok && result.data.authenticated === true;
+  } catch {
     return false;
   }
+}
 
-  return Boolean(data?.active);
+export async function getAdminAccessToken(): Promise<string | null> {
+  const cookieStore = await cookies();
+  return cookieStore.get(ACCESS_COOKIE)?.value || null;
 }
 
 export async function signInAdmin(email: string, password: string) {
@@ -78,7 +73,7 @@ export async function signInAdmin(email: string, password: string) {
     return { user: null, message: "Sähköposti tai salasana on virheellinen." };
   }
 
-  if (!(await isAllowedAdmin(data.user))) {
+  if (!(await isAllowedAdmin(data.session.access_token))) {
     await client.auth.signOut();
     return { user: null, message: "Käyttäjällä ei ole JKP Hallinnan käyttöoikeutta." };
   }
@@ -106,7 +101,7 @@ export async function getAdminUser(): Promise<User | null> {
     return null;
   }
 
-  if (!(await isAllowedAdmin(data.user))) {
+  if (!(await isAllowedAdmin(data.session.access_token))) {
     await clearSession();
     return null;
   }
@@ -171,11 +166,55 @@ export async function changeAdminPassword(currentPassword: string, newPassword: 
   return { ok: true, message: "Salasana vaihdettiin." };
 }
 
-export async function requestAdminPasswordReset(email: string, redirectTo: string) {
-  const configuredEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  const normalizedEmail = email.trim().toLowerCase();
+export async function changeAdminEmail(currentPassword: string, newEmail: string) {
+  const user = await getAdminUser();
+  if (!user?.email) return { ok: false, message: "Istunto on vanhentunut." };
 
-  if (!configuredEmail || normalizedEmail !== configuredEmail) {
+  const normalized = newEmail.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) || normalized.length > 254) {
+    return { ok: false, message: "Anna kelvollinen sähköpostiosoite." };
+  }
+  if (normalized === user.email.toLowerCase()) {
+    return { ok: false, message: "Uusi sähköposti on sama kuin nykyinen." };
+  }
+
+  const client = createAuthClient();
+  if (!client) return { ok: false, message: "Supabase Authia ei ole konfiguroitu." };
+
+  // Re-authenticate with the current password before initiating a sensitive change.
+  const { data: login, error: loginError } = await client.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword,
+  });
+  if (loginError || !login.session || login.user.id !== user.id) {
+    return { ok: false, message: "Nykyinen salasana on virheellinen." };
+  }
+  if (!(await isAllowedAdmin(login.session.access_token))) {
+    return { ok: false, message: "Käyttäjällä ei ole käyttöoikeutta." };
+  }
+
+  // Supabase secure email change sends confirmation to both old and new addresses.
+  // The role remains linked to the immutable Auth UID. Do not change user email
+  // directly with service-role administrative APIs.
+  const { error } = await client.auth.updateUser(
+    { email: normalized },
+    { emailRedirectTo: "https://www.jkpgroup.fi/admin" },
+  );
+  if (error) {
+    console.error("JKP email update request failed", error.message);
+    return { ok: false, message: "Sähköpostin vaihtopyyntö epäonnistui. Tarkista osoite ja yritä uudelleen." };
+  }
+  return {
+    ok: true,
+    message: "Sähköpostin vaihtopyyntö lähetettiin. Vahvista vaihto vanhaan ja uuteen osoitteeseen saapuvista viesteistä.",
+  };
+}
+
+export async function requestAdminPasswordReset(email: string, redirectTo: string) {
+  const normalizedEmail = email.trim().toLowerCase();
+  // The email of an administrator can change. Authorization remains tied to the
+  // immutable Auth user ID and the jkp_admin_users role, not a fixed email.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail) || normalizedEmail.length > 254) {
     return { ok: true, message: "Jos käyttäjätili löytyy, palautuslinkki lähetetään sähköpostiin." };
   }
 
@@ -185,9 +224,7 @@ export async function requestAdminPasswordReset(email: string, redirectTo: strin
   }
 
   const { error } = await client.auth.resetPasswordForEmail(normalizedEmail, { redirectTo });
-  if (error) {
-    console.error("JKP password reset request failed", error.message);
-  }
+  if (error) console.error("JKP password reset request failed", error.message);
 
   return { ok: true, message: "Jos käyttäjätili löytyy, palautuslinkki lähetetään sähköpostiin." };
 }
@@ -213,7 +250,7 @@ export async function completeAdminPasswordRecovery(
     return { ok: false, message: "Palautuslinkki on virheellinen tai vanhentunut." };
   }
 
-  if (!(await isAllowedAdmin(sessionData.user))) {
+  if (!(await isAllowedAdmin(sessionData.session.access_token))) {
     await client.auth.signOut();
     return { ok: false, message: "Käyttäjällä ei ole JKP Hallinnan käyttöoikeutta." };
   }

@@ -1,32 +1,24 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/auth";
-import {
-  normalizeReference,
-  publicationColumns,
-  stringArray,
-} from "@/lib/admin-records";
-import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getAdminAccessToken, getAdminUser } from "@/lib/auth";
+import { backendJson } from "@/lib/backend";
+import { normalizeReference, publicationColumns, stringArray } from "@/lib/admin-records";
 import type { AdminReference, PublicationState } from "@/types/admin";
 
 export async function GET() {
   if (!(await getAdminUser())) return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ message: "Supabasea ei ole konfiguroitu." }, { status: 503 });
+  const token = await getAdminAccessToken();
+  if (!token) return NextResponse.json({ message: "Istunto puuttuu." }, { status: 401 });
 
-  const { data, error } = await supabase
-    .from("jkp_references")
-    .select("*")
-    .order("updated_at", { ascending: false });
-
-  if (error) return NextResponse.json({ message: "Referenssien lataus epäonnistui." }, { status: 500 });
-  return NextResponse.json({ items: (data || []).map((row) => normalizeReference(row)) });
+  const result = await backendJson<{ items?: Record<string, unknown>[]; message?: string }>("admin-references-list", { token });
+  if (!result.ok) return NextResponse.json({ message: result.data.message || "Referenssien lataus epäonnistui." }, { status: result.status });
+  return NextResponse.json({ items: (result.data.items || []).map(normalizeReference) });
 }
 
 export async function POST(request: Request) {
   if (!(await getAdminUser())) return NextResponse.json({ message: "Ei käyttöoikeutta." }, { status: 401 });
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return NextResponse.json({ message: "Supabasea ei ole konfiguroitu." }, { status: 503 });
+  const token = await getAdminAccessToken();
+  if (!token) return NextResponse.json({ message: "Istunto puuttuu." }, { status: 401 });
 
   const body = (await request.json().catch(() => ({}))) as Partial<AdminReference>;
   const title = body.title?.trim() || "";
@@ -55,9 +47,13 @@ export async function POST(request: Request) {
     ...publicationColumns(state),
   };
 
-  const { data, error } = await supabase.from("jkp_references").insert(payload).select("*").single();
-  if (error) return NextResponse.json({ message: "Referenssin tallennus epäonnistui." }, { status: 500 });
+  const result = await backendJson<{ item?: Record<string, unknown>; message?: string }>("admin-references-create", {
+    method: "POST", token, body: { payload },
+  });
+  if (!result.ok || !result.data.item) {
+    return NextResponse.json({ message: result.data.message || "Referenssin tallennus epäonnistui." }, { status: result.status || 500 });
+  }
 
   revalidatePath("/referenssit");
-  return NextResponse.json({ item: normalizeReference(data) }, { status: 201 });
+  return NextResponse.json({ item: normalizeReference(result.data.item) }, { status: 201 });
 }

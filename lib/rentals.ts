@@ -1,6 +1,7 @@
 import "server-only";
 
-import { getSupabaseAdmin, isSupabaseBackendEnabled } from "@/lib/supabase/admin";
+import { backendJson } from "@/lib/backend";
+import { isSupabaseBackendEnabled } from "@/lib/supabase/admin";
 
 export type RentalProperty = {
   id: string;
@@ -66,24 +67,14 @@ export async function getPublishedRentals(): Promise<RentalProperty[]> {
     return staticRentals.filter(isPubliclyVisible).sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from("jkp_rental_properties")
-    .select("*")
-    .eq("published", true)
-    .eq("hidden", false)
-    .order("sortOrder", { ascending: true });
-
-  if (error) {
-    console.error("JKP rentals query failed", error.message);
+  try {
+    const result = await backendJson<{ items?: Record<string, unknown>[] }>("public-rentals");
+    if (!result.ok) return [];
+    return (result.data.items || []).map(normalizeProperty).filter(isPubliclyVisible);
+  } catch (error) {
+    console.error("JKP rentals query failed", error instanceof Error ? error.message : error);
     return [];
   }
-
-  return ((data || []) as Record<string, unknown>[])
-    .map(normalizeProperty)
-    .filter(isPubliclyVisible);
 }
 
 export async function getRentalBySlug(slug: string): Promise<RentalProperty | null> {
@@ -91,21 +82,15 @@ export async function getRentalBySlug(slug: string): Promise<RentalProperty | nu
     return staticRentals.find((property) => property.slug === slug && isPubliclyVisible(property)) || null;
   }
 
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return null;
-
-  const { data, error } = await supabase
-    .from("jkp_rental_properties")
-    .select("*")
-    .eq("slug", slug)
-    .eq("hidden", false)
-    .maybeSingle();
-
-  if (error || !data) {
-    if (error) console.error("JKP rental query failed", error.message);
+  try {
+    const result = await backendJson<{ item?: Record<string, unknown> | null }>("public-rental", {
+      params: { slug },
+    });
+    if (!result.ok || !result.data.item) return null;
+    const property = normalizeProperty(result.data.item);
+    return isPubliclyVisible(property) ? property : null;
+  } catch (error) {
+    console.error("JKP rental query failed", error instanceof Error ? error.message : error);
     return null;
   }
-
-  const property = normalizeProperty(data as Record<string, unknown>);
-  return isPubliclyVisible(property) ? property : null;
 }
