@@ -26,10 +26,12 @@ export default function ResetPasswordPage() {
     const access = params.get("access_token") || "";
     const refresh = params.get("refresh_token") || "";
     const errorDescription = params.get("error_description");
+    // Do not leave access and refresh tokens visible in the URL or browser history.
+    window.history.replaceState({}, "", window.location.pathname);
 
     queueMicrotask(() => {
       if (errorDescription) {
-        setMessage(decodeURIComponent(errorDescription));
+        setMessage(errorDescription);
       } else if (!access || !refresh) {
         setMessage("Palautuslinkki on virheellinen tai vanhentunut.");
       } else {
