@@ -171,7 +171,7 @@ export async function changeAdminEmail(currentPassword: string, newEmail: string
   if (!user?.email) return { ok: false, message: "Istunto on vanhentunut." };
 
   const normalized = newEmail.trim().toLowerCase();
-  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalized) || normalized.length > 254) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) || normalized.length > 254) {
     return { ok: false, message: "Anna kelvollinen sähköpostiosoite." };
   }
   if (normalized === user.email.toLowerCase()) {
@@ -211,7 +211,7 @@ export async function requestAdminPasswordReset(email: string, redirectTo: strin
   const normalizedEmail = email.trim().toLowerCase();
   // The email of an administrator can change. Authorization remains tied to the
   // immutable Auth user ID and the jkp_admin_users role, not a fixed email.
-  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalizedEmail) || normalizedEmail.length > 254) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail) || normalizedEmail.length > 254) {
     return { ok: true, message: "Jos käyttäjätili löytyy, palautuslinkki lähetetään sähköpostiin." };
   }
 
